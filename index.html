@@ -309,23 +309,24 @@
                                 : "0px 12px 30px -10px rgba(0,0,0,0.06), inset 0px 0px 0px 1px rgba(0,0,0,0.06)",
                         }}
                         transition={smoothTransition}
-                        className={`pointer-events-auto relative flex items-center justify-between gap-1 backdrop-blur-[32px] overflow-hidden ${isScrolled ? 'w-full px-6 md:px-12 py-4' : 'w-[calc(100%-3rem)] max-w-fit p-1.5'}`}
+                        className={`pointer-events-auto relative flex items-center justify-between backdrop-blur-[32px] overflow-hidden ${isScrolled ? 'w-full px-6 md:px-12 py-4 gap-4' : 'w-[calc(100%-3rem)] max-w-fit pl-8 pr-2.5 py-2.5'}`}
                     >
                         <motion.button 
                             layout 
                             transition={smoothTransition} 
                             onClick={() => scrollTo("home")} 
                             aria-label="LionRenders home"
-                            className="flex items-center justify-center shrink-0 cursor-pointer select-none px-4"
+                            className="flex items-center justify-center shrink-0 cursor-pointer select-none"
                         >
                             <LionLogo />
                         </motion.button>
                         
-                        <motion.div layout transition={smoothTransition} className="hidden md:flex items-center gap-1 mx-4">
+                        <motion.div layout transition={smoothTransition} className={`hidden md:flex items-center ${isScrolled ? 'gap-1 mx-4' : 'gap-2 lg:gap-4 mx-8 lg:mx-14'}`}>
                             {NAV_ITEMS.slice(1).map((item) => {
                                 const isActive = activeSection === item.id;
                                 return (
-                                    <button
+                                    <motion.button
+                                        layout
                                         key={item.id}
                                         onClick={() => scrollTo(item.id)}
                                         className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 transform ${
@@ -335,18 +336,18 @@
                                         }`}
                                     >
                                         {item.label}
-                                    </button>
+                                    </motion.button>
                                 );
                             })}
                         </motion.div>
 
-                        <motion.div layout transition={smoothTransition} className="hidden md:flex items-center pl-2 shrink-0 group">
+                        <motion.div layout transition={smoothTransition} className={`hidden md:flex items-center shrink-0 group ${isScrolled ? 'pl-2' : 'pl-4'}`}>
                             <button onClick={(e) => openContact(null, e)} className="flex items-center gap-2 px-6 py-3 rounded-full bg-black text-white text-sm font-medium transition-all duration-300 hover:bg-[#b85f4d] hover:shadow-[0_0_20px_rgba(184,95,77,0.4)] hover:scale-105">
                                 Start project <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                             </button>
                         </motion.div>
 
-                        <motion.button layout transition={smoothTransition} onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="grid h-10 w-10 place-items-center rounded-full bg-gray-100 text-black md:hidden pointer-events-auto shrink-0 hover:bg-gray-200 transition-all" aria-label="Menu">
+                        <motion.button layout transition={smoothTransition} onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className={`grid h-10 w-10 place-items-center rounded-full bg-gray-100 text-black md:hidden pointer-events-auto shrink-0 hover:bg-gray-200 transition-all ${isScrolled ? '' : 'mr-1'}`} aria-label="Menu">
                             {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
                         </motion.button>
                     </motion.nav>
@@ -955,5 +956,6 @@
     </script>
 </body>
 </html>
+
 
 
