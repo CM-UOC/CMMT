@@ -1,4128 +1,858 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LionRenders - 3D Visualisation Studio</title>
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <meta
-        name="description"
-        content="LionRenders, independent CGI and 3D visualisation studio."
-    >
-
-    <title>LionRenders | 3D Visualisation Studio</title>
-
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: "#ffffff",
+                        foreground: "#111111",
+                        muted: "#f4f4f4",
+                        border: "#e5e5e5"
+                    },
+                    fontFamily: {
+                        sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+                    }
+                },
+            },
+        }
+    </script>
     <style>
-        /* =====================================================
-           DESIGN TOKENS
-        ===================================================== */
-
-        :root {
-            --black: #111111;
-            --white: #ffffff;
-            --clay: #b85f4d;
-            --clay-light: #d98775;
-            --grey-50: #fafafa;
-            --grey-100: #f4f4f4;
-            --grey-200: #e5e5e5;
-            --grey-300: #d4d4d4;
-            --grey-400: #a3a3a3;
-            --grey-500: #737373;
-            --grey-600: #525252;
-
-            --container: 1440px;
-            --radius-large: 48px;
-            --radius-medium: 24px;
-            --radius-small: 16px;
-
-            --ease:
-                cubic-bezier(
-                    0.16,
-                    1,
-                    0.3,
-                    1
-                );
-        }
-
-        /* =====================================================
-           RESET
-        ===================================================== */
-
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
-            margin: 0;
-            overflow-x: hidden;
-            background: var(--white);
-            color: var(--black);
-            font-family:
-                Inter,
-                ui-sans-serif,
-                system-ui,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                sans-serif;
+            background-color: #ffffff;
+            color: #111111;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
-
-        body.modal-open {
-            overflow: hidden;
-        }
-
-        button,
-        input,
-        textarea,
-        select {
-            font: inherit;
-        }
-
-        button {
-            border: 0;
-            cursor: pointer;
-        }
-
-        img {
-            display: block;
-            max-width: 100%;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
         ::selection {
-            background: var(--clay);
-            color: var(--white);
+            background-color: #b85f4d;
+            color: #ffffff;
         }
-
-        [hidden] {
-            display: none !important;
+        input[type=range] {
+            accent-color: #111111;
         }
-
-        /* =====================================================
-           GLOBAL CLASSES
-        ===================================================== */
-
-        .container {
-            width: min(
-                calc(100% - 48px),
-                var(--container)
-            );
-            margin-inline: auto;
-        }
-
-        .eyebrow {
-            display: block;
-            color: var(--grey-400);
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.2em;
-            line-height: 1.4;
-            text-transform: uppercase;
-        }
-
-        .button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            min-height: 48px;
-            padding: 12px 24px;
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            transition:
-                color 250ms ease,
-                background 250ms ease,
-                transform 250ms ease,
-                box-shadow 250ms ease;
-        }
-
-        .button:hover {
-            transform: translateY(-2px);
-        }
-
-        .button-dark {
-            background: var(--black);
-            color: var(--white);
-        }
-
-        .button-dark:hover {
-            background: var(--clay);
-            box-shadow:
-                0 15px 35px
-                rgba(184, 95, 77, 0.25);
-        }
-
-        .button-light {
-            border: 1px solid var(--grey-200);
-            background: var(--white);
-            color: var(--black);
-        }
-
-        .button-light:hover {
-            border-color: var(--black);
-        }
-
-        .icon-button {
-            display: grid;
-            width: 48px;
-            height: 48px;
-            place-items: center;
-            border: 1px solid var(--grey-200);
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.94);
-            color: var(--black);
-            box-shadow:
-                0 12px 35px
-                rgba(0, 0, 0, 0.1);
-            transition:
-                color 250ms ease,
-                background 250ms ease,
-                transform 250ms ease;
-        }
-
-        .icon-button:hover {
-            background: var(--black);
-            color: var(--white);
-            transform: scale(1.06);
-        }
-
-        /* =====================================================
-           SVG ICONS
-        ===================================================== */
-
-        .icon {
-            width: 20px;
-            height: 20px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 1.7;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        /* =====================================================
-           HEADER
-        ===================================================== */
-
-        .site-header {
-            position: fixed;
-            inset: 0 0 auto;
-            z-index: 50;
-            display: flex;
-            justify-content: center;
-            padding: 22px 24px 0;
-            pointer-events: none;
-        }
-
-        .navigation {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 18px;
-            width: auto;
-            max-width: calc(100vw - 48px);
-            padding: 6px;
-            border: 1px solid
-                rgba(0, 0, 0, 0.06);
-            border-radius: 999px;
-            background:
-                rgba(255, 255, 255, 0.82);
-            box-shadow:
-                0 15px 35px
-                rgba(0, 0, 0, 0.06);
-            backdrop-filter: blur(24px);
-            pointer-events: auto;
-            transition:
-                width 500ms var(--ease),
-                max-width 500ms var(--ease),
-                border-radius 500ms var(--ease),
-                padding 500ms var(--ease);
-        }
-
-        .site-header.scrolled {
-            padding: 0;
-        }
-
-        .site-header.scrolled .navigation {
-            width: 100%;
-            max-width: none;
-            padding: 12px 40px;
-            border-radius: 0;
-            background:
-                rgba(255, 255, 255, 0.96);
-        }
-
-        .logo {
-            padding: 12px 18px;
-            background: transparent;
-            color: var(--black);
-            font-size: 18px;
-            font-weight: 900;
-            letter-spacing: -0.06em;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .nav-link {
-            padding: 11px 18px;
-            border-radius: 999px;
-            background: transparent;
-            color: var(--grey-500);
-            font-size: 14px;
-            font-weight: 600;
-            transition:
-                color 250ms ease,
-                background 250ms ease;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            background: var(--grey-100);
-            color: var(--black);
-        }
-
-        .mobile-menu-button {
+        .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
-
-        .mobile-menu {
-            position: absolute;
-            top: 92px;
-            right: 16px;
-            left: 16px;
-            padding: 12px;
-            border: 1px solid var(--grey-200);
-            border-radius: 28px;
-            background: rgba(255, 255, 255, 0.98);
-            box-shadow:
-                0 25px 70px
-                rgba(0, 0, 0, 0.14);
-            pointer-events: auto;
-        }
-
-        .mobile-menu a,
-        .mobile-menu button {
-            display: flex;
-            width: 100%;
-            padding: 14px 16px;
-            border-radius: 16px;
-            background: transparent;
-            color: var(--grey-600);
-            text-align: left;
-        }
-
-        .mobile-menu a:hover {
-            background: var(--grey-100);
-            color: var(--black);
-        }
-
-        /* =====================================================
-           HERO
-        ===================================================== */
-
-        .hero {
-            display: flex;
-            min-height: 100vh;
-            align-items: center;
-            padding: 150px 0 80px;
-        }
-
-        .hero-content {
-            max-width: 1200px;
-        }
-
-        .hero h1 {
-            margin: 30px 0 0;
-            font-size:
-                clamp(
-                    58px,
-                    10vw,
-                    140px
-                );
-            font-weight: 500;
-            letter-spacing: -0.065em;
-            line-height: 0.87;
-        }
-
-        .hero h1 em {
-            color: var(--grey-400);
-            font-family:
-                Georgia,
-                "Times New Roman",
-                serif;
-            font-weight: 400;
-        }
-
-        .hero-description {
-            max-width: 580px;
-            margin: 42px 0 0;
-            color: var(--grey-500);
-            font-size: 18px;
-            font-weight: 400;
-            line-height: 1.7;
-        }
-
-        .hero-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            margin-top: 46px;
-            padding: 0 0 8px;
-            border-bottom: 1px solid
-                var(--black);
-            background: transparent;
-            color: var(--black);
-            font-size: 12px;
-            font-weight: 800;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-        }
-
-        /* =====================================================
-           GALLERY SECTION
-        ===================================================== */
-
-        .gallery-section {
-            padding: 110px 0;
-        }
-
-        .gallery-heading {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            gap: 40px;
-            margin-bottom: 42px;
-        }
-
-        .gallery-heading h2,
-        .section-heading {
-            margin: 12px 0 0;
-            font-size:
-                clamp(
-                    42px,
-                    6vw,
-                    72px
-                );
-            font-weight: 500;
-            letter-spacing: -0.05em;
-            line-height: 0.95;
-        }
-
-        .filters {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-            gap: 8px;
-        }
-
-        .filter-button {
-            padding: 10px 18px;
-            border-radius: 999px;
-            background: var(--grey-100);
-            color: var(--grey-500);
-            font-size: 12px;
-            font-weight: 700;
-            transition:
-                color 250ms ease,
-                background 250ms ease;
-        }
-
-        .filter-button:hover {
-            color: var(--black);
-        }
-
-        .filter-button.active {
-            background: var(--black);
-            color: var(--white);
-        }
-
-        /*
-         * Compact gallery viewport.
-         */
-        .gallery-placeholder {
-            position: relative;
-            width: 100%;
-            height: 80vh;
-            min-height: 620px;
-        }
-
-        .gallery-viewport {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-            border-top: 1px solid
-                var(--grey-100);
-            border-bottom: 1px solid
-                var(--grey-100);
-            background: var(--white);
-            cursor: ns-resize;
-            touch-action: none;
-            user-select: none;
-        }
-
-        .gallery-fog {
-            position: absolute;
-            z-index: 8;
-            right: 0;
-            left: 0;
-            height: 180px;
-            pointer-events: none;
-        }
-
-        .gallery-fog.top {
-            top: 0;
-            background:
-                linear-gradient(
-                    to bottom,
-                    white,
-                    rgba(255, 255, 255, 0.85),
-                    transparent
-                );
-        }
-
-        .gallery-fog.bottom {
-            bottom: 0;
-            background:
-                linear-gradient(
-                    to top,
-                    white,
-                    rgba(255, 255, 255, 0.85),
-                    transparent
-                );
-        }
-
-        .gallery-unveil {
-            position: absolute;
-            inset: 0;
-            z-index: 10;
-            display: grid;
-            place-items: center;
-            pointer-events: none;
-        }
-
-        .gallery-unveil span {
-            padding: 13px 22px;
-            border-radius: 999px;
-            background: var(--black);
-            color: var(--white);
-            box-shadow:
-                0 15px 35px
-                rgba(0, 0, 0, 0.2);
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: 0.14em;
-            opacity: 0;
-            text-transform: uppercase;
-            transform: translateY(8px);
-            transition:
-                opacity 350ms ease,
-                transform 350ms ease;
-        }
-
-        .gallery-viewport:hover
-        .gallery-unveil span {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .gallery-track {
-            width: 100%;
-            will-change: transform;
-        }
-
-        .gallery-grid {
-            display: grid;
-            grid-auto-flow: dense;
-            grid-template-columns:
-                repeat(4, minmax(0, 1fr));
-            gap: 16px;
-            padding: 32px;
-        }
-
-        .project-card {
-            position: relative;
-            min-height: 380px;
-            overflow: hidden;
-            border-radius: 22px;
-            background: var(--grey-100);
-            cursor: pointer;
-        }
-
-        .project-card.wide {
-            grid-column: span 2;
-        }
-
-        .project-card.tall {
-            grid-row: span 2;
-            min-height: 770px;
-        }
-
-        .project-card.panorama {
-            grid-column: span 3;
-        }
-
-        .project-card img {
-            width: 100%;
-            height: 100%;
-            min-height: inherit;
-            object-fit: cover;
-            filter: grayscale(20%);
-            pointer-events: none;
-            transition:
-                filter 700ms var(--ease),
-                transform 700ms var(--ease);
-        }
-
-        .project-card:hover img {
-            filter: grayscale(0);
-            transform: scale(1.045);
-        }
-
-        .project-overlay {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 28px;
-            background:
-                linear-gradient(
-                    transparent,
-                    rgba(0, 0, 0, 0.75)
-                );
-            color: var(--white);
-            opacity: 0;
-            transition:
-                opacity 400ms ease;
-        }
-
-        .project-card:hover
-        .project-overlay {
-            opacity: 1;
-        }
-
-        .project-category {
-            margin-bottom: 8px;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-        }
-
-        .project-title {
-            margin: 0;
-            font-size: 24px;
-            font-weight: 500;
-            letter-spacing: -0.03em;
-        }
-
-        /*
-         * Fullscreen expanded gallery.
-         */
-        .expanded-gallery {
-            position: fixed;
-            inset: 0;
-            z-index: 70;
-            overflow-y: auto;
-            overscroll-behavior: contain;
-            background: var(--white);
-            animation:
-                galleryOpen
-                600ms
-                var(--ease)
-                both;
-        }
-
-        .expanded-gallery-closing {
-            animation:
-                galleryClose
-                400ms
-                var(--ease)
-                both;
-        }
-
-        .expanded-gallery-content {
-            width: min(
-                100%,
-                1800px
-            );
-            margin-inline: auto;
-            padding: 84px 0 40px;
-        }
-
-        .expanded-gallery .gallery-grid {
-            padding-top: 24px;
-        }
-
-        .expanded-gallery .project-card {
-            cursor: pointer;
-        }
-
-        .gallery-close {
-            position: fixed;
-            top: 26px;
-            right: 26px;
-            z-index: 75;
-        }
-
-        @keyframes galleryOpen {
-            from {
-                opacity: 0;
-                transform: scale(0.98);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        @keyframes galleryClose {
-            from {
-                opacity: 1;
-                transform: scale(1);
-            }
-
-            to {
-                opacity: 0;
-                transform: scale(0.98);
-            }
-        }
-
-        /* =====================================================
-           PROCESS
-        ===================================================== */
-
-        .process-section {
-            padding: 110px 0;
-        }
-
-        .process-intro {
-            max-width: 760px;
-            margin-bottom: 60px;
-        }
-
-        .section-heading em {
-            color: var(--grey-500);
-            font-family:
-                Georgia,
-                "Times New Roman",
-                serif;
-            font-weight: 400;
-        }
-
-        .process-grid {
-            display: grid;
-            grid-template-columns:
-                repeat(5, minmax(0, 1fr));
-            border-top: 1px solid
-                var(--grey-200);
-            border-bottom: 1px solid
-                var(--grey-200);
-        }
-
-        .process-card {
-            min-height: 310px;
-            padding: 32px;
-            border-right: 1px solid
-                var(--grey-200);
-            transition:
-                background 300ms ease;
-        }
-
-        .process-card:last-child {
-            border-right: 0;
-        }
-
-        .process-card:hover {
-            background: var(--grey-50);
-        }
-
-        .process-number {
-            display: block;
-            margin-bottom: 40px;
-            color: var(--grey-300);
-            font-family: monospace;
-            font-size: 32px;
-            transition:
-                color 300ms ease;
-        }
-
-        .process-card:hover
-        .process-number {
-            color: var(--black);
-        }
-
-        .process-card h3 {
-            margin: 0 0 16px;
-            font-size: 13px;
-            letter-spacing: 0.1em;
-            line-height: 1.5;
-            text-transform: uppercase;
-        }
-
-        .process-card p {
-            margin: 0;
-            color: var(--grey-500);
-            font-size: 14px;
-            line-height: 1.7;
-        }
-
-        /* =====================================================
-           ABOUT
-        ===================================================== */
-
-        .about-section {
-            padding: 110px 0;
-        }
-
-        .about-panel {
-            display: grid;
-            grid-template-columns: 1.4fr 0.6fr;
-            gap: 80px;
-            padding: 80px;
-            border: 1px solid
-                var(--grey-200);
-            border-radius: var(--radius-large);
-            background: var(--grey-50);
-        }
-
-        .about-panel h2 {
-            margin: 18px 0 0;
-            font-size:
-                clamp(
-                    48px,
-                    7vw,
-                    88px
-                );
-            font-weight: 500;
-            letter-spacing: -0.06em;
-            line-height: 0.9;
-        }
-
-        .about-panel h2 em {
-            color: var(--grey-500);
-            font-family:
-                Georgia,
-                "Times New Roman",
-                serif;
-            font-weight: 400;
-        }
-
-        .about-copy {
-            max-width: 640px;
-            margin: 32px 0 0;
-            color: var(--grey-500);
-            font-size: 17px;
-            line-height: 1.7;
-        }
-
-        .about-metrics {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 46px;
-        }
-
-        .metric-value {
-            display: block;
-            font-size: 50px;
-            font-weight: 300;
-            letter-spacing: -0.06em;
-        }
-
-        .metric-label {
-            display: block;
-            margin-top: 8px;
-            color: var(--grey-500);
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-        }
-
-        /* =====================================================
-           MODALS
-        ===================================================== */
-
-        .modal-backdrop {
-            position: fixed;
-            inset: 0;
-            z-index: 90;
-            display: grid;
-            place-items: center;
-            padding: 24px;
-            background:
-                rgba(255, 255, 255, 0.56);
-            backdrop-filter: blur(22px);
-            animation:
-                fadeIn
-                300ms
-                ease
-                both;
-        }
-
-        .modal-panel {
-            position: relative;
-            width: min(100%, 1050px);
-            max-height: 90vh;
-            overflow: auto;
-            border: 1px solid
-                rgba(255, 255, 255, 0.9);
-            border-radius: var(--radius-large);
-            background:
-                rgba(255, 255, 255, 0.93);
-            box-shadow:
-                0 40px 100px
-                rgba(0, 0, 0, 0.16);
-            animation:
-                modalIn
-                500ms
-                var(--ease)
-                both;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 22px;
-            right: 22px;
-            z-index: 5;
-        }
-
-        .project-modal-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 36px;
-            padding: 24px;
-        }
-
-        .project-modal-image {
-            min-height: 480px;
-            overflow: hidden;
-            border-radius: 32px;
-            background: var(--grey-100);
-        }
-
-        .project-modal-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .project-modal-details {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 50px 40px 50px 6px;
-        }
-
-        .project-modal-details h2 {
-            margin: 12px 0 0;
-            font-size: 46px;
-            font-weight: 500;
-            letter-spacing: -0.045em;
-            line-height: 1;
-        }
-
-        .project-description {
-            margin: 24px 0 0;
-            color: var(--grey-500);
-            font-size: 15px;
-            line-height: 1.75;
-        }
-
-        .project-discipline {
-            margin-top: 32px;
-            padding-top: 24px;
-            border-top: 1px solid
-                var(--grey-200);
-        }
-
-        .project-discipline strong {
-            display: block;
-            margin-top: 8px;
-            font-size: 14px;
-        }
-
-        /* =====================================================
-           CALCULATOR
-        ===================================================== */
-
-        .calculator-panel {
-            display: grid;
-            grid-template-columns: 1.3fr 0.7fr;
-        }
-
-        .calculator-controls {
-            padding: 54px;
-        }
-
-        .calculator-results {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 54px;
-            background: var(--grey-50);
-        }
-
-        .calculator-title {
-            margin: 12px 0 42px;
-            font-size: 38px;
-            font-weight: 500;
-            letter-spacing: -0.04em;
-        }
-
-        .calculator-group {
-            margin-top: 36px;
-        }
-
-        .calculator-label {
-            display: block;
-            margin-bottom: 14px;
-            color: var(--grey-500);
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-        }
-
-        .category-options {
-            display: grid;
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
-            gap: 10px;
-        }
-
-        .category-option,
-        .segmented-option {
-            padding: 16px;
-            border: 1px solid
-                var(--grey-200);
-            border-radius: 18px;
-            background: var(--white);
-            color: var(--grey-600);
-            font-size: 13px;
-            font-weight: 700;
-            text-align: left;
-            transition:
-                color 200ms ease,
-                background 200ms ease,
-                border 200ms ease;
-        }
-
-        .category-option.active,
-        .segmented-option.active {
-            border-color: var(--black);
-            background: var(--black);
-            color: var(--white);
-        }
-
-        .range-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .range-value {
-            min-width: 38px;
-            padding: 5px 10px;
-            border-radius: 999px;
-            background: var(--grey-100);
-            font-size: 13px;
-            text-align: center;
-        }
-
-        .range-input {
-            width: 100%;
-            margin-top: 12px;
-        }
-
-        .segmented-options {
-            display: grid;
-            grid-template-columns:
-                repeat(3, minmax(0, 1fr));
-            gap: 8px;
-        }
-
-        .segmented-options.two {
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
-        }
-
-        .estimated-range {
-            margin-top: 20px;
-            font-size:
-                clamp(
-                    38px,
-                    6vw,
-                    58px
-                );
-            font-weight: 300;
-            letter-spacing: -0.06em;
-            line-height: 1;
-        }
-
-        .estimated-separator {
-            display: block;
-            margin: 12px 0;
-            color: var(--grey-400);
-            font-family:
-                Georgia,
-                "Times New Roman",
-                serif;
-            font-size: 15px;
-            font-style: italic;
-            letter-spacing: 0;
-        }
-
-        .estimate-breakdown {
-            margin-top: 50px;
-            padding-top: 28px;
-            border-top: 1px solid
-                var(--grey-200);
-        }
-
-        .breakdown-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            padding: 8px 0;
-            font-size: 13px;
-        }
-
-        .breakdown-row span:first-child {
-            color: var(--grey-500);
-        }
-
-        /* =====================================================
-           CONTACT FORM
-        ===================================================== */
-
-        .contact-panel {
-            width: min(100%, 720px);
-            padding: 60px;
-        }
-
-        .contact-panel h2 {
-            margin: 12px 0 40px;
-            font-size: 42px;
-            font-weight: 500;
-            letter-spacing: -0.045em;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 22px;
-        }
-
-        .form-field {
-            margin-top: 22px;
-        }
-
-        .form-field label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--grey-500);
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-        }
-
-        .form-field input,
-        .form-field textarea {
-            width: 100%;
-            padding: 12px 0;
-            border: 0;
-            border-bottom: 1px solid
-                var(--grey-200);
-            border-radius: 0;
-            background: transparent;
-            color: var(--black);
-            outline: none;
-            transition:
-                border 200ms ease;
-        }
-
-        .form-field input:focus,
-        .form-field textarea:focus {
-            border-color: var(--black);
-        }
-
-        .form-field textarea {
-            min-height: 130px;
-            resize: vertical;
-        }
-
-        .success-message {
-            padding: 90px 30px;
-            text-align: center;
-        }
-
-        .success-icon {
-            display: grid;
-            width: 68px;
-            height: 68px;
-            margin: 0 auto 24px;
-            place-items: center;
-            border-radius: 50%;
-            background: var(--black);
-            color: var(--white);
-        }
-
-        /* =====================================================
-           FLOATING ESTIMATOR BUTTON
-        ===================================================== */
-
-        .calculator-fab {
-            position: fixed;
-            right: 24px;
-            bottom: 24px;
-            z-index: 45;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 15px 20px;
-            border-radius: 999px;
-            background: var(--black);
-            color: var(--white);
-            box-shadow:
-                0 18px 45px
-                rgba(0, 0, 0, 0.2);
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            transition:
-                background 250ms ease,
-                transform 250ms ease;
-        }
-
-        .calculator-fab:hover {
-            background: var(--clay);
-            transform: scale(1.05);
-        }
-
-        /* =====================================================
-           FOOTER
-        ===================================================== */
-
-        .footer {
-            padding: 48px 0;
-            border-top: 1px solid
-                var(--grey-100);
-        }
-
-        .footer-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 30px;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 28px;
-            color: var(--grey-500);
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-        }
-
-        .footer-links a:hover {
-            color: var(--black);
-        }
-
-        /* =====================================================
-           ANIMATIONS
-        ===================================================== */
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes modalIn {
-            from {
-                opacity: 0;
-                transform:
-                    translateY(24px)
-                    scale(0.97);
-            }
-
-            to {
-                opacity: 1;
-                transform:
-                    translateY(0)
-                    scale(1);
-            }
-        }
-
-        /* =====================================================
-           RESPONSIVE
-        ===================================================== */
-
-        @media (max-width: 1100px) {
-            .gallery-grid {
-                grid-template-columns:
-                    repeat(3, minmax(0, 1fr));
-            }
-
-            .process-grid {
-                grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
-            }
-
-            .process-card {
-                border-bottom:
-                    1px solid
-                    var(--grey-200);
-            }
-
-            .about-panel {
-                grid-template-columns: 1fr;
-                padding: 60px;
-            }
-        }
-
-        @media (max-width: 820px) {
-            .container {
-                width: min(
-                    calc(100% - 32px),
-                    var(--container)
-                );
-            }
-
-            .nav-links,
-            .navigation > .button {
-                display: none;
-            }
-
-            .mobile-menu-button {
-                display: grid;
-            }
-
-            .site-header.scrolled
-            .navigation {
-                padding:
-                    10px 16px;
-            }
-
-            .gallery-heading {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .filters {
-                justify-content: flex-start;
-            }
-
-            .gallery-grid {
-                grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
-                padding: 16px;
-            }
-
-            .project-card.panorama {
-                grid-column: span 2;
-            }
-
-            .project-modal-content,
-            .calculator-panel {
-                grid-template-columns: 1fr;
-            }
-
-            .project-modal-image {
-                min-height: 360px;
-            }
-
-            .project-modal-details {
-                padding: 16px 20px 44px;
-            }
-
-            .calculator-results {
-                min-height: 480px;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-                gap: 0;
-            }
-
-            .contact-panel {
-                padding: 44px 28px;
-            }
-        }
-
-        @media (max-width: 560px) {
-            .hero h1 {
-                font-size: 56px;
-            }
-
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .project-card,
-            .project-card.tall {
-                min-height: 440px;
-                grid-row: auto;
-            }
-
-            .project-card.wide,
-            .project-card.panorama {
-                grid-column: auto;
-            }
-
-            .process-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .about-panel {
-                padding: 38px 26px;
-            }
-
-            .about-panel h2 {
-                font-size: 52px;
-            }
-
-            .calculator-controls,
-            .calculator-results {
-                padding: 42px 24px;
-            }
-
-            .calculator-fab span {
-                display: none;
-            }
-
-            .calculator-fab {
-                width: 54px;
-                height: 54px;
-                justify-content: center;
-                padding: 0;
-            }
-
-            .footer-content {
-                flex-direction: column;
-            }
-        }
-
-        @media (
-            prefers-reduced-motion:
-            reduce
-        ) {
-            html {
-                scroll-behavior: auto;
-            }
-
-            *,
-            *::before,
-            *::after {
-                animation-duration:
-                    0.01ms !important;
-                animation-iteration-count:
-                    1 !important;
-                scroll-behavior:
-                    auto !important;
-                transition-duration:
-                    0.01ms !important;
-            }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        @keyframes shimmer {
+            100% { transform: translateX(150%); }
+        }
+        .logo-invert {
+            filter: invert(1);
         }
     </style>
+
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    
+    <!-- Babel for in-browser JSX compilation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Framer Motion -->
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
 </head>
-
 <body>
-    <!-- ======================================================
-         SHARED SVG DEFINITIONS
-    ======================================================= -->
+    <div id="root"></div>
 
-    <svg
-        width="0"
-        height="0"
-        style="position:absolute"
-        aria-hidden="true"
-    >
-        <symbol
-            id="icon-arrow"
-            viewBox="0 0 24 24"
-        >
-            <path d="M7 7h10v10"></path>
-            <path d="M7 17 17 7"></path>
-        </symbol>
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useMemo } = React;
+        const { motion, AnimatePresence, useReducedMotion, useAnimationFrame, useScroll, useMotionValueEvent, useMotionValue, useSpring } = window.Motion;
 
-        <symbol
-            id="icon-down"
-            viewBox="0 0 24 24"
-        >
-            <path d="M12 5v14"></path>
-            <path d="m19 12-7 7-7-7"></path>
-        </symbol>
+        // --- ICONS ---
+        const ArrowUpRight = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>;
+        const ArrowDown = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>;
+        const Check = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 6 9 17l-5-5"/></svg>;
+        const Menu = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M4 12h16"/><path d="M4 18h16"/><path d="M4 6h16"/></svg>;
+        const X = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>;
+        const Clock = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>;
+        const Zap = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>;
+        const Box = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>;
+        const Video = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="14" height="10" x="2" y="7" rx="2"/><path d="m16 10 4-2v8l-4-2"/></svg>;
+        const Building = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>;
+        const Layers = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 17 22 12"/></svg>;
+        const CalculatorIcon = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>;
 
-        <symbol
-            id="icon-close"
-            viewBox="0 0 24 24"
-        >
-            <path d="M18 6 6 18"></path>
-            <path d="m6 6 12 12"></path>
-        </symbol>
+        const LionLogo = ({className=""}) => (
+            <img src="./logo.svg" alt="LionRenders" className={`logo-invert ${className}`} />
+        );
+        
+        function AnimatedNumber({ value }) {
+            const ref = useRef(null);
+            const motionValue = useMotionValue(value);
+            const springValue = useSpring(motionValue, { stiffness: 100, damping: 20 });
 
-        <symbol
-            id="icon-menu"
-            viewBox="0 0 24 24"
-        >
-            <path d="M4 6h16"></path>
-            <path d="M4 12h16"></path>
-            <path d="M4 18h16"></path>
-        </symbol>
+            useEffect(() => {
+                motionValue.set(value);
+            }, [value, motionValue]);
 
-        <symbol
-            id="icon-check"
-            viewBox="0 0 24 24"
-        >
-            <path d="M20 6 9 17l-5-5"></path>
-        </symbol>
+            useMotionValueEvent(springValue, "change", (latest) => {
+                if (ref.current) {
+                    ref.current.textContent = Math.round(latest).toLocaleString();
+                }
+            });
 
-        <symbol
-            id="icon-calculator"
-            viewBox="0 0 24 24"
-        >
-            <rect
-                x="4"
-                y="2"
-                width="16"
-                height="20"
-                rx="2"
-            ></rect>
-            <path d="M8 6h8"></path>
-            <path d="M8 10h.01"></path>
-            <path d="M12 10h.01"></path>
-            <path d="M16 10h.01"></path>
-            <path d="M8 14h.01"></path>
-            <path d="M12 14h.01"></path>
-            <path d="M16 14v4"></path>
-            <path d="M8 18h.01"></path>
-            <path d="M12 18h.01"></path>
-        </symbol>
-    </svg>
+            return <span ref={ref}>{value.toLocaleString()}</span>;
+        }
 
-    <!-- ======================================================
-         HEADER
-    ======================================================= -->
+        // --- DATA ---
+        const PROJECTS = [
+            { id: "aether-house", title: "Aether house", category: "Architecture", discipline: "Architectural visualisation", ratio: "wide", src: "https://picsum.photos/seed/aether/1600/1000", alt: "Cinematic concrete residence at dusk" },
+            { id: "serein-no-7", title: "Serein no. 7", category: "Fragrance", discipline: "Product CGI", ratio: "tall", src: "https://picsum.photos/seed/serein/1000/1500", alt: "Luxury fragrance bottle on translucent stone" },
+            { id: "forma-one", title: "Forma chair", category: "Furniture", discipline: "Creative direction", ratio: "square", src: "https://picsum.photos/seed/forma/1200/1200", alt: "Sculptural lounge chair in a soft set" },
+            { id: "halcyon-hypercar", title: "Halcyon GT", category: "Automotive", discipline: "Launch film", ratio: "panorama", src: "https://picsum.photos/seed/halcyon/1800/900", alt: "Concept vehicle crossing atmospheric desert" },
+            { id: "nacre-jewelry", title: "Nacre fine ring", category: "Jewellery", discipline: "Macro imagery", ratio: "tall", src: "https://picsum.photos/seed/nacre/1000/1400", alt: "Pearl and platinum jewellery close-up" },
+            { id: "monolith-audio", title: "Monolith speaker", category: "Technology", discipline: "Studio CGI", ratio: "wide", src: "https://picsum.photos/seed/monolith/1500/1000", alt: "Minimalist aluminum speaker system" },
+            { id: "lumen-skin", title: "Lumen serum", category: "Cosmetics", discipline: "Campaign", ratio: "square", src: "https://picsum.photos/seed/lumen/1200/1200", alt: "Glass cosmetics jar surrounded by water light ripples" },
+            { id: "velvet-lounge", title: "Velvet sofa", category: "Furniture", discipline: "Interior rendering", ratio: "tall", src: "https://picsum.photos/seed/velvet/1000/1500", alt: "Soft modern sofa in concrete gallery space" }
+        ];
 
-    <header
-        class="site-header"
-        id="site-header"
-    >
-        <nav class="navigation">
-            <button
-                class="logo"
-                type="button"
-                data-scroll="home"
-            >
-                LIONRENDERS
-            </button>
+        const PROCESS_STEPS = [
+            { step: "01", title: "Briefing & CAD models", desc: "Send us your CAD files, sketches, or physical prototypes along with brand guidelines and material specs." },
+            { step: "02", title: "Clay model & cameras", desc: "We establish digital geometry, camera framing, and composition for initial sign-off." },
+            { step: "03", title: "Materials & lighting", desc: "Creation of high-resolution PBR textures, bespoke lighting, and realistic environment integration." },
+            { step: "04", title: "Review & refinement", desc: "Collaborative review rounds to fine-tune reflections, environmental mood, and subtle micro-details." },
+            { step: "05", title: "8K master delivery", desc: "Final high-precision ray-traced rendering, post-processing color grading, and delivery in all formats." }
+        ];
 
-            <div class="nav-links">
-                <button
-                    class="nav-link active"
-                    type="button"
-                    data-scroll="work"
-                >
-                    Work
-                </button>
+        const NAV_ITEMS = [
+            { id: "home", label: "LionRenders" },
+            { id: "work", label: "Work" },
+            { id: "process", label: "Process" },
+            { id: "about", label: "Studio" }
+        ];
 
-                <button
-                    class="nav-link"
-                    type="button"
-                    data-scroll="process"
-                >
-                    Process
-                </button>
+        const smoothTransition = { duration: 0.7, ease: [0.16, 1, 0.3, 1] };
 
-                <button
-                    class="nav-link"
-                    type="button"
-                    data-scroll="about"
-                >
-                    Studio
-                </button>
-            </div>
+        // --- KINETIC ENGINE CORE ---
+        function KineticEngine({ items, onProjectClick, interactive }) {
+            const containerRef = useRef(null);
+            const wrapperRef = useRef(null);
+            const prefersReducedMotion = useReducedMotion();
+            const yPos = useRef(0);
+            const currentVelocity = useRef(-0.3);
+            const targetVelocity = useRef(-0.3);
+            const isDragging = useRef(false);
 
-            <button
-                class="button button-dark"
-                type="button"
-                data-open-contact
-            >
-                Start project
+            useAnimationFrame((t, delta) => {
+                if (prefersReducedMotion || !wrapperRef.current) return;
+                
+                let vDelta = (targetVelocity.current - currentVelocity.current) * 0.05;
+                if (isNaN(vDelta)) vDelta = 0;
+                
+                currentVelocity.current += vDelta;
+                yPos.current += currentVelocity.current;
+                
+                if (isNaN(yPos.current)) yPos.current = 0;
+                
+                const scrollHeight = wrapperRef.current.scrollHeight / 2;
+                if (scrollHeight > 0) {
+                    if (yPos.current <= -scrollHeight) {
+                        yPos.current += scrollHeight;
+                    } else if (yPos.current > 0) {
+                        yPos.current -= scrollHeight;
+                    }
+                    wrapperRef.current.style.transform = `translate3d(0, ${yPos.current}px, 0)`;
+                }
+            });
 
-                <svg class="icon">
-                    #icon-arrow</use>
-                </svg>
-            </button>
+            const handlePointerMove = (e) => {
+                if (prefersReducedMotion || isDragging.current || !containerRef.current || !interactive) return;
+                const rect = containerRef.current.getBoundingClientRect();
+                if (rect.height === 0) return; 
+                
+                const relativeY = e.clientY - rect.top;
+                const normalizedY = (relativeY / rect.height) * 2 - 1;
+                
+                let speed = (normalizedY * 1.5) - 0.3;
+                if (isNaN(speed)) speed = -0.3;
+                
+                targetVelocity.current = speed;
+            };
 
-            <button
-                class="
-                    icon-button
-                    mobile-menu-button
-                "
-                id="mobile-menu-button"
-                type="button"
-                aria-label="Open menu"
-                aria-expanded="false"
-            >
-                <svg class="icon">
-                    #icon-menu</use>
-                </svg>
-            </button>
-        </nav>
+            const handlePointerLeave = () => {
+                if (prefersReducedMotion || !interactive) return;
+                isDragging.current = false;
+                targetVelocity.current = -0.3;
+            };
 
-        <div
-            class="mobile-menu"
-            id="mobile-menu"
-            hidden
-        >
-            <button
-                type="button"
-                data-scroll="home"
-            >
-                LionRenders
-            </button>
+            const getSpanClass = (ratio) => {
+                switch (ratio) {
+                    case "wide": return "col-span-1 md:col-span-2 row-span-1";
+                    case "tall": return "col-span-1 row-span-2";
+                    case "panorama": return "col-span-1 md:col-span-3 row-span-1";
+                    case "square": default: return "col-span-1 row-span-1";
+                }
+            };
 
-            <button
-                type="button"
-                data-scroll="work"
-            >
-                Work
-            </button>
-
-            <button
-                type="button"
-                data-scroll="process"
-            >
-                Process
-            </button>
-
-            <button
-                type="button"
-                data-scroll="about"
-            >
-                Studio
-            </button>
-
-            <button
-                class="button button-dark"
-                type="button"
-                data-open-contact
-            >
-                Start project
-            </button>
-        </div>
-    </header>
-
-    <!-- ======================================================
-         MAIN CONTENT
-    ======================================================= -->
-
-    <main>
-        <!-- HERO -->
-
-        <section
-            class="hero"
-            id="home"
-        >
-            <div class="container">
-                <div class="hero-content">
-                    <span class="eyebrow">
-                        Visualisation & CGI studio
-                    </span>
-
-                    <h1>
-                        Imagined in 3D.
-                        <br>
-
-                        <em>Felt as real.</em>
-                    </h1>
-
-                    <p class="hero-description">
-                        High-end CGI, product
-                        visualisation, architecture, and
-                        cinematic launch films for luxury,
-                        technology, and design-led brands.
-                    </p>
-
-                    <button
-                        class="hero-link"
-                        type="button"
-                        data-scroll="work"
-                    >
-                        View gallery
-
-                        <svg class="icon">
-                            #icon-down</use>
-                        </svg>
-                    </button>
+            const renderMosaicGrid = (isDuplicate = false) => (
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 grid-flow-dense gap-3 md:gap-5 p-4 md:p-8">
+                    {items.map((item, idx) => (
+                        <article 
+                            key={isDuplicate ? `dup-${item.id}-${idx}` : item.id} 
+                            onClick={(e) => {
+                                if (interactive) {
+                                    e.stopPropagation();
+                                    onProjectClick(item);
+                                }
+                            }} 
+                            className={`group relative overflow-hidden bg-gray-100 cursor-pointer transition-all duration-700 ${getSpanClass(item.ratio)} rounded-[24px]`}
+                        >
+                            <div className="relative w-full h-full min-h-[320px] md:min-h-[420px] overflow-hidden bg-gray-200">
+                                <img src={item.src} alt={item.alt} loading="lazy" className="h-full w-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 ease-[0.16,1,0.3,1] group-hover:scale-105" />
+                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-6 flex flex-col justify-end text-white">
+                                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/70 mb-2">{item.category}</span>
+                                    <h3 className="text-xl font-medium tracking-tight text-white">{item.title}</h3>
+                                </div>
+                            </div>
+                        </article>
+                    ))}
                 </div>
-            </div>
-        </section>
+            );
 
-        <!-- GALLERY -->
-
-        <section
-            class="gallery-section"
-            id="work"
-        >
-            <div class="container">
-                <div class="gallery-heading">
-                    <div>
-                        <span class="eyebrow">
-                            Portfolio
-                        </span>
-
-                        <h2>
-                            Selected works.
-                        </h2>
+            return (
+                <div 
+                    ref={containerRef} 
+                    onPointerMove={handlePointerMove} 
+                    onPointerLeave={handlePointerLeave} 
+                    className="relative w-full h-full overflow-hidden"
+                >
+                    <div ref={wrapperRef} className={`w-full will-change-transform ${prefersReducedMotion ? "overflow-y-auto h-full no-scrollbar" : ""}`}>
+                        {renderMosaicGrid(false)}
+                        {!prefersReducedMotion && renderMosaicGrid(true)}
                     </div>
-
-                    <div
-                        class="filters"
-                        id="gallery-filters"
-                    ></div>
                 </div>
-            </div>
+            );
+        }
 
-            <div class="gallery-placeholder">
-                <div
-                    class="gallery-viewport"
-                    id="gallery-viewport"
-                    tabindex="0"
-                    aria-label="
-                        Kinetic project gallery.
-                        Click to expand.
-                    "
-                >
-                    <div
-                        class="gallery-fog top"
-                    ></div>
+        // --- COMPONENTS ---
+        function Header({ activeSection, scrollTo, openContact }) {
+            const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+            const { scrollY } = useScroll();
+            const [isScrolled, setIsScrolled] = useState(false);
 
-                    <div
-                        class="gallery-fog bottom"
-                    ></div>
+            useMotionValueEvent(scrollY, "change", (latest) => {
+                setIsScrolled(latest > 20);
+            });
 
-                    <div
-                        class="gallery-unveil"
+            return (
+                <header className="fixed top-0 left-0 right-0 z-40 flex justify-center pointer-events-none">
+                    <motion.nav 
+                        layout
+                        initial={false}
+                        animate={{
+                            y: isScrolled ? 0 : 24,
+                            borderRadius: isScrolled ? "0px" : "9999px",
+                            backgroundColor: isScrolled ? "rgba(255, 255, 255, 0.95)" : "rgba(255, 255, 255, 0.8)",
+                            boxShadow: isScrolled 
+                                ? "0px 4px 20px rgba(0,0,0,0.03)" 
+                                : "0px 12px 30px -10px rgba(0,0,0,0.05), inset 0px 0px 0px 1px rgba(0,0,0,0.05)",
+                        }}
+                        transition={smoothTransition}
+                        className={`pointer-events-auto relative flex items-center justify-between gap-1 backdrop-blur-[32px] overflow-hidden ${isScrolled ? 'w-full px-6 md:px-12 py-4' : 'w-[calc(100%-3rem)] max-w-fit p-1.5'}`}
                     >
-                        <span>
-                            Click to unveil
-                        </span>
-                    </div>
+                        <motion.button layout transition={smoothTransition} onClick={() => scrollTo("home")} className="flex items-center justify-center px-6 py-3 rounded-full transition-all hover:bg-gray-100 shrink-0">
+                            <LionLogo className="h-4 sm:h-5 w-auto object-contain" />
+                        </motion.button>
+                        
+                        <motion.div layout transition={smoothTransition} className="hidden md:flex items-center gap-1 mx-4">
+                            {NAV_ITEMS.slice(1).map((item) => {
+                                const isActive = activeSection === item.id;
+                                return (
+                                    <button
+                                        key={item.id}
+                                        onClick={() => scrollTo(item.id)}
+                                        className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 transform ${
+                                            isActive
+                                                ? "bg-gray-100 text-black scale-105"
+                                                : "text-gray-500 hover:bg-gray-50 hover:text-black hover:scale-105"
+                                        }`}
+                                    >
+                                        {item.label}
+                                    </button>
+                                );
+                            })}
+                        </motion.div>
 
-                    <div
-                        class="gallery-track"
-                        id="gallery-track"
-                    ></div>
-                </div>
-            </div>
-        </section>
+                        <motion.div layout transition={smoothTransition} className="hidden md:flex items-center pl-2 shrink-0 group">
+                            <button onClick={() => openContact()} className="flex items-center gap-2 px-6 py-3 rounded-full bg-black text-white text-sm font-medium transition-all duration-300 hover:bg-[#b85f4d] hover:shadow-[0_0_20px_rgba(184,95,77,0.4)] hover:scale-105">
+                                Start project <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                            </button>
+                        </motion.div>
 
-        <!-- PROCESS -->
+                        <motion.button layout transition={smoothTransition} onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="grid h-10 w-10 place-items-center rounded-full bg-gray-100 text-black md:hidden pointer-events-auto shrink-0 hover:bg-gray-200 transition-all" aria-label="Menu">
+                            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+                        </motion.button>
+                    </motion.nav>
 
-        <section
-            class="process-section"
-            id="process"
-        >
-            <div class="container">
-                <div class="process-intro">
-                    <span class="eyebrow">
-                        Methodology
-                    </span>
+                    <AnimatePresence>
+                        {mobileMenuOpen && (
+                            <motion.div 
+                                initial={{ opacity: 0, y: -16, scale: 0.96 }} 
+                                animate={{ opacity: 1, y: 0, scale: 1 }} 
+                                exit={{ opacity: 0, y: -16, scale: 0.96 }} 
+                                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} 
+                                className={`pointer-events-auto absolute left-4 right-4 p-4 rounded-3xl bg-white border border-gray-100 shadow-[0_24px_80px_rgba(0,0,0,0.1)] md:hidden ${isScrolled ? 'top-20' : 'top-28'}`}
+                            >
+                                <div className="flex flex-col gap-1">
+                                    {NAV_ITEMS.map((item) => (
+                                        <button key={item.id} onClick={() => { scrollTo(item.id); setMobileMenuOpen(false); }} className="px-4 py-3 text-left rounded-2xl text-[15px] font-medium text-gray-600 hover:bg-gray-50 hover:text-black transition-all">
+                                            {item.id === 'home' ? 'LionRenders' : item.label}
+                                        </button>
+                                    ))}
+                                    <div className="my-2 h-px bg-gray-100" />
+                                    <button onClick={() => { setMobileMenuOpen(false); openContact(); }} className="flex items-center justify-between px-4 py-3.5 rounded-2xl bg-black text-white font-medium text-[15px] hover:bg-[#b85f4d] transition-all">
+                                        <span>Start project</span>
+                                        <ArrowUpRight size={18} />
+                                    </button>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </header>
+            );
+        }
 
-                    <h2 class="section-heading">
-                        From blueprint to
-                        <br>
-
-                        <em>master image.</em>
-                    </h2>
-                </div>
-
-                <div
-                    class="process-grid"
-                    id="process-grid"
-                ></div>
-            </div>
-        </section>
-
-        <!-- ABOUT -->
-
-        <section
-            class="about-section"
-            id="about"
-        >
-            <div class="container">
-                <div class="about-panel">
-                    <div>
-                        <span class="eyebrow">
-                            The studio
-                        </span>
-
-                        <h2>
-                            Independent.
-                            <br>
-
-                            <em>Unrestricted.</em>
-                        </h2>
-
-                        <p class="about-copy">
-                            Direct collaboration with the
-                            artists designing, modelling,
-                            lighting, animating, and
-                            finishing every frame.
+        function Hero({ scrollTo }) {
+            return (
+                <section id="home" className="relative min-h-screen flex flex-col justify-center px-6 pt-32 pb-20 max-w-[1440px] mx-auto overflow-hidden bg-white">
+                    <motion.div 
+                        initial={{ opacity: 0, y: 30 }} 
+                        animate={{ opacity: 1, y: 0 }} 
+                        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }} 
+                        className="max-w-4xl"
+                    >
+                        <span className="text-xs font-semibold tracking-[0.2em] text-gray-400 uppercase mb-6 block">Visualisation & CGI studio</span>
+                        <h1 className="text-[clamp(3.5rem,10vw,8.5rem)] font-medium leading-[0.9] tracking-[-0.04em] text-black">
+                            Imagined in 3D.<br />
+                            <span className="text-gray-400 italic font-serif font-light">Felt as real.</span>
+                        </h1>
+                        <p className="mt-8 max-w-lg text-base md:text-lg text-gray-500 leading-relaxed font-light">
+                            High-end CGI, 3D product visualization, and cinematic launch films engineered for luxury, technology, and design. Letting the color speak only through the product.
                         </p>
-                    </div>
-
-                    <div class="about-metrics">
-                        <div>
-                            <span class="metric-value">
-                                100%
-                            </span>
-
-                            <span class="metric-label">
-                                Direct collaboration
-                            </span>
+                        <div className="mt-12">
+                            <button onClick={() => scrollTo("work")} className="group flex items-center gap-3 text-black text-sm font-semibold uppercase tracking-widest pb-1 border-b border-black hover:text-gray-500 hover:border-gray-500 transition-all duration-300">
+                                <span>View gallery</span>
+                                <motion.div animate={{ y: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}>
+                                    <ArrowDown size={16} />
+                                </motion.div>
+                            </button>
                         </div>
+                    </motion.div>
+                </section>
+            );
+        }
 
+        function KineticGallerySection({ onSelectProject }) {
+            const [filter, setFilter] = useState("All");
+            const [isExpanded, setIsExpanded] = useState(false);
+            const categories = ["All", "Architecture", "Cosmetics", "Fragrance", "Furniture", "Automotive", "Technology"];
+            const filteredProjects = useMemo(() => {
+                if (filter === "All") return PROJECTS;
+                return PROJECTS.filter((p) => p.category === filter);
+            }, [filter]);
+
+            useEffect(() => {
+                if (isExpanded) {
+                    document.body.style.overflow = "hidden";
+                } else {
+                    document.body.style.overflow = "auto";
+                }
+                return () => { document.body.style.overflow = "auto"; };
+            }, [isExpanded]);
+
+            return (
+                <section id="work" className="py-24 max-w-[1800px] mx-auto bg-white">
+                    <div className="mb-12 flex flex-col lg:flex-row lg:items-end justify-between gap-8 px-6 md:px-12">
                         <div>
-                            <span class="metric-value">
-                                CGI & film
-                            </span>
-
-                            <span class="metric-label">
-                                Full service
-                            </span>
+                            <span className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400">Portfolio</span>
+                            <h2 className="mt-3 text-4xl sm:text-5xl font-medium tracking-tight text-black">Selected works.</h2>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {categories.map((cat) => (
+                                <button key={cat} onClick={() => setFilter(cat)} className={`px-5 py-2 rounded-full text-xs font-semibold tracking-wide transition-all duration-300 ${filter === cat ? "bg-black text-white" : "bg-gray-50 text-gray-500 hover:text-black hover:bg-gray-100"}`}>
+                                    {cat}
+                                </button>
+                            ))}
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- ======================================================
-         FOOTER
-    ======================================================= -->
-
-    <footer class="footer">
-        <div
-            class="
-                container
-                footer-content
-            "
-        >
-            <span class="logo">
-                LIONRENDERS
-            </span>
-
-            <div class="footer-links">
-                #
-                    Instagram
-                </a>
-
-                #
-                    Behance
-                </a>
-
-                #
-                    Vimeo
-                </a>
-            </div>
-        </div>
-    </footer>
-
-    <!-- ======================================================
-         FLOATING CALCULATOR BUTTON
-    ======================================================= -->
-
-    <button
-        class="calculator-fab"
-        id="calculator-fab"
-        type="button"
-    >
-        <svg class="icon">
-            #icon-calculator</use>
-        </svg>
-
-        <span>Project estimator</span>
-    </button>
-
-    <!-- ======================================================
-         EXPANDED GALLERY
-    ======================================================= -->
-
-    <div
-        class="expanded-gallery"
-        id="expanded-gallery"
-        hidden
-        role="dialog"
-        aria-modal="true"
-        aria-label="Expanded project gallery"
-    >
-        <button
-            class="
-                icon-button
-                gallery-close
-            "
-            id="gallery-close"
-            type="button"
-            aria-label="Close expanded gallery"
-        >
-            <svg class="icon">
-                #icon-close</use>
-            </svg>
-        </button>
-
-        <div
-            class="expanded-gallery-content"
-            id="expanded-gallery-content"
-        ></div>
-    </div>
-
-    <!-- ======================================================
-         PROJECT MODAL
-    ======================================================= -->
-
-    <div
-        class="modal-backdrop"
-        id="project-modal"
-        hidden
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="project-modal-title"
-    >
-        <article
-            class="modal-panel"
-            id="project-modal-panel"
-        >
-            <button
-                class="
-                    icon-button
-                    modal-close
-                "
-                id="project-modal-close"
-                type="button"
-                aria-label="Close project"
-            >
-                <svg class="icon">
-                    #icon-close</use>
-                </svg>
-            </button>
-
-            <div class="project-modal-content">
-                <div class="project-modal-image">
                     
-                </div>
-
-                <div class="project-modal-details">
-                    <span
-                        class="eyebrow"
-                        id="project-modal-category"
-                    ></span>
-
-                    <h2 id="project-modal-title"></h2>
-
-                    <p
-                        class="project-description"
-                        id="project-modal-description"
-                    ></p>
-
-                    <div class="project-discipline">
-                        <span class="eyebrow">
-                            Discipline
-                        </span>
-
-                        <strong
-                            id="project-modal-discipline"
-                        ></strong>
-                    </div>
-
-                    <button
-                        class="
-                            button
-                            button-dark
-                        "
-                        id="project-enquiry-button"
-                        type="button"
-                        style="margin-top:32px"
+                    {/* Embedded Glimpse View with Fog */}
+                    <div 
+                        className="relative w-full h-[80vh] min-h-[600px] border-y border-gray-100 group cursor-pointer"
+                        onClick={() => setIsExpanded(true)}
                     >
-                        Inquire about similar work
+                        {/* CSS Gradients for the Fog Effect (Top & Bottom only) */}
+                        <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-white via-white/80 to-transparent z-20 pointer-events-none transition-opacity duration-500" />
+                        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-white via-white/80 to-transparent z-20 pointer-events-none transition-opacity duration-500" />
+                        
+                        <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none transition-opacity duration-700">
+                            <span className="bg-black text-white px-6 py-3 rounded-full text-xs font-bold tracking-widest uppercase shadow-[0_10px_40px_rgba(0,0,0,0.2)] opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                Click to unveil
+                            </span>
+                        </div>
 
-                        <svg class="icon">
-                            #icon-arrow</use>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </article>
-    </div>
+                        <KineticEngine items={filteredProjects} onProjectClick={() => {}} interactive={false} />
+                    </div>
 
-    <!-- ======================================================
-         CALCULATOR MODAL
-    ======================================================= -->
+                    {/* Expanded Full-Screen View */}
+                    <AnimatePresence>
+                        {isExpanded && (
+                            <motion.div 
+                                initial={{ opacity: 0, scale: 0.98 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.98 }}
+                                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                                className="fixed inset-0 z-[60] bg-white cursor-ns-resize"
+                            >
+                                <button onClick={() => setIsExpanded(false)} className="absolute top-8 right-8 z-[70] p-4 rounded-full bg-white/80 backdrop-blur-md border border-gray-200 shadow-xl text-black hover:bg-black hover:text-white transition-all">
+                                    <X size={24} />
+                                </button>
+                                
+                                <div className="w-full h-full pt-16 pb-8">
+                                    <KineticEngine items={filteredProjects} onProjectClick={(item) => onSelectProject(item)} interactive={true} />
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </section>
+            );
+        }
 
-    <div
-        class="modal-backdrop"
-        id="calculator-modal"
-        hidden
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="calculator-title"
-    >
-        <div class="modal-panel">
-            <button
-                class="
-                    icon-button
-                    modal-close
-                "
-                id="calculator-close"
-                type="button"
-                aria-label="Close estimator"
-            >
-                <svg class="icon">
-                    #icon-close</use>
-                </svg>
-            </button>
+        function ProcessSection() {
+            return (
+                <section id="process" className="py-24 px-6 md:px-12 max-w-[1440px] mx-auto bg-white">
+                    <div className="mb-16 max-w-2xl">
+                        <span className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400">Methodology</span>
+                        <h2 className="mt-3 text-4xl sm:text-5xl font-medium tracking-tight text-black">
+                            From blueprint to<br />
+                            <span className="italic font-serif font-light text-gray-500">master image.</span>
+                        </h2>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 border-y md:border-y-0 md:border-t md:border-b border-gray-200 divide-y md:divide-y-0 md:divide-x divide-gray-200">
+                        {PROCESS_STEPS.map((step, idx) => (
+                            <div key={idx} className="group p-8 bg-white transition-all duration-500 hover:bg-gray-50 flex flex-col h-full">
+                                <span className="text-3xl font-mono font-light text-gray-300 block mb-6 transition-colors duration-500 group-hover:text-black">{step.step}</span>
+                                <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 text-black">{step.title}</h3>
+                                <p className="text-sm text-gray-500 leading-relaxed font-light">{step.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            );
+        }
 
-            <div class="calculator-panel">
-                <div class="calculator-controls">
-                    <span class="eyebrow">
-                        Project estimator
-                    </span>
+        function AboutSection() {
+            return (
+                <section id="about" className="py-24 px-6 md:px-12 max-w-[1440px] mx-auto bg-white">
+                    <div className="border border-gray-200 p-8 md:p-20 flex flex-col md:flex-row gap-16 justify-between items-start bg-gray-50 rounded-[48px]">
+                        <div className="max-w-xl">
+                            <span className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400">The studio</span>
+                            <h2 className="mt-4 text-4xl sm:text-6xl font-medium tracking-tight text-black leading-[0.9]">
+                                Independent.<br />
+                                <span className="font-serif italic font-light text-gray-500">Unrestricted.</span>
+                            </h2>
+                            <p className="mt-8 text-base text-gray-500 leading-relaxed font-light">
+                                We operate without the noise or overhead of conventional agencies. You work directly with the creative directors and technical artists who craft every pixel in monochrome, letting the color speak only through your product.
+                            </p>
+                        </div>
+                        <div className="flex flex-col gap-10">
+                            <div>
+                                <p className="text-4xl sm:text-5xl font-light text-black tracking-tighter">100%</p>
+                                <p className="text-xs text-gray-500 uppercase tracking-widest mt-2 font-semibold">Direct collaboration</p>
+                            </div>
+                            <div>
+                                <p className="text-4xl sm:text-5xl font-light text-black tracking-tighter">CGI & film</p>
+                                <p className="text-xs text-gray-500 uppercase tracking-widest mt-2 font-semibold">Full service</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        }
 
-                    <h2
-                        class="calculator-title"
-                        id="calculator-title"
+        function CalculatorModal({ isOpen, onClose, openContact }) {
+            const [type, setType] = useState('product'); 
+            const [views, setViews] = useState(3);
+            const [quality, setQuality] = useState('standard'); 
+            const [speed, setSpeed] = useState('standard'); 
+
+            const estimate = useMemo(() => {
+                let basePerView = 900;
+                let daysBase = 5;
+
+                if (type === 'motion') { basePerView = 2400; daysBase = 10; }
+                else if (type === 'spatial') { basePerView = 1200; daysBase = 7; }
+                else if (type === 'interactive') { basePerView = 1600; daysBase = 8; }
+
+                let qualityMultiplier = 1.0;
+                if (quality === 'campaign') qualityMultiplier = 1.35;
+                if (quality === 'cinematic') qualityMultiplier = 1.75;
+
+                let speedMultiplier = speed === 'express' ? 1.4 : 1.0;
+                let daysMultiplier = speed === 'express' ? 0.6 : 1.0;
+
+                const rawCost = basePerView * views * qualityMultiplier * speedMultiplier;
+                const estimatedDays = Math.max(2, Math.round((daysBase + (views * 0.8)) * daysMultiplier));
+
+                return {
+                    lowerCost: Math.round(rawCost * 0.9),
+                    upperCost: Math.round(rawCost * 1.15),
+                    days: estimatedDays
+                };
+            }, [type, views, quality, speed]);
+
+            return (
+                <AnimatePresence>
+                    {isOpen && (
+                        <motion.div 
+                            initial={{ opacity: 0 }} 
+                            animate={{ opacity: 1 }} 
+                            exit={{ opacity: 0 }} 
+                            transition={{ duration: 0.4 }}
+                            className="fixed inset-0 z-[80] flex items-center justify-center p-4 bg-black/20 backdrop-blur-[10px]"
+                            onClick={onClose}
+                        >
+                            <motion.div 
+                                initial={{ opacity: 0, y: 40, scale: 0.95 }} 
+                                animate={{ opacity: 1, y: 0, scale: 1 }} 
+                                exit={{ opacity: 0, y: 20, scale: 0.95 }} 
+                                transition={smoothTransition}
+                                className="relative w-full max-w-5xl bg-white/80 backdrop-blur-[60px] rounded-[48px] overflow-hidden flex flex-col lg:flex-row shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] border border-white"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <button onClick={onClose} className="absolute top-6 right-6 p-3 rounded-full bg-white text-gray-500 shadow-sm border border-gray-100 hover:bg-black hover:text-white transition-all z-20">
+                                    <X size={18} />
+                                </button>
+
+                                {/* Left Controls */}
+                                <div className="flex-1 p-8 md:p-12 overflow-y-auto max-h-[85vh] no-scrollbar border-b lg:border-b-0 lg:border-r border-gray-200/50">
+                                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-2 block">Project estimator</span>
+                                    <h3 className="text-3xl font-medium tracking-tight text-black mb-10">Configure your scope.</h3>
+
+                                    <div className="space-y-10">
+                                        <div>
+                                            <label className="block text-xs font-semibold tracking-wider text-gray-500 mb-4 uppercase">1. Deliverable category</label>
+                                            <div className="grid grid-cols-2 gap-3">
+                                                {[
+                                                    { id: 'product', label: 'Product CGI', icon: <Box size={16} /> },
+                                                    { id: 'motion', label: 'Motion film', icon: <Video size={16} /> },
+                                                    { id: 'spatial', label: 'Spatial / arch', icon: <Building size={16} /> },
+                                                    { id: 'interactive', label: 'Interactive', icon: <Layers size={16} /> }
+                                                ].map((item) => (
+                                                    <button key={item.id} onClick={() => setType(item.id)} className={`relative flex flex-col items-start gap-3 p-4 rounded-[20px] text-sm font-medium transition-all border ${type === item.id ? 'bg-black text-white border-black shadow-md' : 'bg-white/50 text-gray-600 border-gray-200 hover:border-gray-400 hover:bg-white'}`}>
+                                                        <span className={type === item.id ? 'text-white' : 'text-gray-400'}>{item.icon}</span>
+                                                        {item.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div className="flex justify-between items-center mb-4">
+                                                <label className="text-xs font-semibold tracking-wider text-gray-500 uppercase">2. Quantity of assets</label>
+                                                <span className="font-mono text-sm font-medium text-black bg-white shadow-sm border border-gray-100 px-3 py-1 rounded-full">{views}</span>
+                                            </div>
+                                            <input type="range" min="1" max="12" value={views} onChange={(e) => setViews(parseInt(e.target.value))} className="w-full h-1.5 bg-gray-200 rounded-full appearance-none outline-none focus:ring-2 focus:ring-black" />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-xs font-semibold tracking-wider text-gray-500 mb-4 uppercase">3. Production tier</label>
+                                            <div className="flex p-1.5 bg-gray-100/80 backdrop-blur-md rounded-[20px] relative border border-white/50">
+                                                {[{ id: 'standard', label: 'E-commerce' }, { id: 'campaign', label: 'Campaign' }, { id: 'cinematic', label: 'Cinematic' }].map((t) => (
+                                                    <button key={t.id} onClick={() => setQuality(t.id)} className={`flex-1 py-3 text-xs font-semibold tracking-wide rounded-[16px] z-10 relative transition-colors ${quality === t.id ? 'text-black' : 'text-gray-500 hover:text-black'}`}>
+                                                        {quality === t.id && <motion.div layoutId="q-pill" transition={smoothTransition} className="absolute inset-0 bg-white rounded-[16px] -z-10 shadow-sm border border-gray-200" />}
+                                                        {t.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-xs font-semibold tracking-wider text-gray-500 mb-4 uppercase">4. Target timeline</label>
+                                            <div className="flex p-1.5 bg-gray-100/80 backdrop-blur-md rounded-[20px] relative border border-white/50">
+                                                {[{ id: 'standard', label: 'Standard' }, { id: 'express', label: 'Express' }].map((t) => (
+                                                    <button key={t.id} onClick={() => setSpeed(t.id)} className={`flex-1 flex items-center justify-center gap-2 py-3 text-xs font-semibold tracking-wide rounded-[16px] z-10 relative transition-colors ${speed === t.id ? 'text-black' : 'text-gray-500 hover:text-black'}`}>
+                                                        {speed === t.id && <motion.div layoutId="s-pill" transition={smoothTransition} className="absolute inset-0 bg-white rounded-[16px] -z-10 shadow-sm border border-gray-200" />}
+                                                        {t.id === 'express' ? <Zap size={14} className={speed === t.id ? "text-black" : ""} /> : <Clock size={14} />}
+                                                        {t.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Right HUD */}
+                                <div className="w-full lg:w-[400px] bg-white/40 p-8 md:p-12 flex flex-col justify-between">
+                                    <div>
+                                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-4 block">Estimated investment</span>
+                                        <div className="text-4xl font-light tracking-tighter text-black flex flex-col gap-1">
+                                            <div className="flex items-center gap-1"><span className="text-gray-400 font-medium text-2xl">$</span><AnimatedNumber value={estimate.lowerCost} /></div>
+                                            <div className="text-sm text-gray-400 font-serif italic ml-1">— to —</div>
+                                            <div className="flex items-center gap-1"><span className="text-gray-400 font-medium text-2xl">$</span><AnimatedNumber value={estimate.upperCost} /></div>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-12 space-y-4 text-sm border-t border-gray-200 pt-8">
+                                        <div className="flex justify-between items-center"><span className="text-gray-500 text-xs uppercase font-bold tracking-widest">Base setup</span><span className="font-mono text-black">Included</span></div>
+                                        <div className="flex justify-between items-center"><span className="text-gray-500 text-xs uppercase font-bold tracking-widest">Assets</span><span className="font-mono text-black">{views}x</span></div>
+                                        <div className="flex justify-between items-center"><span className="text-gray-500 text-xs uppercase font-bold tracking-widest">Tier</span><span className="font-mono text-black capitalize">{quality}</span></div>
+                                        <div className="flex justify-between items-center"><span className="text-gray-500 text-xs uppercase font-bold tracking-widest">Timeline</span><span className="font-mono text-black">~<AnimatedNumber value={estimate.days} /> Days</span></div>
+                                    </div>
+
+                                    <button onClick={() => {
+                                        onClose();
+                                        openContact({ type: 'estimate', lowerCost: estimate.lowerCost, upperCost: estimate.upperCost, days: estimate.days, config: { type, views, quality, speed } });
+                                    }} className="w-full mt-10 py-4 rounded-full bg-black text-white font-bold text-xs uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 hover:scale-105">
+                                        Lock in this scope
+                                    </button>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            );
+        }
+
+        function ProjectDetailModal({ project, onClose, openContact }) {
+            // Prevent background interaction when the project modal is open
+            useEffect(() => {
+                const handleKey = (e) => e.key === "Escape" && onClose();
+                window.addEventListener("keydown", handleKey);
+                return () => window.removeEventListener("keydown", handleKey);
+            }, [onClose]);
+
+            return (
+                <div className="fixed inset-0 z-[80] flex items-center justify-center p-4 sm:p-8 bg-black/20 backdrop-blur-[20px]" onClick={onClose}>
+                    <motion.div 
+                        initial={{ opacity: 0, y: 30, scale: 0.95 }} 
+                        animate={{ opacity: 1, y: 0, scale: 1 }} 
+                        exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                        transition={smoothTransition}
+                        className="relative w-full max-w-5xl bg-white/80 backdrop-blur-[60px] border border-white shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] rounded-[48px] p-6 flex flex-col md:flex-row gap-8 overflow-hidden"
+                        onClick={e => e.stopPropagation()}
                     >
-                        Configure your scope.
-                    </h2>
-
-                    <div class="calculator-group">
-                        <span class="calculator-label">
-                            1. Category
-                        </span>
-
-                        <div
-                            class="category-options"
-                            id="category-options"
-                        >
-                            <button
-                                class="
-                                    category-option
-                                    active
-                                "
-                                type="button"
-                                data-category="product"
-                            >
-                                Product CGI
-                            </button>
-
-                            <button
-                                class="category-option"
-                                type="button"
-                                data-category="motion"
-                            >
-                                Motion film
-                            </button>
-
-                            <button
-                                class="category-option"
-                                type="button"
-                                data-category="spatial"
-                            >
-                                Spatial / arch
-                            </button>
-
-                            <button
-                                class="category-option"
-                                type="button"
-                                data-category="interactive"
-                            >
-                                Interactive
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="calculator-group">
-                        <div class="range-row">
-                            <span class="calculator-label">
-                                2. Quantity
-                            </span>
-
-                            <span
-                                class="range-value"
-                                id="quantity-value"
-                            >
-                                3
-                            </span>
-                        </div>
-
-                        <input
-                            class="range-input"
-                            id="quantity-input"
-                            type="range"
-                            min="1"
-                            max="12"
-                            value="3"
-                        >
-                    </div>
-
-                    <div class="calculator-group">
-                        <span class="calculator-label">
-                            3. Production tier
-                        </span>
-
-                        <div
-                            class="segmented-options"
-                            id="quality-options"
-                        >
-                            <button
-                                class="segmented-option"
-                                type="button"
-                                data-quality="standard"
-                            >
-                                Standard
-                            </button>
-
-                            <button
-                                class="
-                                    segmented-option
-                                    active
-                                "
-                                type="button"
-                                data-quality="campaign"
-                            >
-                                Campaign
-                            </button>
-
-                            <button
-                                class="segmented-option"
-                                type="button"
-                                data-quality="cinematic"
-                            >
-                                Cinematic
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="calculator-group">
-                        <span class="calculator-label">
-                            4. Timeline
-                        </span>
-
-                        <div
-                            class="
-                                segmented-options
-                                two
-                            "
-                            id="speed-options"
-                        >
-                            <button
-                                class="
-                                    segmented-option
-                                    active
-                                "
-                                type="button"
-                                data-speed="standard"
-                            >
-                                Standard
-                            </button>
-
-                            <button
-                                class="segmented-option"
-                                type="button"
-                                data-speed="express"
-                            >
-                                Express
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="calculator-results">
-                    <div>
-                        <span class="eyebrow">
-                            Estimated investment
-                        </span>
-
-                        <div class="estimated-range">
-                            <span>
-                                $
-                                <span
-                                    id="estimate-lower"
-                                >
-                                    4,450
-                                </span>
-                            </span>
-
-                            <span class="estimated-separator">
-                                to
-                            </span>
-
-                            <span>
-                                $
-                                <span
-                                    id="estimate-upper"
-                                >
-                                    5,700
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="estimate-breakdown">
-                            <div class="breakdown-row">
-                                <span>Assets</span>
-
-                                <strong
-                                    id="breakdown-quantity"
-                                >
-                                    3x
-                                </strong>
-                            </div>
-
-                            <div class="breakdown-row">
-                                <span>Tier</span>
-
-                                <strong
-                                    id="breakdown-quality"
-                                >
-                                    Campaign
-                                </strong>
-                            </div>
-
-                            <div class="breakdown-row">
-                                <span>Timeline</span>
-
-                                <strong
-                                    id="breakdown-days"
-                                >
-                                    ~7 days
-                                </strong>
-                            </div>
-                        </div>
-
-                        <button
-                            class="
-                                button
-                                button-dark
-                            "
-                            id="request-proposal-button"
-                            type="button"
-                            style="
-                                width:100%;
-                                margin-top:32px
-                            "
-                        >
-                            Request proposal
+                        <button onClick={onClose} className="absolute top-6 right-6 z-50 p-3 rounded-full bg-white shadow-sm border border-gray-100 text-gray-500 hover:bg-black hover:text-white transition-all">
+                            <X size={18} />
                         </button>
-                    </div>
+
+                        <div className="w-full md:w-1/2 aspect-[4/3] rounded-[32px] overflow-hidden bg-gray-100">
+                            <img src={project.src} alt={project.alt} className="w-full h-full object-cover" />
+                        </div>
+                        
+                        <div className="w-full md:w-1/2 flex flex-col justify-center px-4 md:pr-12">
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{project.category}</span>
+                            <h3 className="text-3xl sm:text-4xl font-medium tracking-tight text-black mt-2">{project.title}</h3>
+                            <p className="text-sm text-gray-500 mt-4 leading-relaxed">{project.alt}. Developed with technical precision and photographic attention to detail, this project encapsulates the brand's vision by elevating it through immersive CGI.</p>
+                            
+                            <div className="mt-8 pt-6 border-t border-gray-200">
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-1">Discipline</span>
+                                <p className="text-black text-sm font-medium">{project.discipline}</p>
+                            </div>
+
+                            <button onClick={() => { onClose(); openContact(); }} className="mt-8 py-4 rounded-full bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 group">
+                                Inquire similar work <ArrowUpRight size={14} className="inline ml-1 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                            </button>
+                        </div>
+                    </motion.div>
                 </div>
-            </div>
-        </div>
-    </div>
+            );
+        }
 
-    <!-- ======================================================
-         CONTACT MODAL
-    ======================================================= -->
+        function ContactModal({ isOpen, onClose, contactData }) {
+            const [status, setStatus] = useState("idle");
+            const isEstimate = contactData?.type === 'estimate';
 
-    <div
-        class="modal-backdrop"
-        id="contact-modal"
-        hidden
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="contact-title"
-    >
-        <div
-            class="
-                modal-panel
-                contact-panel
-            "
-        >
-            <button
-                class="
-                    icon-button
-                    modal-close
-                "
-                id="contact-close"
-                type="button"
-                aria-label="Close contact form"
-            >
-                <svg class="icon">
-                    #icon-close</use>
-                </svg>
-            </button>
+            const [formData, setFormData] = useState({ name: '', phone: '', email: '', details: '' });
 
-            <div id="contact-form-view">
-                <span class="eyebrow">
-                    Contact
-                </span>
+            useEffect(() => {
+                if (isOpen && isEstimate) {
+                    const detailsText = `I would like to request a formal proposal based on my estimate:\n\n` +
+                        `- Category: ${contactData.config.type}\n` +
+                        `- Views: ${contactData.config.views}\n` +
+                        `- Quality: ${contactData.config.quality}\n` +
+                        `- Timeline: ${contactData.config.speed}\n` +
+                        `- Estimated Investment: $${contactData.lowerCost.toLocaleString()} - $${contactData.upperCost.toLocaleString()}\n\n` +
+                        `Additional project details: `;
+                    setFormData(prev => ({ ...prev, details: detailsText }));
+                } else if (!isOpen) {
+                    setFormData({ name: '', phone: '', email: '', details: '' });
+                    setStatus("idle");
+                }
+            }, [isOpen, contactData]);
 
-                <h2 id="contact-title">
-                    Let us discuss your project.
-                </h2>
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                setStatus("submitting");
+                setTimeout(() => {
+                    setStatus("success");
+                    setTimeout(() => { onClose(); setStatus("idle"); }, 3000);
+                }, 1500);
+            };
 
-                <form id="contact-form">
-                    <div class="form-grid">
-                        <div class="form-field">
-                            <label for="contact-name">
-                                Name / company
-                            </label>
-
-                            <input
-                                id="contact-name"
-                                name="name"
-                                type="text"
-                                required
-                            >
-                        </div>
-
-                        <div class="form-field">
-                            <label for="contact-phone">
-                                Phone
-                            </label>
-
-                            <input
-                                id="contact-phone"
-                                name="phone"
-                                type="tel"
-                                required
-                            >
-                        </div>
-                    </div>
-
-                    <div class="form-field">
-                        <label for="contact-email">
-                            Email
-                        </label>
-
-                        <input
-                            id="contact-email"
-                            name="email"
-                            type="email"
-                            required
+            return (
+                <AnimatePresence>
+                    {isOpen && (
+                        <motion.div 
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}
+                            className="fixed inset-0 z-[90] flex items-center justify-center p-4 bg-black/20 backdrop-blur-[20px]"
+                            onClick={onClose}
                         >
+                            <motion.div 
+                                initial={{ opacity: 0, y: 30, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 20, scale: 0.98 }} transition={smoothTransition}
+                                className="relative w-full max-w-2xl p-10 sm:p-16 bg-white/80 backdrop-blur-[60px] border border-white shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] rounded-[48px]"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <button onClick={onClose} className="absolute top-6 right-6 p-3 rounded-full bg-white text-gray-500 shadow-sm border border-gray-100 hover:bg-black hover:text-white transition-all">
+                                    <X size={18} />
+                                </button>
+                                
+                                {status === "success" ? (
+                                    <div className="py-12 text-center">
+                                        <div className="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-full bg-black text-white"><Check size={28} /></div>
+                                        <h3 className="text-3xl font-medium tracking-tight text-black">Request sent.</h3>
+                                        <p className="mt-3 text-sm text-gray-500 max-w-xs mx-auto">We will review the details and get back to you within 24 hours.</p>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-2 block">{isEstimate ? "Your estimate" : "Contact"}</span>
+                                        <h3 className="text-3xl sm:text-4xl font-medium tracking-tight mb-8 text-black">Let's discuss your project.</h3>
+                                        
+                                        <form className="space-y-6" onSubmit={handleSubmit}>
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                                <div>
+                                                    <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-2">Name / Company</label>
+                                                    <input type="text" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-0 py-3 bg-transparent border-b border-gray-200 text-black placeholder-gray-300 focus:outline-none focus:border-black transition-colors" placeholder="e.g. John Doe" />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-2">Phone</label>
+                                                    <input type="tel" required value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full px-0 py-3 bg-transparent border-b border-gray-200 text-black placeholder-gray-300 focus:outline-none focus:border-black transition-colors" placeholder="+1 555 000 000" />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-2">Email address</label>
+                                                <input type="email" required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full px-0 py-3 bg-transparent border-b border-gray-200 text-black placeholder-gray-300 focus:outline-none focus:border-black transition-colors" placeholder="hello@company.com" />
+                                            </div>
+                                            <div>
+                                                <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-2">Project details</label>
+                                                <textarea required rows="4" value={formData.details} onChange={e => setFormData({...formData, details: e.target.value})} className="w-full px-0 py-3 bg-transparent border-b border-gray-200 text-black placeholder-gray-300 focus:outline-none focus:border-black transition-colors resize-none" placeholder="Tell us more..."></textarea>
+                                            </div>
+                                            <button type="submit" disabled={status === "submitting"} className="w-full mt-6 py-4 rounded-full bg-black text-white font-bold text-xs uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 disabled:opacity-50 hover:-translate-y-0.5 group">
+                                                {status === "submitting" ? "Sending..." : "Submit request"}
+                                            </button>
+                                        </form>
+                                    </div>
+                                )}
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            );
+        }
+
+        function Footer() {
+            return (
+                <footer className="py-12 border-t border-gray-100 bg-white text-gray-500 text-sm">
+                    <div className="max-w-[1380px] mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-6">
+                        <LionLogo className="h-4 opacity-50 logo-invert" />
+                        <div className="text-xs uppercase tracking-widest font-semibold flex gap-8">
+                            <a href="#" className="hover:text-black transition">Instagram</a>
+                            <a href="#" className="hover:text-black transition">Behance</a>
+                        </div>
                     </div>
+                </footer>
+            );
+        }
 
-                    <div class="form-field">
-                        <label for="contact-details">
-                            Project details
-                        </label>
+        function CalculatorFAB({ onClick }) {
+            const { scrollY } = useScroll();
+            const [isHidden, setIsHidden] = useState(false);
 
-                        <textarea
-                            id="contact-details"
-                            name="details"
-                            required
-                        ></textarea>
-                    </div>
+            useMotionValueEvent(scrollY, "change", (latest) => {
+                setIsHidden(latest < 500); // Hide if at top of page
+            });
 
-                    <button
-                        class="
-                            button
-                            button-dark
-                        "
-                        type="submit"
-                        style="
-                            width:100%;
-                            margin-top:30px
-                        "
-                    >
-                        Submit request
-                    </button>
-                </form>
-            </div>
+            return (
+                <AnimatePresence>
+                    {!isHidden && (
+                        <motion.button 
+                            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+                            onClick={onClick}
+                            className="fixed bottom-6 right-6 z-40 bg-black text-white px-5 py-4 rounded-full shadow-[0_12px_40px_rgba(0,0,0,0.2)] flex items-center gap-3 hover:scale-105 hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 group"
+                        >
+                            <CalculatorIcon size={20} />
+                            <span className="text-[10px] font-bold uppercase tracking-widest hidden sm:inline-block max-w-0 group-hover:max-w-[150px] overflow-hidden whitespace-nowrap transition-all duration-500">Project estimator</span>
+                        </motion.button>
+                    )}
+                </AnimatePresence>
+            );
+        }
 
-            <div
-                class="success-message"
-                id="contact-success"
-                hidden
-            >
-                <div class="success-icon">
-                    <svg class="icon">
-                        #icon-check</use>
-                    </svg>
+        // --- MAIN APP ---
+        function App() {
+            const [activeSection, setActiveSection] = useState("home");
+            const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+            const [isCalcModalOpen, setIsCalcModalOpen] = useState(false);
+            const [previewProject, setPreviewProject] = useState(null);
+            const [contactData, setContactData] = useState(null);
+            
+            const scrollTo = (id) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                    setActiveSection(id);
+                }
+            };
+
+            const openContact = (data = null) => {
+                setIsCalcModalOpen(false); // Close calculator if open
+                setPreviewProject(null);
+                setContactData(data);
+                setIsContactModalOpen(true);
+            };
+
+            return (
+                <div className="min-h-screen relative bg-white">
+                    <Header activeSection={activeSection} scrollTo={scrollTo} openContact={openContact} />
+                    
+                    {/* Main content scales back gently when popups open */}
+                    <main className={`transition-all duration-700 ease-[0.16,1,0.3,1] ${isContactModalOpen || isCalcModalOpen || previewProject ? "scale-[0.98] opacity-50 pointer-events-none select-none blur-[4px]" : ""}`}>
+                        <Hero scrollTo={scrollTo} />
+                        <KineticGallerySection onSelectProject={setPreviewProject} />
+                        <ProcessSection />
+                        <AboutSection />
+                    </main>
+                    
+                    <Footer />
+                    
+                    <CalculatorFAB onClick={() => setIsCalcModalOpen(true)} />
+                    <CalculatorModal isOpen={isCalcModalOpen} onClose={() => setIsCalcModalOpen(false)} openContact={openContact} />
+                    <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} contactData={contactData} />
+                    
+                    <AnimatePresence>
+                        {previewProject && <ProjectDetailModal project={previewProject} onClose={() => setPreviewProject(null)} openContact={openContact} />}
+                    </AnimatePresence>
                 </div>
-
-                <h2>
-                    Request received.
-                </h2>
-
-                <p>
-                    This demonstration has not yet been
-                    connected to a form backend.
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ======================================================
-         JAVASCRIPT
-    ======================================================= -->
-
-    <script>
-        "use strict";
-
-        /*
-         * =====================================================
-         * PROJECT DATA
-         * =====================================================
-         */
-
-        const projects = [
-            {
-                id: "aether-house",
-                title: "Aether house",
-                category: "Architecture",
-                discipline:
-                    "Architectural visualisation",
-                ratio: "wide",
-                image:
-                    "https://picsum.photos/seed/aether/1600/1000",
-                description:
-                    "Cinematic concrete residence at dusk, developed with careful control of atmosphere, material response, landscaping, and architectural lighting."
-            },
-            {
-                id: "serein-no-7",
-                title: "Serein no. 7",
-                category: "Fragrance",
-                discipline: "Product CGI",
-                ratio: "tall",
-                image:
-                    "https://picsum.photos/seed/serein/1000/1500",
-                description:
-                    "Luxury fragrance bottle presented on translucent stone, with precise glass refraction, controlled highlights, and a restrained material palette."
-            },
-            {
-                id: "forma-chair",
-                title: "Forma chair",
-                category: "Furniture",
-                discipline:
-                    "Creative direction",
-                ratio: "square",
-                image:
-                    "https://picsum.photos/seed/forma/1200/1200",
-                description:
-                    "Sculptural lounge chair placed within a softly illuminated studio environment designed to emphasise form, fabric, and proportion."
-            },
-            {
-                id: "halcyon-gt",
-                title: "Halcyon GT",
-                category: "Automotive",
-                discipline: "Launch film",
-                ratio: "panorama",
-                image:
-                    "https://picsum.photos/seed/halcyon/1800/900",
-                description:
-                    "Concept performance vehicle crossing an atmospheric desert environment, combining automotive CGI with cinematic art direction."
-            },
-            {
-                id: "nacre-ring",
-                title: "Nacre fine ring",
-                category: "Jewellery",
-                discipline: "Macro imagery",
-                ratio: "tall",
-                image:
-                    "https://picsum.photos/seed/nacre/1000/1400",
-                description:
-                    "Pearl and platinum jewellery study created with macro-scale materials, controlled reflections, and fine surface detailing."
-            },
-            {
-                id: "monolith-speaker",
-                title: "Monolith speaker",
-                category: "Technology",
-                discipline: "Studio CGI",
-                ratio: "wide",
-                image:
-                    "https://picsum.photos/seed/monolith/1500/1000",
-                description:
-                    "Minimalist aluminium speaker system presented through precision product lighting and restrained technical composition."
-            },
-            {
-                id: "lumen-serum",
-                title: "Lumen serum",
-                category: "Cosmetics",
-                discipline: "Campaign CGI",
-                ratio: "square",
-                image:
-                    "https://picsum.photos/seed/lumen/1200/1200",
-                description:
-                    "Glass cosmetics packaging surrounded by water-light reflections, combining liquid-inspired lighting with premium campaign styling."
-            },
-            {
-                id: "velvet-sofa",
-                title: "Velvet sofa",
-                category: "Furniture",
-                discipline:
-                    "Interior rendering",
-                ratio: "tall",
-                image:
-                    "https://picsum.photos/seed/velvet/1000/1500",
-                description:
-                    "Contemporary upholstered sofa within a concrete gallery environment, balancing soft materials with architectural restraint."
-            },
-            {
-                id: "solaris-one",
-                title: "Solaris one",
-                category: "Automotive",
-                discipline: "Campaign CGI",
-                ratio: "wide",
-                image:
-                    "https://picsum.photos/seed/solaris/1600/1000",
-                description:
-                    "Electric performance vehicle presented in a controlled studio setting with precise automotive reflections."
-            },
-            {
-                id: "horizon-tower",
-                title: "Horizon tower",
-                category: "Architecture",
-                discipline:
-                    "Urban visualisation",
-                ratio: "tall",
-                image:
-                    "https://picsum.photos/seed/horizon/1000/1500",
-                description:
-                    "Residential tower with planted terraces and an urban-scale visual narrative focused on light, context, and materiality."
-            },
-            {
-                id: "zenith-pods",
-                title: "Zenith pods",
-                category: "Technology",
-                discipline: "Exploded CGI",
-                ratio: "square",
-                image:
-                    "https://picsum.photos/seed/zenith/1200/1200",
-                description:
-                    "Transparent wireless earbuds revealing internal components through layered technical CGI."
-            },
-            {
-                id: "flora-elixir",
-                title: "Flora elixir",
-                category: "Fragrance",
-                discipline: "Lifestyle CGI",
-                ratio: "wide",
-                image:
-                    "https://picsum.photos/seed/flora/1600/1000",
-                description:
-                    "Botanical fragrance atmosphere using soft morning light, natural forms, and premium glass rendering."
-            }
-        ];
-
-        const processSteps = [
-            {
-                number: "01",
-                title: "Briefing & CAD models",
-                description:
-                    "Send CAD files, sketches, references, or physical prototypes alongside brand and material specifications."
-            },
-            {
-                number: "02",
-                title: "Clay model & cameras",
-                description:
-                    "We establish geometry, focal length, camera framing, and composition for initial approval."
-            },
-            {
-                number: "03",
-                title: "Materials & lighting",
-                description:
-                    "High-resolution PBR materials, bespoke lighting, and realistic environment integration."
-            },
-            {
-                number: "04",
-                title: "Review & refinement",
-                description:
-                    "Collaborative reviews fine-tune reflections, colour, mood, composition, and micro-details."
-            },
-            {
-                number: "05",
-                title: "Master delivery",
-                description:
-                    "Final rendering, post-production, colour grading, quality control, and delivery in agreed formats."
-            }
-        ];
-
-        const categories = [
-            "All",
-            "Architecture",
-            "Automotive",
-            "Cosmetics",
-            "Fragrance",
-            "Furniture",
-            "Jewellery",
-            "Technology"
-        ];
-
-        /*
-         * =====================================================
-         * APPLICATION STATE
-         * =====================================================
-         */
-
-        const state = {
-            filter: "All",
-            galleryExpanded: false,
-            galleryClosing: false,
-
-            galleryY: 0,
-            currentVelocity: -0.3,
-            targetVelocity: -0.3,
-            loopHeight: 0,
-
-            pointerDown: false,
-            pointerMoved: false,
-            lastPointerY: 0,
-
-            selectedProject: null,
-
-            calculator: {
-                category: "product",
-                quantity: 3,
-                quality: "campaign",
-                speed: "standard"
-            }
-        };
-
-        /*
-         * =====================================================
-         * DOM REFERENCES
-         * =====================================================
-         */
-
-        const body =
-            document.body;
-
-        const siteHeader =
-            document.getElementById(
-                "site-header"
-            );
-
-        const mobileMenu =
-            document.getElementById(
-                "mobile-menu"
-            );
-
-        const mobileMenuButton =
-            document.getElementById(
-                "mobile-menu-button"
-            );
-
-        const mobileMenuIcon =
-            document.getElementById(
-                "mobile-menu-icon"
-            );
-
-        const filtersContainer =
-            document.getElementById(
-                "gallery-filters"
-            );
-
-        const galleryViewport =
-            document.getElementById(
-                "gallery-viewport"
-            );
-
-        const galleryTrack =
-            document.getElementById(
-                "gallery-track"
-            );
-
-        const expandedGallery =
-            document.getElementById(
-                "expanded-gallery"
-            );
-
-        const expandedGalleryContent =
-            document.getElementById(
-                "expanded-gallery-content"
-            );
-
-        const galleryClose =
-            document.getElementById(
-                "gallery-close"
-            );
-
-        const processGrid =
-            document.getElementById(
-                "process-grid"
-            );
-
-        const projectModal =
-            document.getElementById(
-                "project-modal"
-            );
-
-        const projectModalPanel =
-            document.getElementById(
-                "project-modal-panel"
-            );
-
-        const projectModalClose =
-            document.getElementById(
-                "project-modal-close"
-            );
-
-        const projectModalImage =
-            document.getElementById(
-                "project-modal-image"
-            );
-
-        const projectModalCategory =
-            document.getElementById(
-                "project-modal-category"
-            );
-
-        const projectModalTitle =
-            document.getElementById(
-                "project-modal-title"
-            );
-
-        const projectModalDescription =
-            document.getElementById(
-                "project-modal-description"
-            );
-
-        const projectModalDiscipline =
-            document.getElementById(
-                "project-modal-discipline"
-            );
-
-        const projectEnquiryButton =
-            document.getElementById(
-                "project-enquiry-button"
-            );
-
-        const calculatorFab =
-            document.getElementById(
-                "calculator-fab"
-            );
-
-        const calculatorModal =
-            document.getElementById(
-                "calculator-modal"
-            );
-
-        const calculatorClose =
-            document.getElementById(
-                "calculator-close"
-            );
-
-        const quantityInput =
-            document.getElementById(
-                "quantity-input"
-            );
-
-        const quantityValue =
-            document.getElementById(
-                "quantity-value"
-            );
-
-        const estimateLower =
-            document.getElementById(
-                "estimate-lower"
-            );
-
-        const estimateUpper =
-            document.getElementById(
-                "estimate-upper"
-            );
-
-        const breakdownQuantity =
-            document.getElementById(
-                "breakdown-quantity"
-            );
-
-        const breakdownQuality =
-            document.getElementById(
-                "breakdown-quality"
-            );
-
-        const breakdownDays =
-            document.getElementById(
-                "breakdown-days"
-            );
-
-        const requestProposalButton =
-            document.getElementById(
-                "request-proposal-button"
-            );
-
-        const contactModal =
-            document.getElementById(
-                "contact-modal"
-            );
-
-        const contactClose =
-            document.getElementById(
-                "contact-close"
-            );
-
-        const contactForm =
-            document.getElementById(
-                "contact-form"
-            );
-
-        const contactFormView =
-            document.getElementById(
-                "contact-form-view"
-            );
-
-        const contactSuccess =
-            document.getElementById(
-                "contact-success"
-            );
-
-        const contactDetails =
-            document.getElementById(
-                "contact-details"
-            );
-
-        /*
-         * =====================================================
-         * UTILITY FUNCTIONS
-         * =====================================================
-         */
-
-        function getFilteredProjects() {
-            if (state.filter === "All") {
-                return projects;
-            }
-
-            return projects.filter(
-                project =>
-                    project.category ===
-                    state.filter
             );
         }
 
-        function formatCurrency(value) {
-            return Math.round(
-                value
-            ).toLocaleString(
-                "en-US"
-            );
-        }
-
-        function lockBody() {
-            body.classList.add(
-                "modal-open"
-            );
-        }
-
-        function unlockBodyIfPossible() {
-            const overlayOpen =
-                !expandedGallery.hidden ||
-                !projectModal.hidden ||
-                !calculatorModal.hidden ||
-                !contactModal.hidden;
-
-            if (!overlayOpen) {
-                body.classList.remove(
-                    "modal-open"
-                );
-            }
-        }
-
-        function createProjectCard(
-            project,
-            duplicate = false
-        ) {
-            const article =
-                document.createElement(
-                    "article"
-                );
-
-            article.className =
-                `project-card ${project.ratio}`;
-
-            article.dataset.projectId =
-                project.id;
-
-            if (duplicate) {
-                article.setAttribute(
-                    "aria-hidden",
-                    "true"
-                );
-            }
-
-            const image =
-                document.createElement(
-                    "img"
-                );
-
-            image.src = project.image;
-            image.alt = duplicate
-                ? ""
-                : project.description;
-
-            image.loading = "lazy";
-            image.draggable = false;
-
-            const overlay =
-                document.createElement(
-                    "div"
-                );
-
-            overlay.className =
-                "project-overlay";
-
-            const category =
-                document.createElement(
-                    "span"
-                );
-
-            category.className =
-                "project-category";
-
-            category.textContent =
-                project.category;
-
-            const title =
-                document.createElement(
-                    "h3"
-                );
-
-            title.className =
-                "project-title";
-
-            title.textContent =
-                project.title;
-
-            overlay.append(
-                category,
-                title
-            );
-
-            article.append(
-                image,
-                overlay
-            );
-
-            article.addEventListener(
-                "click",
-                event => {
-                    event.stopPropagation();
-
-                    if (
-                        state.pointerMoved &&
-                        !state.galleryExpanded
-                    ) {
-                        return;
-                    }
-
-                    if (
-                        state.galleryExpanded
-                    ) {
-                        closeExpandedGallery(
-                            () => {
-                                openProjectModal(
-                                    project.id
-                                );
-                            }
-                        );
-                    } else {
-                        openExpandedGallery();
-                    }
-                }
-            );
-
-            return article;
-        }
-
-        function createProjectGrid({
-            duplicate = false
-        } = {}) {
-            const grid =
-                document.createElement(
-                    "div"
-                );
-
-            grid.className =
-                "gallery-grid";
-
-            getFilteredProjects().forEach(
-                project => {
-                    grid.appendChild(
-                        createProjectCard(
-                            project,
-                            duplicate
-                        )
-                    );
-                }
-            );
-
-            return grid;
-        }
-
-        /*
-         * =====================================================
-         * RENDERING
-         * =====================================================
-         */
-
-        function renderFilters() {
-            filtersContainer.innerHTML =
-                "";
-
-            categories.forEach(
-                category => {
-                    const button =
-                        document.createElement(
-                            "button"
-                        );
-
-                    button.type =
-                        "button";
-
-                    button.className =
-                        "filter-button";
-
-                    if (
-                        category ===
-                        state.filter
-                    ) {
-                        button.classList.add(
-                            "active"
-                        );
-                    }
-
-                    button.textContent =
-                        category;
-
-                    button.addEventListener(
-                        "click",
-                        () => {
-                            state.filter =
-                                category;
-
-                            resetKineticGallery();
-                            renderFilters();
-                            renderCompactGallery();
-
-                            if (
-                                state.galleryExpanded
-                            ) {
-                                renderExpandedGallery();
-                            }
-                        }
-                    );
-
-                    filtersContainer.appendChild(
-                        button
-                    );
-                }
-            );
-        }
-
-        function renderCompactGallery() {
-            galleryTrack.innerHTML =
-                "";
-
-            const firstGrid =
-                createProjectGrid();
-
-            firstGrid.id =
-                "primary-gallery-grid";
-
-            const duplicateGrid =
-                createProjectGrid({
-                    duplicate: true
-                });
-
-            galleryTrack.append(
-                firstGrid,
-                duplicateGrid
-            );
-
-            requestAnimationFrame(
-                () => {
-                    state.loopHeight =
-                        firstGrid.offsetHeight;
-                }
-            );
-        }
-
-        function renderExpandedGallery() {
-            expandedGalleryContent.innerHTML =
-                "";
-
-            expandedGalleryContent.appendChild(
-                createProjectGrid()
-            );
-        }
-
-        function renderProcess() {
-            processGrid.innerHTML = "";
-
-            processSteps.forEach(
-                processStep => {
-                    const article =
-                        document.createElement(
-                            "article"
-                        );
-
-                    article.className =
-                        "process-card";
-
-                    article.innerHTML = `
-                        <span class="process-number">
-                            ${processStep.number}
-                        </span>
-
-                        <h3>
-                            ${processStep.title}
-                        </h3>
-
-                        <p>
-                            ${processStep.description}
-                        </p>
-                    `;
-
-                    processGrid.appendChild(
-                        article
-                    );
-                }
-            );
-        }
-
-        /*
-         * =====================================================
-         * KINETIC GALLERY
-         * =====================================================
-         */
-
-        function resetKineticGallery() {
-            state.galleryY = 0;
-            state.currentVelocity =
-                -0.3;
-            state.targetVelocity =
-                -0.3;
-            state.loopHeight = 0;
-
-            galleryTrack.style.transform =
-                "translate3d(0,0,0)";
-        }
-
-        function animateGallery() {
-            if (
-                !state.galleryExpanded &&
-                !state.pointerDown &&
-                !window.matchMedia(
-                    "(prefers-reduced-motion: reduce)"
-                ).matches
-            ) {
-                if (
-                    state.loopHeight <= 0
-                ) {
-                    const firstGrid =
-                        document.getElementById(
-                            "primary-gallery-grid"
-                        );
-
-                    if (firstGrid) {
-                        state.loopHeight =
-                            firstGrid.offsetHeight;
-                    }
-                }
-
-                state.currentVelocity +=
-                    (
-                        state.targetVelocity -
-                        state.currentVelocity
-                    ) * 0.05;
-
-                state.galleryY +=
-                    state.currentVelocity;
-
-                if (
-                    state.loopHeight > 0
-                ) {
-                    if (
-                        state.galleryY <=
-                        -state.loopHeight
-                    ) {
-                        state.galleryY +=
-                            state.loopHeight;
-                    }
-
-                    if (
-                        state.galleryY > 0
-                    ) {
-                        state.galleryY -=
-                            state.loopHeight;
-                    }
-                }
-
-                galleryTrack.style.transform =
-                    `translate3d(
-                        0,
-                        ${state.galleryY}px,
-                        0
-                    )`;
-            }
-
-            requestAnimationFrame(
-                animateGallery
-            );
-        }
-
-        galleryViewport.addEventListener(
-            "pointermove",
-            event => {
-                if (
-                    state.galleryExpanded
-                ) {
-                    return;
-                }
-
-                if (
-                    state.pointerDown
-                ) {
-                    const delta =
-                        event.clientY -
-                        state.lastPointerY;
-
-                    if (
-                        Math.abs(delta) > 2
-                    ) {
-                        state.pointerMoved =
-                            true;
-                    }
-
-                    state.galleryY +=
-                        delta;
-
-                    state.lastPointerY =
-                        event.clientY;
-
-                    galleryTrack.style.transform =
-                        `translate3d(
-                            0,
-                            ${state.galleryY}px,
-                            0
-                        )`;
-
-                    return;
-                }
-
-                const bounds =
-                    galleryViewport
-                        .getBoundingClientRect();
-
-                const normalized =
-                    (
-                        (
-                            event.clientY -
-                            bounds.top
-                        ) /
-                        bounds.height
-                    ) * 2 - 1;
-
-                state.targetVelocity =
-                    normalized * 1.45 -
-                    0.3;
-            }
-        );
-
-        galleryViewport.addEventListener(
-            "pointerdown",
-            event => {
-                state.pointerDown = true;
-                state.pointerMoved =
-                    false;
-                state.lastPointerY =
-                    event.clientY;
-                state.targetVelocity = 0;
-
-                galleryViewport
-                    .setPointerCapture(
-                        event.pointerId
-                    );
-            }
-        );
-
-        function finishPointerGesture(
-            event
-        ) {
-            state.pointerDown = false;
-            state.targetVelocity = -0.3;
-
-            if (
-                galleryViewport
-                    .hasPointerCapture(
-                        event.pointerId
-                    )
-            ) {
-                galleryViewport
-                    .releasePointerCapture(
-                        event.pointerId
-                    );
-            }
-
-            window.setTimeout(
-                () => {
-                    state.pointerMoved =
-                        false;
-                },
-                0
-            );
-        }
-
-        galleryViewport.addEventListener(
-            "pointerup",
-            finishPointerGesture
-        );
-
-        galleryViewport.addEventListener(
-            "pointercancel",
-            finishPointerGesture
-        );
-
-        galleryViewport.addEventListener(
-            "pointerleave",
-            () => {
-                if (
-                    !state.pointerDown
-                ) {
-                    state.targetVelocity =
-                        -0.3;
-                }
-            }
-        );
-
-        galleryViewport.addEventListener(
-            "click",
-            () => {
-                if (
-                    !state.pointerMoved
-                ) {
-                    openExpandedGallery();
-                }
-            }
-        );
-
-        /*
-         * =====================================================
-         * EXPANDED GALLERY
-         * =====================================================
-         */
-
-        function openExpandedGallery() {
-            if (
-                state.galleryExpanded
-            ) {
-                return;
-            }
-
-            state.galleryExpanded =
-                true;
-
-            renderExpandedGallery();
-
-            expandedGallery.hidden =
-                false;
-
-            expandedGallery.scrollTop =
-                0;
-
-            lockBody();
-
-            galleryClose.focus();
-        }
-
-        function closeExpandedGallery(
-            callback
-        ) {
-            if (
-                expandedGallery.hidden
-            ) {
-                if (callback) {
-                    callback();
-                }
-
-                return;
-            }
-
-            expandedGallery.classList.add(
-                "expanded-gallery-closing"
-            );
-
-            window.setTimeout(
-                () => {
-                    expandedGallery.hidden =
-                        true;
-
-                    expandedGallery.classList.remove(
-                        "expanded-gallery-closing"
-                    );
-
-                    state.galleryExpanded =
-                        false;
-
-                    unlockBodyIfPossible();
-
-                    if (callback) {
-                        callback();
-                    }
-                },
-                380
-            );
-        }
-
-        galleryClose.addEventListener(
-            "click",
-            () => {
-                closeExpandedGallery();
-            }
-        );
-
-        /*
-         * =====================================================
-         * PROJECT MODAL
-         * =====================================================
-         */
-
-        function openProjectModal(
-            projectId
-        ) {
-            const project =
-                projects.find(
-                    item =>
-                        item.id ===
-                        projectId
-                );
-
-            if (!project) {
-                return;
-            }
-
-            state.selectedProject =
-                project;
-
-            projectModalImage.src =
-                project.image;
-
-            projectModalImage.alt =
-                project.description;
-
-            projectModalCategory.textContent =
-                project.category;
-
-            projectModalTitle.textContent =
-                project.title;
-
-            projectModalDescription.textContent =
-                project.description;
-
-            projectModalDiscipline.textContent =
-                project.discipline;
-
-            projectModal.hidden =
-                false;
-
-            lockBody();
-
-            projectModalClose.focus();
-        }
-
-        function closeProjectModal() {
-            projectModal.hidden =
-                true;
-
-            state.selectedProject =
-                null;
-
-            unlockBodyIfPossible();
-        }
-
-        projectModalClose.addEventListener(
-            "click",
-            closeProjectModal
-        );
-
-        projectModal.addEventListener(
-            "click",
-            event => {
-                if (
-                    event.target ===
-                    projectModal
-                ) {
-                    closeProjectModal();
-                }
-            }
-        );
-
-        projectModalPanel.addEventListener(
-            "click",
-            event => {
-                event.stopPropagation();
-            }
-        );
-
-        projectEnquiryButton.addEventListener(
-            "click",
-            () => {
-                closeProjectModal();
-                openContactModal();
-            }
-        );
-
-        /*
-         * =====================================================
-         * CALCULATOR
-         * =====================================================
-         */
-
-        function calculateEstimate() {
-            const basePrices = {
-                product: 1200,
-                motion: 3300,
-                spatial: 1700,
-                interactive: 2800
-            };
-
-            const qualityFactors = {
-                standard: 1,
-                campaign: 1.38,
-                cinematic: 1.78
-            };
-
-            const speedFactor =
-                state.calculator.speed ===
-                "express"
-                    ? 1.35
-                    : 1;
-
-            const rawEstimate =
-                basePrices[
-                    state.calculator.category
-                ] *
-                state.calculator.quantity *
-                qualityFactors[
-                    state.calculator.quality
-                ] *
-                speedFactor;
-
-            const lower =
-                Math.round(
-                    rawEstimate *
-                    0.9 /
-                    50
-                ) * 50;
-
-            const upper =
-                Math.round(
-                    rawEstimate *
-                    1.15 /
-                    50
-                ) * 50;
-
-            const days =
-                Math.max(
-                    3,
-                    Math.round(
-                        (
-                            5 +
-                            state.calculator
-                                .quantity *
-                                0.8
-                        ) *
-                        (
-                            state.calculator
-                                .speed ===
-                            "express"
-                                ? 0.65
-                                : 1
-                        )
-                    )
-                );
-
-            estimateLower.textContent =
-                formatCurrency(lower);
-
-            estimateUpper.textContent =
-                formatCurrency(upper);
-
-            breakdownQuantity.textContent =
-                `${state.calculator.quantity}x`;
-
-            breakdownQuality.textContent =
-                state.calculator
-                    .quality
-                    .charAt(0)
-                    .toUpperCase() +
-                state.calculator
-                    .quality
-                    .slice(1);
-
-            breakdownDays.textContent =
-                `~${days} days`;
-
-            return {
-                lower,
-                upper,
-                days
-            };
-        }
-
-        function setActiveOption(
-            containerSelector,
-            activeButton
-        ) {
-            document
-                .querySelectorAll(
-                    containerSelector
-                )
-                .forEach(
-                    button => {
-                        button.classList.remove(
-                            "active"
-                        );
-                    }
-                );
-
-            activeButton.classList.add(
-                "active"
-            );
-        }
-
-        document
-            .querySelectorAll(
-                "[data-category]"
-            )
-            .forEach(
-                button => {
-                    button.addEventListener(
-                        "click",
-                        () => {
-                            state.calculator
-                                .category =
-                                button.dataset
-                                    .category;
-
-                            setActiveOption(
-                                "[data-category]",
-                                button
-                            );
-
-                            calculateEstimate();
-                        }
-                    );
-                }
-            );
-
-        document
-            .querySelectorAll(
-                "[data-quality]"
-            )
-            .forEach(
-                button => {
-                    button.addEventListener(
-                        "click",
-                        () => {
-                            state.calculator
-                                .quality =
-                                button.dataset
-                                    .quality;
-
-                            setActiveOption(
-                                "[data-quality]",
-                                button
-                            );
-
-                            calculateEstimate();
-                        }
-                    );
-                }
-            );
-
-        document
-            .querySelectorAll(
-                "[data-speed]"
-            )
-            .forEach(
-                button => {
-                    button.addEventListener(
-                        "click",
-                        () => {
-                            state.calculator
-                                .speed =
-                                button.dataset
-                                    .speed;
-
-                            setActiveOption(
-                                "[data-speed]",
-                                button
-                            );
-
-                            calculateEstimate();
-                        }
-                    );
-                }
-            );
-
-        quantityInput.addEventListener(
-            "input",
-            () => {
-                state.calculator
-                    .quantity =
-                    Number(
-                        quantityInput.value
-                    );
-
-                quantityValue.textContent =
-                    state.calculator
-                        .quantity;
-
-                calculateEstimate();
-            }
-        );
-
-        function openCalculatorModal() {
-            calculatorModal.hidden =
-                false;
-
-            lockBody();
-
-            calculateEstimate();
-
-            calculatorClose.focus();
-        }
-
-        function closeCalculatorModal() {
-            calculatorModal.hidden =
-                true;
-
-            unlockBodyIfPossible();
-        }
-
-        calculatorFab.addEventListener(
-            "click",
-            openCalculatorModal
-        );
-
-        calculatorClose.addEventListener(
-            "click",
-            closeCalculatorModal
-        );
-
-        calculatorModal.addEventListener(
-            "click",
-            event => {
-                if (
-                    event.target ===
-                    calculatorModal
-                ) {
-                    closeCalculatorModal();
-                }
-            }
-        );
-
-        requestProposalButton.addEventListener(
-            "click",
-            () => {
-                const estimate =
-                    calculateEstimate();
-
-                const details = `
-Estimate request
-
-Category:
-${state.calculator.category}
-
-Quantity:
-${state.calculator.quantity}
-
-Production tier:
-${state.calculator.quality}
-
-Timeline:
-${state.calculator.speed}
-
-Estimated investment:
-$${formatCurrency(
-    estimate.lower
-)} to $${formatCurrency(
-    estimate.upper
-)}
-
-Estimated delivery:
-Approximately ${estimate.days} days
-
-Additional project information:
-                `.trim();
-
-                closeCalculatorModal();
-
-                openContactModal(
-                    details
-                );
-            }
-        );
-
-        /*
-         * =====================================================
-         * CONTACT
-         * =====================================================
-         */
-
-        function openContactModal(
-            details = ""
-        ) {
-            contactFormView.hidden =
-                false;
-
-            contactSuccess.hidden =
-                true;
-
-            contactDetails.value =
-                details;
-
-            contactModal.hidden =
-                false;
-
-            lockBody();
-
-            contactClose.focus();
-        }
-
-        function closeContactModal() {
-            contactModal.hidden =
-                true;
-
-            unlockBodyIfPossible();
-        }
-
-        document
-            .querySelectorAll(
-                "[data-open-contact]"
-            )
-            .forEach(
-                button => {
-                    button.addEventListener(
-                        "click",
-                        () => {
-                            closeMobileMenu();
-                            openContactModal();
-                        }
-                    );
-                }
-            );
-
-        contactClose.addEventListener(
-            "click",
-            closeContactModal
-        );
-
-        contactModal.addEventListener(
-            "click",
-            event => {
-                if (
-                    event.target ===
-                    contactModal
-                ) {
-                    closeContactModal();
-                }
-            }
-        );
-
-        contactForm.addEventListener(
-            "submit",
-            event => {
-                event.preventDefault();
-
-                contactFormView.hidden =
-                    true;
-
-                contactSuccess.hidden =
-                    false;
-
-                contactForm.reset();
-            }
-        );
-
-        /*
-         * =====================================================
-         * NAVIGATION
-         * =====================================================
-         */
-
-        function closeMobileMenu() {
-            mobileMenu.hidden = true;
-
-            mobileMenuButton.setAttribute(
-                "aria-expanded",
-                "false"
-            );
-
-            mobileMenuIcon.setAttribute(
-                "href",
-                "#icon-menu"
-            );
-        }
-
-        mobileMenuButton.addEventListener(
-            "click",
-            () => {
-                const willOpen =
-                    mobileMenu.hidden;
-
-                mobileMenu.hidden =
-                    !willOpen;
-
-                mobileMenuButton.setAttribute(
-                    "aria-expanded",
-                    String(willOpen)
-                );
-
-                mobileMenuIcon.setAttribute(
-                    "href",
-                    willOpen
-                        ? "#icon-close"
-                        : "#icon-menu"
-                );
-            }
-        );
-
-        document
-            .querySelectorAll(
-                "[data-scroll]"
-            )
-            .forEach(
-                control => {
-                    control.addEventListener(
-                        "click",
-                        () => {
-                            const sectionId =
-                                control.dataset
-                                    .scroll;
-
-                            const section =
-                                document.getElementById(
-                                    sectionId
-                                );
-
-                            if (section) {
-                                section.scrollIntoView(
-                                    {
-                                        behavior:
-                                            "smooth"
-                                    }
-                                );
-                            }
-
-                            closeMobileMenu();
-                        }
-                    );
-                }
-            );
-
-        function updateHeader() {
-            siteHeader.classList.toggle(
-                "scrolled",
-                window.scrollY > 20
-            );
-
-            const midpoint =
-                window.scrollY +
-                window.innerHeight *
-                0.45;
-
-            let currentSection =
-                "home";
-
-            [
-                "home",
-                "work",
-                "process",
-                "about"
-            ].forEach(
-                sectionId => {
-                    const section =
-                        document.getElementById(
-                            sectionId
-                        );
-
-                    if (
-                        section &&
-                        section.offsetTop <=
-                            midpoint
-                    ) {
-                        currentSection =
-                            sectionId;
-                    }
-                }
-            );
-
-            document
-                .querySelectorAll(
-                    ".nav-link"
-                )
-                .forEach(
-                    link => {
-                        link.classList.toggle(
-                            "active",
-                            link.dataset.scroll ===
-                                currentSection
-                        );
-                    }
-                );
-        }
-
-        window.addEventListener(
-            "scroll",
-            updateHeader,
-            {
-                passive: true
-            }
-        );
-
-        /*
-         * =====================================================
-         * ESCAPE KEY
-         * =====================================================
-         */
-
-        window.addEventListener(
-            "keydown",
-            event => {
-                if (
-                    event.key !==
-                    "Escape"
-                ) {
-                    return;
-                }
-
-                if (
-                    !contactModal.hidden
-                ) {
-                    closeContactModal();
-                    return;
-                }
-
-                if (
-                    !calculatorModal.hidden
-                ) {
-                    closeCalculatorModal();
-                    return;
-                }
-
-                if (
-                    !projectModal.hidden
-                ) {
-                    closeProjectModal();
-                    return;
-                }
-
-                if (
-                    !expandedGallery.hidden
-                ) {
-                    closeExpandedGallery();
-                    return;
-                }
-
-                closeMobileMenu();
-            }
-        );
-
-        /*
-         * =====================================================
-         * INITIALISATION
-         * =====================================================
-         */
-
-        function initialise() {
-            renderFilters();
-            renderCompactGallery();
-            renderProcess();
-            calculateEstimate();
-            updateHeader();
-
-            requestAnimationFrame(
-                animateGallery
-            );
-        }
-
-        /*
-         * Visible error fallback.
-         */
-        try {
-            initialise();
-        } catch (error) {
-            console.error(
-                "LionRenders initialisation error:",
-                error
-            );
-
-            document.body.innerHTML = `
-                <main style="
-                    max-width:900px;
-                    margin:80px auto;
-                    padding:30px;
-                    font-family:Arial,sans-serif;
-                ">
-                    <h1 style="
-                        color:#b85f4d;
-                        margin-bottom:20px;
-                    ">
-                        LionRenders could not load
-                    </h1>
-
-                    <p>
-                        The website encountered a
-                        JavaScript error.
-                    </p>
-
-                    <pre style="
-                        margin-top:24px;
-                        padding:20px;
-                        border-radius:16px;
-                        background:#f4f4f4;
-                        color:#111;
-                        overflow:auto;
-                        white-space:pre-wrap;
-                    ">${String(
-                        error.stack ||
-                        error.message ||
-                        error
-                    )}</pre>
-                </main>
-            `;
-        }
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
+
