@@ -148,6 +148,9 @@
         ];
 
         const smoothTransition = { duration: 0.7, ease: [0.16, 1, 0.3, 1] };
+        
+        // New liquid bounce physics for popups
+        const liquidBounce = { type: "spring", damping: 18, stiffness: 200, mass: 0.8 };
 
         // --- MOTOR CINÉTICO DE GALERÍA ---
         function KineticEngine({ items, onProjectClick, interactive }) {
@@ -312,7 +315,7 @@
                         </motion.div>
 
                         <motion.div layout transition={smoothTransition} className="hidden md:flex items-center pl-2 shrink-0 group">
-                            <button onClick={() => openContact()} className="flex items-center gap-2 px-6 py-3 rounded-full bg-black text-white text-sm font-medium transition-all duration-300 hover:bg-[#b85f4d] hover:shadow-[0_0_20px_rgba(184,95,77,0.4)] hover:scale-105">
+                            <button onClick={(e) => openContact(null, e)} className="flex items-center gap-2 px-6 py-3 rounded-full bg-black text-white text-sm font-medium transition-all duration-300 hover:bg-[#b85f4d] hover:shadow-[0_0_20px_rgba(184,95,77,0.4)] hover:scale-105">
                                 Start project <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                             </button>
                         </motion.div>
@@ -338,7 +341,7 @@
                                         </button>
                                     ))}
                                     <div className="my-2 h-px bg-gray-100" />
-                                    <button onClick={() => { setMobileMenuOpen(false); openContact(); }} className="flex items-center justify-between px-4 py-3.5 rounded-2xl bg-black text-white font-medium text-[15px] hover:bg-[#b85f4d] transition-all">
+                                    <button onClick={(e) => { setMobileMenuOpen(false); openContact(null, e); }} className="flex items-center justify-between px-4 py-3.5 rounded-2xl bg-black text-white font-medium text-[15px] hover:bg-[#b85f4d] transition-all">
                                         <span>Start project</span>
                                         <ArrowUpRight size={18} />
                                     </button>
@@ -508,7 +511,7 @@
             );
         }
 
-        function CalculatorModal({ isOpen, onClose, openContact }) {
+        function CalculatorModal({ isOpen, onClose, openContact, origin }) {
             const [type, setType] = useState('product'); 
             const [views, setViews] = useState(3);
             const [quality, setQuality] = useState('standard'); 
@@ -539,6 +542,10 @@
                 };
             }, [type, views, quality, speed]);
 
+            // Calcula la distancia desde el botón clickeado hasta el centro de la pantalla
+            const deltaX = typeof window !== 'undefined' ? origin.x - window.innerWidth / 2 : 0;
+            const deltaY = typeof window !== 'undefined' ? origin.y - window.innerHeight / 2 : 0;
+
             return (
                 <AnimatePresence>
                     {isOpen && (
@@ -551,14 +558,14 @@
                             onClick={onClose}
                         >
                             <motion.div 
-                                initial={{ opacity: 0, y: 40, scale: 0.95 }} 
-                                animate={{ opacity: 1, y: 0, scale: 1 }} 
-                                exit={{ opacity: 0, y: 20, scale: 0.95 }} 
-                                transition={smoothTransition}
-                                className="relative w-full max-w-5xl bg-white/70 backdrop-blur-[60px] rounded-[48px] overflow-hidden flex flex-col lg:flex-row shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] border border-white"
+                                initial={{ opacity: 0, x: deltaX, y: deltaY, scale: 0.05, borderRadius: "200px" }} 
+                                animate={{ opacity: 1, x: 0, y: 0, scale: 1, borderRadius: "48px" }} 
+                                exit={{ opacity: 0, x: deltaX, y: deltaY, scale: 0.05, borderRadius: "200px" }} 
+                                transition={liquidBounce}
+                                className="relative w-full max-w-5xl bg-white/60 backdrop-blur-[80px] overflow-hidden flex flex-col lg:flex-row shadow-[0_40px_120px_rgba(0,0,0,0.2),inset_0_4px_16px_rgba(255,255,255,1),inset_0_-4px_16px_rgba(255,255,255,0.4)] border border-white/80"
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                <button onClick={onClose} className="absolute top-6 right-6 p-3 rounded-full bg-white text-gray-500 shadow-sm border border-gray-100 hover:bg-black hover:text-white transition-all z-20">
+                                <button onClick={onClose} className="absolute top-6 right-6 p-3 rounded-full bg-white text-gray-500 shadow-[0_4px_10px_rgba(0,0,0,0.1)] border border-gray-100 hover:bg-black hover:text-white transition-all z-20 hover:scale-105">
                                     <X size={18} />
                                 </button>
 
@@ -638,9 +645,9 @@
                                         <div className="flex justify-between items-center"><span className="text-gray-500 text-xs uppercase font-bold tracking-widest">Timeline</span><span className="font-mono text-black">~<AnimatedNumber value={estimate.days} /> Days</span></div>
                                     </div>
 
-                                    <button onClick={() => {
+                                    <button onClick={(e) => {
                                         onClose();
-                                        openContact({ type: 'estimate', lowerCost: estimate.lowerCost, upperCost: estimate.upperCost, days: estimate.days, config: { type, views, quality, speed } });
+                                        openContact({ type: 'estimate', lowerCost: estimate.lowerCost, upperCost: estimate.upperCost, days: estimate.days, config: { type, views, quality, speed } }, e);
                                     }} className="w-full mt-10 py-4 rounded-full bg-black text-white font-bold text-xs uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 hover:scale-105">
                                         Lock in this scope
                                     </button>
@@ -660,16 +667,16 @@
             }, [onClose]);
 
             return (
-                <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 sm:p-8 bg-black/20 backdrop-blur-[20px]" onClick={onClose}>
+                <div className="fixed inset-0 z-[80] flex items-center justify-center p-4 sm:p-8 bg-black/20 backdrop-blur-[20px]" onClick={onClose}>
                     <motion.div 
-                        initial={{ opacity: 0, y: 30, scale: 0.95 }} 
-                        animate={{ opacity: 1, y: 0, scale: 1 }} 
-                        exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                        transition={smoothTransition}
-                        className="relative w-full max-w-5xl bg-white/80 backdrop-blur-[60px] border border-white shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] rounded-[48px] p-6 flex flex-col md:flex-row gap-8 overflow-hidden"
+                        initial={{ opacity: 0, y: 30, scale: 0.8, borderRadius: "150px" }} 
+                        animate={{ opacity: 1, y: 0, scale: 1, borderRadius: "48px" }} 
+                        exit={{ opacity: 0, y: 30, scale: 0.8, borderRadius: "150px" }}
+                        transition={liquidBounce}
+                        className="relative w-full max-w-5xl bg-white/60 backdrop-blur-[80px] shadow-[0_40px_120px_rgba(0,0,0,0.2),inset_0_4px_16px_rgba(255,255,255,1),inset_0_-4px_16px_rgba(255,255,255,0.4)] border border-white/80 p-6 flex flex-col md:flex-row gap-8 overflow-hidden"
                         onClick={e => e.stopPropagation()}
                     >
-                        <button onClick={onClose} className="absolute top-6 right-6 z-50 p-3 rounded-full bg-white shadow-sm border border-gray-100 text-gray-500 hover:bg-black hover:text-white transition-all">
+                        <button onClick={onClose} className="absolute top-6 right-6 z-50 p-3 rounded-full bg-white shadow-[0_4px_10px_rgba(0,0,0,0.1)] border border-gray-100 text-gray-500 hover:bg-black hover:text-white transition-all hover:scale-105">
                             <X size={18} />
                         </button>
 
@@ -687,7 +694,7 @@
                                 <p className="text-black text-sm font-medium">{project.discipline}</p>
                             </div>
 
-                            <button onClick={() => { onClose(); openContact(); }} className="mt-8 py-4 rounded-full bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 group">
+                            <button onClick={(e) => { onClose(); openContact(null, e); }} className="mt-8 py-4 rounded-full bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 group hover:scale-105">
                                 Inquire similar work <ArrowUpRight size={14} className="inline ml-1 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                             </button>
                         </div>
@@ -696,7 +703,7 @@
             );
         }
 
-        function ContactModal({ isOpen, onClose, contactData }) {
+        function ContactModal({ isOpen, onClose, contactData, origin }) {
             const [status, setStatus] = useState("idle");
             const isEstimate = contactData?.type === 'estimate';
 
@@ -727,6 +734,10 @@
                 }, 1500);
             };
 
+            // Distancia del botón clickeado al centro de la pantalla
+            const deltaX = typeof window !== 'undefined' ? origin.x - window.innerWidth / 2 : 0;
+            const deltaY = typeof window !== 'undefined' ? origin.y - window.innerHeight / 2 : 0;
+
             return (
                 <AnimatePresence>
                     {isOpen && (
@@ -736,11 +747,14 @@
                             onClick={onClose}
                         >
                             <motion.div 
-                                initial={{ opacity: 0, y: 30, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 20, scale: 0.98 }} transition={smoothTransition}
-                                className="relative w-full max-w-2xl p-10 sm:p-16 bg-white/80 backdrop-blur-[60px] border border-white shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] rounded-[48px]"
+                                initial={{ opacity: 0, x: deltaX, y: deltaY, scale: 0.05, borderRadius: "200px" }} 
+                                animate={{ opacity: 1, x: 0, y: 0, scale: 1, borderRadius: "48px" }} 
+                                exit={{ opacity: 0, x: deltaX, y: deltaY, scale: 0.05, borderRadius: "200px" }} 
+                                transition={liquidBounce}
+                                className="relative w-full max-w-2xl p-10 sm:p-16 bg-white/60 backdrop-blur-[80px] shadow-[0_40px_120px_rgba(0,0,0,0.2),inset_0_4px_16px_rgba(255,255,255,1),inset_0_-4px_16px_rgba(255,255,255,0.4)] border border-white/80"
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                <button onClick={onClose} className="absolute top-6 right-6 p-3 rounded-full bg-white text-gray-500 shadow-sm border border-gray-100 hover:bg-black hover:text-white transition-all">
+                                <button onClick={onClose} className="absolute top-6 right-6 p-3 rounded-full bg-white text-gray-500 shadow-[0_4px_10px_rgba(0,0,0,0.1)] border border-gray-100 hover:bg-black hover:text-white transition-all hover:scale-105">
                                     <X size={18} />
                                 </button>
                                 
@@ -835,6 +849,10 @@
             const [previewProject, setPreviewProject] = useState(null);
             const [contactData, setContactData] = useState(null);
             
+            // Estados para capturar las coordenadas (origen) del último clic
+            const [contactOrigin, setContactOrigin] = useState({ x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0 });
+            const [calcOrigin, setCalcOrigin] = useState({ x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0 });
+            
             const scrollTo = (id) => {
                 const el = document.getElementById(id);
                 if (el) {
@@ -843,7 +861,12 @@
                 }
             };
 
-            const openContact = (data = null) => {
+            const openContact = (data = null, e = null) => {
+                if (e && e.clientX) {
+                    setContactOrigin({ x: e.clientX, y: e.clientY });
+                } else {
+                    setContactOrigin({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+                }
                 setIsCalcModalOpen(false); 
                 setPreviewProject(null);
                 setContactData(data);
@@ -864,9 +887,14 @@
                     
                     <Footer />
                     
-                    <CalculatorFAB onClick={() => setIsCalcModalOpen(true)} />
-                    <CalculatorModal isOpen={isCalcModalOpen} onClose={() => setIsCalcModalOpen(false)} openContact={openContact} />
-                    <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} contactData={contactData} />
+                    <CalculatorFAB onClick={(e) => {
+                        if (e && e.clientX) setCalcOrigin({ x: e.clientX, y: e.clientY });
+                        setIsCalcModalOpen(true);
+                    }} />
+                    
+                    <CalculatorModal isOpen={isCalcModalOpen} onClose={() => setIsCalcModalOpen(false)} openContact={openContact} origin={calcOrigin} />
+                    
+                    <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} contactData={contactData} origin={contactOrigin} />
                     
                     <AnimatePresence>
                         {previewProject && <ProjectDetailModal project={previewProject} onClose={() => setPreviewProject(null)} openContact={openContact} />}
@@ -880,7 +908,5 @@
     </script>
 </body>
 </html>
-
-
 
 
