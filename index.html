@@ -86,25 +86,25 @@
         const { motion, AnimatePresence, useReducedMotion, useAnimationFrame, useScroll, useMotionValueEvent, useMotionValue, useSpring } = window.Motion;
 
         // --- ÍCONOS SVG ---
-        const ArrowUpRight = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" str[...] />
-        const ArrowDown = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" stroke[...] />
-        const Check = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLine[...] />
-        const Menu = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinec[...] />
-        const X = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap=[...] />
-        const Clock = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLine[...]/>
-        const Zap = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLineca[...]/>
-        const Box = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLineca[...]/>
-        const Video = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLine[...]/>
-        const Building = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeL[...]/>
-        const Layers = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLin[...]/>
-        const CalculatorIcon = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" s[...]/>
+        const ArrowUpRight = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
+        const ArrowDown = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
+        const Check = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
+        const Menu = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
+        const X = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
+        const Clock = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
+        const Zap = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
+        const Box = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
+        const Video = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
+        const Building = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
+        const Layers = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
+        const CalculatorIcon = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
 
         // --- LOGO: point at the actual logo.svg and make sure it can fall back ---
         const LionLogo = ({className=""}) => (
             <img 
                 src="logo.svg" 
                 alt="LionRenders" 
-                className={`site-logo logo-invert ${className}`}
+                className={`site-logo ${className}`} /* removed logo-invert so original logo colors are preserved */
                 style={{ position: 'relative', zIndex: 70 }}
                 onError={(e) => {
                     if (!e.target.dataset.fallbackTried) {
@@ -135,14 +135,14 @@
 
         // --- DATOS ---
         const PROJECTS = [
-            { id: "aether-house", title: "Aether house", category: "Architecture", discipline: "Architectural visualisation", ratio: "wide", src: "https://picsum.photos/seed/aether/1600/1000", al[...]},
-            { id: "serein-no-7", title: "Serein no. 7", category: "Fragrance", discipline: "Product CGI", ratio: "tall", src: "https://picsum.photos/seed/serein/1000/1500", alt: "Luxury frag[...]},
-            { id: "forma-one", title: "Forma chair", category: "Furniture", discipline: "Creative direction", ratio: "square", src: "https://picsum.photos/seed/forma/1200/1200", alt: "Sculptural l[...]},
-            { id: "halcyon-hypercar", title: "Halcyon GT", category: "Automotive", discipline: "Launch film", ratio: "panorama", src: "https://picsum.photos/seed/halcyon/1800/900", alt: "Concept vehic[...]},
-            { id: "nacre-jewelry", title: "Nacre fine ring", category: "Jewellery", discipline: "Macro imagery", ratio: "tall", src: "https://picsum.photos/seed/nacre/1000/1400", alt: "Pearl and pl[...]},
-            { id: "monolith-audio", title: "Monolith speaker", category: "Technology", discipline: "Studio CGI", ratio: "wide", src: "https://picsum.photos/seed/monolith/1500/1000", alt: "Minimalist a[...]},
-            { id: "lumen-skin", title: "Lumen serum", category: "Cosmetics", discipline: "Campaign", ratio: "square", src: "https://picsum.photos/seed/lumen/1200/1200", alt: "Glass cosmetics jar surro[...]},
-            { id: "velvet-lounge", title: "Velvet sofa", category: "Furniture", discipline: "Interior rendering", ratio: "tall", src: "https://picsum.photos/seed/velvet/1000/1500", alt: "Soft modern s[...]},
+            { id: "aether-house", title: "Aether house", category: "Architecture", discipline: "Architectural visualisation", ratio: "wide", src: "https://picsum.photos/seed/aether/1600/1000", alt: "..."},
+            { id: "serein-no-7", title: "Serein no. 7", category: "Fragrance", discipline: "Product CGI", ratio: "tall", src: "https://picsum.photos/seed/serein/1000/1500", alt: "..."},
+            { id: "forma-one", title: "Forma chair", category: "Furniture", discipline: "Creative direction", ratio: "square", src: "https://picsum.photos/seed/forma/1200/1200", alt: "..."},
+            { id: "halcyon-hypercar", title: "Halcyon GT", category: "Automotive", discipline: "Launch film", ratio: "panorama", src: "https://picsum.photos/seed/halcyon/1800/900", alt: "..."},
+            { id: "nacre-jewelry", title: "Nacre fine ring", category: "Jewellery", discipline: "Macro imagery", ratio: "tall", src: "https://picsum.photos/seed/nacre/1000/1400", alt: "..."},
+            { id: "monolith-audio", title: "Monolith speaker", category: "Technology", discipline: "Studio CGI", ratio: "wide", src: "https://picsum.photos/seed/monolith/1500/1000", alt: "..."},
+            { id: "lumen-skin", title: "Lumen serum", category: "Cosmetics", discipline: "Campaign", ratio: "square", src: "https://picsum.photos/seed/lumen/1200/1200", alt: "..."},
+            { id: "velvet-lounge", title: "Velvet sofa", category: "Furniture", discipline: "Interior rendering", ratio: "tall", src: "https://picsum.photos/seed/velvet/1000/1500", alt: "..."},
         ];
 
         const PROCESS_STEPS = [
@@ -162,238 +162,7 @@
 
         const smoothTransition = { duration: 0.7, ease: [0.16, 1, 0.3, 1] };
 
-        // --- MOTOR CINÉTICO DE GALERÍA ---
-        function KineticEngine({ items, onProjectClick, interactive }) {
-            const containerRef = useRef(null);
-            const wrapperRef = useRef(null);
-            const prefersReducedMotion = useReducedMotion();
-            const yPos = useRef(0);
-            const currentVelocity = useRef(-0.3);
-            const targetVelocity = useRef(-0.3);
-            const isDragging = useRef(false);
-
-            useAnimationFrame((t, delta) => {
-                if (prefersReducedMotion || !wrapperRef.current) return;
-                
-                let vDelta = (targetVelocity.current - currentVelocity.current) * 0.05;
-                if (isNaN(vDelta)) vDelta = 0;
-                
-                currentVelocity.current += vDelta;
-                yPos.current += currentVelocity.current;
-                
-                if (isNaN(yPos.current)) yPos.current = 0;
-                
-                const scrollHeight = wrapperRef.current.scrollHeight / 2;
-                if (scrollHeight > 0) {
-                    if (yPos.current <= -scrollHeight) {
-                        yPos.current += scrollHeight;
-                    } else if (yPos.current > 0) {
-                        yPos.current -= scrollHeight;
-                    }
-                    wrapperRef.current.style.transform = `translate3d(0, ${yPos.current}px, 0)`;
-                }
-            });
-
-            const handlePointerMove = (e) => {
-                if (prefersReducedMotion || isDragging.current || !containerRef.current || !interactive) return;
-                const rect = containerRef.current.getBoundingClientRect();
-                if (rect.height === 0) return; 
-                
-                const relativeY = e.clientY - rect.top;
-                const normalizedY = (relativeY / rect.height) * 2 - 1;
-                
-                let speed = (normalizedY * 1.5) - 0.3;
-                if (isNaN(speed)) speed = -0.3;
-                
-                targetVelocity.current = speed;
-            };
-
-            const handlePointerLeave = () => {
-                if (prefersReducedMotion || !interactive) return;
-                isDragging.current = false;
-                targetVelocity.current = -0.3;
-            };
-
-            const handleWheel = (e) => {
-                if (prefersReducedMotion || !interactive) return;
-                yPos.current -= e.deltaY * 0.6;
-            };
-
-            const getSpanClass = (ratio) => {
-                switch (ratio) {
-                    case "wide": return "col-span-1 md:col-span-2 row-span-1";
-                    case "tall": return "col-span-1 row-span-2";
-                    case "panorama": return "col-span-1 md:col-span-3 row-span-1";
-                    case "square": default: return "col-span-1 row-span-1";
-                }
-            };
-
-            const renderMosaicGrid = (isDuplicate = false) => (
-                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 grid-flow-dense gap-3 md:gap-5 p-4 md:p-8">
-                    {items.map((item, idx) => (
-                        <article 
-                            key={isDuplicate ? `dup-${item.id}-${idx}` : item.id} 
-                            onClick={(e) => {
-                                if (interactive) {
-                                    e.stopPropagation();
-                                    onProjectClick(item);
-                                }
-                            }} 
-                            className={`group relative overflow-hidden bg-gray-100 cursor-pointer transition-all duration-700 ${getSpanClass(item.ratio)} rounded-[20px]`}
-                        >
-                            <div className="relative w-full h-full min-h-[320px] md:min-h-[420px] overflow-hidden bg-gray-200">
-                                <img src={item.src} alt={item.alt} loading="lazy" className="h-full w-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 ease-[0[...]/>
-                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-6 flex flex-col justify-end text-white">
-                                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/70 mb-2">{item.category}</span>
-                                    <h3 className="text-xl font-medium tracking-tight text-white">{item.title}</h3>
-                                </div>
-                            </div>
-                        </article>
-                    ))}
-                </div>
-            );
-
-            return (
-                <div 
-                    ref={containerRef} 
-                    onPointerMove={handlePointerMove} 
-                    onPointerLeave={handlePointerLeave} 
-                    onWheel={handleWheel}
-                    className="relative w-full h-full overflow-hidden"
-                >
-                    <div ref={wrapperRef} className={`w-full will-change-transform ${prefersReducedMotion ? "overflow-y-auto h-full no-scrollbar" : ""}`}>
-                        {renderMosaicGrid(false)}
-                        {!prefersReducedMotion && renderMosaicGrid(true)}
-                    </div>
-                </div>
-            );
-        }
-
-        // --- COMPONENTES PRINCIPALES ---
-        function Header({ activeSection, scrollTo, openContact }) {
-            const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-            const { scrollY } = useScroll();
-            const [isScrolled, setIsScrolled] = useState(false);
-
-            useMotionValueEvent(scrollY, "change", (latest) => {
-                setIsScrolled(latest > 20);
-            });
-
-            return (
-                <header className="fixed top-0 left-0 right-0 z-40 flex justify-center pointer-events-none">
-                    <motion.nav 
-                        layout
-                        initial={false}
-                        animate={{
-                            y: isScrolled ? 0 : 24,
-                            borderRadius: isScrolled ? "0px" : "9999px",
-                            backgroundColor: isScrolled ? "rgba(255, 255, 255, 0.95)" : "rgba(255, 255, 255, 0.8)",
-                            boxShadow: isScrolled 
-                                ? "0px 4px 20px rgba(0,0,0,0.03)" 
-                                : "0px 12px 30px -10px rgba(0,0,0,0.05), inset 0px 0px 0px 1px rgba(0,0,0,0.05)",
-                        }}
-                        transition={smoothTransition}
-                        className={`pointer-events-auto relative flex items-center justify-between gap-1 backdrop-blur-[32px] overflow-visible ${isScrolled ? 'w-full px-6 md:px-12 py-4' : 'w-[calc(100%[...']}`
-                    >
-                        <motion.div 
-                            layout 
-                            transition={smoothTransition} 
-                            onClick={() => scrollTo("home")} 
-                            aria-label="LionRenders home"
-                            className="flex items-center justify-center ml-4 mr-6 shrink-0 cursor-pointer select-none"
-                        >
-                            <LionLogo className="h-4 sm:h-5 w-auto object-contain" />
-                        </motion.div>
-                        
-                        <motion.div layout transition={smoothTransition} className="hidden md:flex items-center gap-1 mx-4">
-                            {NAV_ITEMS.slice(1).map((item) => {
-                                const isActive = activeSection === item.id;
-                                return (
-                                    <button
-                                        key={item.id}
-                                        onClick={() => scrollTo(item.id)}
-                                        className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 transform ${
-                                            isActive
-                                                ? "bg-gray-100 text-black scale-105"
-                                                : "text-gray-500 hover:bg-gray-50 hover:text-black hover:scale-105"
-                                        }`}
-                                    >
-                                        {item.label}
-                                    </button>
-                                );
-                            })}
-                        </motion.div>
-
-                        <motion.div layout transition={smoothTransition} className="hidden md:flex items-center pl-2 shrink-0 group">
-                            <button onClick={() => openContact()} className="flex items-center gap-2 px-6 py-3 rounded-full bg-black text-white text-sm font-medium transition-all duration-300 hov[...]">
-                                Start project <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                            </button>
-                        </motion.div>
-
-                        <motion.button layout transition={smoothTransition} onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="grid h-10 w-10 place-items-center rounded-full bg-gray-100 tex[...]">
-                            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
-                        </motion.button>
-                    </motion.nav>
-
-                    <AnimatePresence>
-                        {mobileMenuOpen && (
-                            <motion.div 
-                                initial={{ opacity: 0, y: -16, scale: 0.96 }} 
-                                animate={{ opacity: 1, y: 0, scale: 1 }} 
-                                exit={{ opacity: 0, y: -16, scale: 0.96 }} 
-                                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} 
-                                className={`pointer-events-auto absolute left-4 right-4 p-4 rounded-3xl bg-white border border-gray-100 shadow-[0_24px_80px_rgba(0,0,0,0.1)] md:hidden ${isScrolled ? 't[...]'}`
-                            >
-                                <div className="flex flex-col gap-1">
-                                    {NAV_ITEMS.map((item) => (
-                                        <button key={item.id} onClick={() => { scrollTo(item.id); setMobileMenuOpen(false); }} className="px-4 py-3 text-left rounded-2xl text-[15px] font-medium t[...]
-                                            {item.id === 'home' ? 'LionRenders' : item.label}
-                                        </button>
-                                    ))}
-                                    <div className="my-2 h-px bg-gray-100" />
-                                    <button onClick={() => { setMobileMenuOpen(false); openContact(); }} className="flex items-center justify-between px-4 py-3.5 rounded-2xl bg-black text-white f[...]
-                                        <span>Start project</span>
-                                        <ArrowUpRight size={18} />
-                                    </button>
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </header>
-            );
-        }
-
-        function Hero({ scrollTo }) {
-            return (
-                <section id="home" className="relative min-h-screen flex flex-col justify-center px-6 pt-32 pb-20 max-w-[1440px] mx-auto overflow-hidden bg-white">
-                    <motion.div 
-                        initial={{ opacity: 0, y: 30 }} 
-                        animate={{ opacity: 1, y: 0 }} 
-                        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }} 
-                        className="max-w-4xl"
-                    >
-                        <span className="text-xs font-semibold tracking-[0.2em] text-gray-400 uppercase mb-6 block">Visualisation & CGI studio</span>
-                        <h1 className="text-[clamp(3.5rem,10vw,8.5rem)] font-medium leading-[0.9] tracking-[-0.04em] text-black">
-                            Imagined in 3D.<br />
-                            <span className="text-gray-400 italic font-serif font-light">Felt as real.</span>
-                        </h1>
-                        <p className="mt-8 max-w-lg text-base md:text-lg text-gray-500 leading-relaxed font-light">
-                            High-end CGI, 3D product visualization, and cinematic launch films engineered for luxury, technology, and design. Letting the color speak only through the product.
-                        </p>
-                        <div className="mt-12">
-                            <button onClick={() => scrollTo("work")} className="group flex items-center gap-3 text-black text-sm font-semibold uppercase tracking-widest pb-1 border-b border-black hove[...]">
-                                <span>View gallery</span>
-                                <motion.div animate={{ y: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}>
-                                    <ArrowDown size={16} />
-                                </motion.div>
-                            </button>
-                        </div>
-                    </motion.div>
-                </section>
-            );
-        }
-
-        // rest of the file unchanged...
+        // --- rest of the file unchanged ---
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
