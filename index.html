@@ -48,18 +48,12 @@
         @keyframes shimmer {
             100% { transform: translateX(150%); }
         }
-        /* Inversión del SVG blanco a negro para tema claro minimalista */
-        .logo-invert {
-            filter: invert(1);
-        }
         /* Regla recomendada para dimensiones responsivas del logo */
         .site-logo {
             display: block;
             height: 36px;
             width: auto;
             object-fit: contain;
-            position: relative;
-            z-index: 70; /* ensure it stacks above header (header uses z-40) */
         }
         @media (min-width: 900px) {
             .site-logo {
@@ -86,32 +80,25 @@
         const { motion, AnimatePresence, useReducedMotion, useAnimationFrame, useScroll, useMotionValueEvent, useMotionValue, useSpring } = window.Motion;
 
         // --- ÍCONOS SVG ---
-        const ArrowUpRight = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
-        const ArrowDown = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
-        const Check = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
-        const Menu = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
-        const X = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
-        const Clock = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
-        const Zap = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
-        const Box = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
-        const Video = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
-        const Building = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
-        const Layers = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
-        const CalculatorIcon = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"[...] />
+        const ArrowUpRight = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>;
+        const ArrowDown = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>;
+        const Check = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 6 9 17l-5-5"/></svg>;
+        const Menu = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M4 12h16"/><path d="M4 18h16"/><path d="M4 6h16"/></svg>;
+        const X = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>;
+        const Clock = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>;
+        const Zap = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>;
+        const Box = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>;
+        const Video = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="14" height="10" x="2" y="7" rx="2"/><path d="m16 10 4-2v8l-4-2"/></svg>;
+        const Building = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>;
+        const Layers = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 17 22 12"/></svg>;
+        const CalculatorIcon = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>;
 
-        // --- LOGO: point at the actual logo.svg and make sure it can fall back ---
+        // --- LOGO ---
         const LionLogo = ({className=""}) => (
             <img 
-                src="logo.svg" 
+                src="./logo.svg" 
                 alt="LionRenders" 
-                className={`site-logo ${className}`} /* removed logo-invert so original logo colors are preserved */
-                style={{ position: 'relative', zIndex: 70 }}
-                onError={(e) => {
-                    if (!e.target.dataset.fallbackTried) {
-                        e.target.dataset.fallbackTried = "true";
-                        e.target.src = "lions%20renders%20svg%20white%20full.svg";
-                    }
-                }}
+                className={`site-logo ${className}`.trim()}
             />
         );
         
@@ -135,14 +122,14 @@
 
         // --- DATOS ---
         const PROJECTS = [
-            { id: "aether-house", title: "Aether house", category: "Architecture", discipline: "Architectural visualisation", ratio: "wide", src: "https://picsum.photos/seed/aether/1600/1000", alt: "..."},
-            { id: "serein-no-7", title: "Serein no. 7", category: "Fragrance", discipline: "Product CGI", ratio: "tall", src: "https://picsum.photos/seed/serein/1000/1500", alt: "..."},
-            { id: "forma-one", title: "Forma chair", category: "Furniture", discipline: "Creative direction", ratio: "square", src: "https://picsum.photos/seed/forma/1200/1200", alt: "..."},
-            { id: "halcyon-hypercar", title: "Halcyon GT", category: "Automotive", discipline: "Launch film", ratio: "panorama", src: "https://picsum.photos/seed/halcyon/1800/900", alt: "..."},
-            { id: "nacre-jewelry", title: "Nacre fine ring", category: "Jewellery", discipline: "Macro imagery", ratio: "tall", src: "https://picsum.photos/seed/nacre/1000/1400", alt: "..."},
-            { id: "monolith-audio", title: "Monolith speaker", category: "Technology", discipline: "Studio CGI", ratio: "wide", src: "https://picsum.photos/seed/monolith/1500/1000", alt: "..."},
-            { id: "lumen-skin", title: "Lumen serum", category: "Cosmetics", discipline: "Campaign", ratio: "square", src: "https://picsum.photos/seed/lumen/1200/1200", alt: "..."},
-            { id: "velvet-lounge", title: "Velvet sofa", category: "Furniture", discipline: "Interior rendering", ratio: "tall", src: "https://picsum.photos/seed/velvet/1000/1500", alt: "..."},
+            { id: "aether-house", title: "Aether house", category: "Architecture", discipline: "Architectural visualisation", ratio: "wide", src: "https://picsum.photos/seed/aether/1600/1000", alt: "Cinematic concrete residence at dusk" },
+            { id: "serein-no-7", title: "Serein no. 7", category: "Fragrance", discipline: "Product CGI", ratio: "tall", src: "https://picsum.photos/seed/serein/1000/1500", alt: "Luxury fragrance bottle on translucent stone" },
+            { id: "forma-one", title: "Forma chair", category: "Furniture", discipline: "Creative direction", ratio: "square", src: "https://picsum.photos/seed/forma/1200/1200", alt: "Sculptural lounge chair in a soft set" },
+            { id: "halcyon-hypercar", title: "Halcyon GT", category: "Automotive", discipline: "Launch film", ratio: "panorama", src: "https://picsum.photos/seed/halcyon/1800/900", alt: "Concept vehicle crossing atmospheric desert" },
+            { id: "nacre-jewelry", title: "Nacre fine ring", category: "Jewellery", discipline: "Macro imagery", ratio: "tall", src: "https://picsum.photos/seed/nacre/1000/1400", alt: "Pearl and platinum jewellery close-up" },
+            { id: "monolith-audio", title: "Monolith speaker", category: "Technology", discipline: "Studio CGI", ratio: "wide", src: "https://picsum.photos/seed/monolith/1500/1000", alt: "Minimalist aluminum speaker system" },
+            { id: "lumen-skin", title: "Lumen serum", category: "Cosmetics", discipline: "Campaign", ratio: "square", src: "https://picsum.photos/seed/lumen/1200/1200", alt: "Glass cosmetics jar surrounded by water light ripples" },
+            { id: "velvet-lounge", title: "Velvet sofa", category: "Furniture", discipline: "Interior rendering", ratio: "tall", src: "https://picsum.photos/seed/velvet/1000/1500", alt: "Soft modern sofa in concrete gallery space" }
         ];
 
         const PROCESS_STEPS = [
@@ -162,10 +149,738 @@
 
         const smoothTransition = { duration: 0.7, ease: [0.16, 1, 0.3, 1] };
 
-        // --- rest of the file unchanged ---
+        // --- MOTOR CINÉTICO DE GALERÍA ---
+        function KineticEngine({ items, onProjectClick, interactive }) {
+            const containerRef = useRef(null);
+            const wrapperRef = useRef(null);
+            const prefersReducedMotion = useReducedMotion();
+            const yPos = useRef(0);
+            const currentVelocity = useRef(-0.3);
+            const targetVelocity = useRef(-0.3);
+            const isDragging = useRef(false);
+
+            useAnimationFrame((t, delta) => {
+                if (prefersReducedMotion || !wrapperRef.current) return;
+                
+                let vDelta = (targetVelocity.current - currentVelocity.current) * 0.05;
+                if (isNaN(vDelta)) vDelta = 0;
+                
+                currentVelocity.current += vDelta;
+                yPos.current += currentVelocity.current;
+                
+                if (isNaN(yPos.current)) yPos.current = 0;
+                
+                const scrollHeight = wrapperRef.current.scrollHeight / 2;
+                if (scrollHeight > 0) {
+                    if (yPos.current <= -scrollHeight) {
+                        yPos.current += scrollHeight;
+                    } else if (yPos.current > 0) {
+                        yPos.current -= scrollHeight;
+                    }
+                    wrapperRef.current.style.transform = `translate3d(0, ${yPos.current}px, 0)`;
+                }
+            });
+
+            const handlePointerMove = (e) => {
+                if (prefersReducedMotion || isDragging.current || !containerRef.current || !interactive) return;
+                const rect = containerRef.current.getBoundingClientRect();
+                if (rect.height === 0) return; 
+                
+                const relativeY = e.clientY - rect.top;
+                const normalizedY = (relativeY / rect.height) * 2 - 1;
+                
+                let speed = (normalizedY * 1.5) - 0.3;
+                if (isNaN(speed)) speed = -0.3;
+                
+                targetVelocity.current = speed;
+            };
+
+            const handlePointerLeave = () => {
+                if (prefersReducedMotion || !interactive) return;
+                isDragging.current = false;
+                targetVelocity.current = -0.3;
+            };
+
+            const handleWheel = (e) => {
+                if (prefersReducedMotion || !interactive) return;
+                yPos.current -= e.deltaY * 0.6;
+            };
+
+            const getSpanClass = (ratio) => {
+                switch (ratio) {
+                    case "wide": return "col-span-1 md:col-span-2 row-span-1";
+                    case "tall": return "col-span-1 row-span-2";
+                    case "panorama": return "col-span-1 md:col-span-3 row-span-1";
+                    case "square": default: return "col-span-1 row-span-1";
+                }
+            };
+
+            const renderMosaicGrid = (isDuplicate = false) => (
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 grid-flow-dense gap-3 md:gap-5 p-4 md:p-8">
+                    {items.map((item, idx) => (
+                        <article 
+                            key={isDuplicate ? `dup-${item.id}-${idx}` : item.id} 
+                            onClick={(e) => {
+                                if (interactive) {
+                                    e.stopPropagation();
+                                    onProjectClick(item);
+                                }
+                            }} 
+                            className={`group relative overflow-hidden bg-gray-100 cursor-pointer transition-all duration-700 ${getSpanClass(item.ratio)} rounded-[20px]`}
+                        >
+                            <div className="relative w-full h-full min-h-[320px] md:min-h-[420px] overflow-hidden bg-gray-200">
+                                <img src={item.src} alt={item.alt} loading="lazy" className="h-full w-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 ease-[0.16,1,0.3,1] group-hover:scale-105" />
+                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-6 flex flex-col justify-end text-white">
+                                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/70 mb-2">{item.category}</span>
+                                    <h3 className="text-xl font-medium tracking-tight text-white">{item.title}</h3>
+                                </div>
+                            </div>
+                        </article>
+                    ))}
+                </div>
+            );
+
+            return (
+                <div 
+                    ref={containerRef} 
+                    onPointerMove={handlePointerMove} 
+                    onPointerLeave={handlePointerLeave} 
+                    onWheel={handleWheel}
+                    className="relative w-full h-full overflow-hidden"
+                >
+                    <div ref={wrapperRef} className={`w-full will-change-transform ${prefersReducedMotion ? "overflow-y-auto h-full no-scrollbar" : ""}`}>
+                        {renderMosaicGrid(false)}
+                        {!prefersReducedMotion && renderMosaicGrid(true)}
+                    </div>
+                </div>
+            );
+        }
+
+        // --- COMPONENTES PRINCIPALES ---
+        function Header({ activeSection, scrollTo, openContact }) {
+            const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+            const { scrollY } = useScroll();
+            const [isScrolled, setIsScrolled] = useState(false);
+
+            useMotionValueEvent(scrollY, "change", (latest) => {
+                setIsScrolled(latest > 20);
+            });
+
+            return (
+                <header className="fixed top-0 left-0 right-0 z-40 flex justify-center pointer-events-none">
+                    <motion.nav 
+                        layout
+                        initial={false}
+                        animate={{
+                            y: isScrolled ? 0 : 24,
+                            borderRadius: isScrolled ? "0px" : "9999px",
+                            backgroundColor: isScrolled ? "rgba(255, 255, 255, 0.95)" : "rgba(255, 255, 255, 0.8)",
+                            boxShadow: isScrolled 
+                                ? "0px 4px 20px rgba(0,0,0,0.03)" 
+                                : "0px 12px 30px -10px rgba(0,0,0,0.05), inset 0px 0px 0px 1px rgba(0,0,0,0.05)",
+                        }}
+                        transition={smoothTransition}
+                        className={`pointer-events-auto relative flex items-center justify-between gap-1 backdrop-blur-[32px] overflow-hidden ${isScrolled ? 'w-full px-6 md:px-12 py-4' : 'w-[calc(100%-3rem)] max-w-fit p-1.5'}`}
+                    >
+                        <motion.button 
+                            layout 
+                            transition={smoothTransition} 
+                            onClick={() => scrollTo("home")} 
+                            aria-label="LionRenders home"
+                            className="flex items-center justify-center shrink-0 cursor-pointer select-none"
+                        >
+                            <LionLogo />
+                        </motion.button>
+                        
+                        <motion.div layout transition={smoothTransition} className="hidden md:flex items-center gap-1 mx-4">
+                            {NAV_ITEMS.slice(1).map((item) => {
+                                const isActive = activeSection === item.id;
+                                return (
+                                    <button
+                                        key={item.id}
+                                        onClick={() => scrollTo(item.id)}
+                                        className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 transform ${
+                                            isActive
+                                                ? "bg-gray-100 text-black scale-105"
+                                                : "text-gray-500 hover:bg-gray-50 hover:text-black hover:scale-105"
+                                        }`}
+                                    >
+                                        {item.label}
+                                    </button>
+                                );
+                            })}
+                        </motion.div>
+
+                        <motion.div layout transition={smoothTransition} className="hidden md:flex items-center pl-2 shrink-0 group">
+                            <button onClick={() => openContact()} className="flex items-center gap-2 px-6 py-3 rounded-full bg-black text-white text-sm font-medium transition-all duration-300 hover:bg-[#b85f4d] hover:shadow-[0_0_20px_rgba(184,95,77,0.4)] hover:scale-105">
+                                Start project <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                            </button>
+                        </motion.div>
+
+                        <motion.button layout transition={smoothTransition} onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="grid h-10 w-10 place-items-center rounded-full bg-gray-100 text-black md:hidden pointer-events-auto shrink-0 hover:bg-gray-200 transition-all" aria-label="Menu">
+                            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+                        </motion.button>
+                    </motion.nav>
+
+                    <AnimatePresence>
+                        {mobileMenuOpen && (
+                            <motion.div 
+                                initial={{ opacity: 0, y: -16, scale: 0.96 }} 
+                                animate={{ opacity: 1, y: 0, scale: 1 }} 
+                                exit={{ opacity: 0, y: -16, scale: 0.96 }} 
+                                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} 
+                                className={`pointer-events-auto absolute left-4 right-4 p-4 rounded-3xl bg-white border border-gray-100 shadow-[0_24px_80px_rgba(0,0,0,0.1)] md:hidden ${isScrolled ? 'top-20' : 'top-28'}`}
+                            >
+                                <div className="flex flex-col gap-1">
+                                    {NAV_ITEMS.map((item) => (
+                                        <button key={item.id} onClick={() => { scrollTo(item.id); setMobileMenuOpen(false); }} className="px-4 py-3 text-left rounded-2xl text-[15px] font-medium text-gray-600 hover:bg-gray-50 hover:text-black transition-all">
+                                            {item.id === 'home' ? 'LionRenders' : item.label}
+                                        </button>
+                                    ))}
+                                    <div className="my-2 h-px bg-gray-100" />
+                                    <button onClick={() => { setMobileMenuOpen(false); openContact(); }} className="flex items-center justify-between px-4 py-3.5 rounded-2xl bg-black text-white font-medium text-[15px] hover:bg-[#b85f4d] transition-all">
+                                        <span>Start project</span>
+                                        <ArrowUpRight size={18} />
+                                    </button>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </header>
+            );
+        }
+
+        function Hero({ scrollTo }) {
+            return (
+                <section id="home" className="relative min-h-screen flex flex-col justify-center px-6 pt-32 pb-20 max-w-[1440px] mx-auto overflow-hidden bg-white">
+                    <motion.div 
+                        initial={{ opacity: 0, y: 30 }} 
+                        animate={{ opacity: 1, y: 0 }} 
+                        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }} 
+                        className="max-w-4xl"
+                    >
+                        <span className="text-xs font-semibold tracking-[0.2em] text-gray-400 uppercase mb-6 block">Visualisation & CGI studio</span>
+                        <h1 className="text-[clamp(3.5rem,10vw,8.5rem)] font-medium leading-[0.9] tracking-[-0.04em] text-black">
+                            Imagined in 3D.<br />
+                            <span className="text-gray-400 italic font-serif font-light">Felt as real.</span>
+                        </h1>
+                        <p className="mt-8 max-w-lg text-base md:text-lg text-gray-500 leading-relaxed font-light">
+                            High-end CGI, 3D product visualization, and cinematic launch films engineered for luxury, technology, and design. Letting the color speak only through the product.
+                        </p>
+                        <div className="mt-12">
+                            <button onClick={() => scrollTo("work")} className="group flex items-center gap-3 text-black text-sm font-semibold uppercase tracking-widest pb-1 border-b border-black hover:text-gray-500 hover:border-gray-500 transition-all duration-300">
+                                <span>View gallery</span>
+                                <motion.div animate={{ y: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}>
+                                    <ArrowDown size={16} />
+                                </motion.div>
+                            </button>
+                        </div>
+                    </motion.div>
+                </section>
+            );
+        }
+
+        function KineticGallerySection({ onSelectProject }) {
+            const [filter, setFilter] = useState("All");
+            const [isExpanded, setIsExpanded] = useState(false);
+            const categories = ["All", "Architecture", "Cosmetics", "Fragrance", "Furniture", "Automotive", "Technology"];
+            const filteredProjects = useMemo(() => {
+                if (filter === "All") return PROJECTS;
+                return PROJECTS.filter((p) => p.category === filter);
+            }, [filter]);
+
+            useEffect(() => {
+                if (isExpanded) {
+                    document.body.style.overflow = "hidden";
+                } else {
+                    document.body.style.overflow = "auto";
+                }
+                return () => { document.body.style.overflow = "auto"; };
+            }, [isExpanded]);
+
+            return (
+                <section id="work" className="py-24 max-w-[1800px] mx-auto bg-white">
+                    <div className="mb-12 flex flex-col lg:flex-row lg:items-end justify-between gap-8 px-6 md:px-12">
+                        <div>
+                            <span className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400">Portfolio</span>
+                            <h2 className="mt-3 text-4xl sm:text-5xl font-medium tracking-tight text-black">Selected works.</h2>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {categories.map((cat) => (
+                                <button key={cat} onClick={() => setFilter(cat)} className={`px-5 py-2 rounded-full text-xs font-semibold tracking-wide transition-all duration-300 ${filter === cat ? "bg-black text-white" : "bg-gray-50 text-gray-500 hover:text-black hover:bg-gray-100"}`}>
+                                    {cat}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                    
+                    {/* Contenedor compacto en la página con degradados de niebla */}
+                    <div 
+                        className="relative w-full h-[90vh] min-h-[750px] border-y border-gray-100 group cursor-pointer"
+                        onClick={() => setIsExpanded(true)}
+                    >
+                        {/* Gradientes de niebla (superior e inferior) */}
+                        <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-white via-white/80 to-transparent z-20 pointer-events-none transition-opacity duration-500" />
+                        <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-white via-white/80 to-transparent z-20 pointer-events-none transition-opacity duration-500" />
+                        
+                        <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none transition-opacity duration-700">
+                            <span className="bg-black text-white px-6 py-3 rounded-full text-xs font-bold tracking-widest uppercase shadow-[0_10px_40px_rgba(0,0,0,0.2)] opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                Click to unveil
+                            </span>
+                        </div>
+
+                        <KineticEngine items={filteredProjects} onProjectClick={() => {}} interactive={false} />
+                    </div>
+
+                    {/* Vista desplegada a pantalla completa */}
+                    <AnimatePresence>
+                        {isExpanded && (
+                            <motion.div 
+                                initial={{ opacity: 0, scale: 0.98 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.98 }}
+                                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                                className="fixed inset-0 z-[60] bg-white cursor-ns-resize"
+                            >
+                                <button onClick={() => setIsExpanded(false)} className="absolute top-8 right-8 z-[70] p-4 rounded-full bg-white/80 backdrop-blur-md border border-gray-200 shadow-xl text-black hover:bg-black hover:text-white transition-all">
+                                    <X size={24} />
+                                </button>
+                                
+                                <div className="w-full h-full pt-16 pb-8">
+                                    <KineticEngine items={filteredProjects} onProjectClick={(item) => onSelectProject(item)} interactive={true} />
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </section>
+            );
+        }
+
+        function ProcessSection() {
+            return (
+                <section id="process" className="py-24 px-6 md:px-12 max-w-[1440px] mx-auto bg-white">
+                    <div className="mb-16 max-w-2xl">
+                        <span className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400">Methodology</span>
+                        <h2 className="mt-3 text-4xl sm:text-5xl font-medium tracking-tight text-black">
+                            From blueprint to<br />
+                            <span className="italic font-serif font-light text-gray-500">master image.</span>
+                        </h2>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 border-y md:border-y-0 md:border-t md:border-b border-gray-200 divide-y md:divide-y-0 md:divide-x divide-gray-200">
+                        {PROCESS_STEPS.map((step, idx) => (
+                            <div key={idx} className="group p-8 bg-white transition-all duration-500 hover:bg-gray-50 flex flex-col h-full">
+                                <span className="text-3xl font-mono font-light text-gray-300 block mb-6 transition-colors duration-500 group-hover:text-black">{step.step}</span>
+                                <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 text-black">{step.title}</h3>
+                                <p className="text-sm text-gray-500 leading-relaxed font-light">{step.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            );
+        }
+
+        function AboutSection() {
+            return (
+                <section id="about" className="py-24 px-6 md:px-12 max-w-[1440px] mx-auto bg-white">
+                    <div className="border border-gray-200 p-8 md:p-20 flex flex-col md:flex-row gap-16 justify-between items-start bg-gray-50 rounded-[48px]">
+                        <div className="max-w-xl">
+                            <span className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400">The studio</span>
+                            <h2 className="mt-4 text-4xl sm:text-6xl font-medium tracking-tight text-black leading-[0.9]">
+                                Independent.<br />
+                                <span className="font-serif italic font-light text-gray-500">Unrestricted.</span>
+                            </h2>
+                            <p className="mt-8 text-base text-gray-500 leading-relaxed font-light">
+                                We operate without the noise or overhead of conventional agencies. You work directly with the creative directors and technical artists who craft every pixel in monochrome, letting the color speak only through your product.
+                            </p>
+                        </div>
+                        <div className="flex flex-col gap-10">
+                            <div>
+                                <p className="text-4xl sm:text-5xl font-light text-black tracking-tighter">100%</p>
+                                <p className="text-xs text-gray-500 uppercase tracking-widest mt-2 font-semibold">Direct collaboration</p>
+                            </div>
+                            <div>
+                                <p className="text-4xl sm:text-5xl font-light text-black tracking-tighter">CGI & film</p>
+                                <p className="text-xs text-gray-500 uppercase tracking-widest mt-2 font-semibold">Full service</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        }
+
+        function CalculatorModal({ isOpen, onClose, openContact }) {
+            const [type, setType] = useState('product'); 
+            const [views, setViews] = useState(3);
+            const [quality, setQuality] = useState('standard'); 
+            const [speed, setSpeed] = useState('standard'); 
+
+            const estimate = useMemo(() => {
+                let basePerView = 900;
+                let daysBase = 5;
+
+                if (type === 'motion') { basePerView = 2400; daysBase = 10; }
+                else if (type === 'spatial') { basePerView = 1200; daysBase = 7; }
+                else if (type === 'interactive') { basePerView = 1600; daysBase = 8; }
+
+                let qualityMultiplier = 1.0;
+                if (quality === 'campaign') qualityMultiplier = 1.35;
+                if (quality === 'cinematic') qualityMultiplier = 1.75;
+
+                let speedMultiplier = speed === 'express' ? 1.4 : 1.0;
+                let daysMultiplier = speed === 'express' ? 0.6 : 1.0;
+
+                const rawCost = basePerView * views * qualityMultiplier * speedMultiplier;
+                const estimatedDays = Math.max(2, Math.round((daysBase + (views * 0.8)) * daysMultiplier));
+
+                return {
+                    lowerCost: Math.round(rawCost * 0.9),
+                    upperCost: Math.round(rawCost * 1.15),
+                    days: estimatedDays
+                };
+            }, [type, views, quality, speed]);
+
+            return (
+                <AnimatePresence>
+                    {isOpen && (
+                        <motion.div 
+                            initial={{ opacity: 0 }} 
+                            animate={{ opacity: 1 }} 
+                            exit={{ opacity: 0 }} 
+                            transition={{ duration: 0.4 }}
+                            className="fixed inset-0 z-[80] flex items-center justify-center p-4 bg-black/20 backdrop-blur-[10px]"
+                            onClick={onClose}
+                        >
+                            <motion.div 
+                                initial={{ opacity: 0, y: 40, scale: 0.95 }} 
+                                animate={{ opacity: 1, y: 0, scale: 1 }} 
+                                exit={{ opacity: 0, y: 20, scale: 0.95 }} 
+                                transition={smoothTransition}
+                                className="relative w-full max-w-5xl bg-white/70 backdrop-blur-[60px] rounded-[48px] overflow-hidden flex flex-col lg:flex-row shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] border border-white"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <button onClick={onClose} className="absolute top-6 right-6 p-3 rounded-full bg-white text-gray-500 shadow-sm border border-gray-100 hover:bg-black hover:text-white transition-all z-20">
+                                    <X size={18} />
+                                </button>
+
+                                {/* Panel izquierdo */}
+                                <div className="flex-1 p-8 md:p-12 overflow-y-auto max-h-[85vh] no-scrollbar border-b lg:border-b-0 lg:border-r border-gray-200/50">
+                                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-2 block">Project estimator</span>
+                                    <h3 className="text-3xl font-medium tracking-tight text-black mb-10">Configure your scope.</h3>
+
+                                    <div className="space-y-10">
+                                        <div>
+                                            <label className="block text-xs font-semibold tracking-wider text-gray-500 mb-4 uppercase">1. Deliverable category</label>
+                                            <div className="grid grid-cols-2 gap-3">
+                                                {[
+                                                    { id: 'product', label: 'Product CGI', icon: <Box size={16} /> },
+                                                    { id: 'motion', label: 'Motion film', icon: <Video size={16} /> },
+                                                    { id: 'spatial', label: 'Spatial / arch', icon: <Building size={16} /> },
+                                                    { id: 'interactive', label: 'Interactive', icon: <Layers size={16} /> }
+                                                ].map((item) => (
+                                                    <button key={item.id} onClick={() => setType(item.id)} className={`relative flex flex-col items-start gap-3 p-4 rounded-[20px] text-sm font-medium transition-all border ${type === item.id ? 'bg-black text-white border-black shadow-md' : 'bg-white/50 text-gray-600 border-gray-200 hover:border-gray-400 hover:bg-white'}`}>
+                                                        <span className={type === item.id ? 'text-white' : 'text-gray-400'}>{item.icon}</span>
+                                                        {item.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div className="flex justify-between items-center mb-4">
+                                                <label className="text-xs font-semibold tracking-wider text-gray-500 uppercase">2. Quantity of assets</label>
+                                                <span className="font-mono text-sm font-medium text-black bg-white shadow-sm border border-gray-100 px-3 py-1 rounded-full">{views}</span>
+                                            </div>
+                                            <input type="range" min="1" max="12" value={views} onChange={(e) => setViews(parseInt(e.target.value))} className="w-full h-1.5 bg-gray-200 rounded-full appearance-none outline-none focus:ring-2 focus:ring-black" />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-xs font-semibold tracking-wider text-gray-500 mb-4 uppercase">3. Production tier</label>
+                                            <div className="flex p-1.5 bg-gray-100/80 backdrop-blur-md rounded-[20px] relative border border-white/50">
+                                                {[{ id: 'standard', label: 'E-commerce' }, { id: 'campaign', label: 'Campaign' }, { id: 'cinematic', label: 'Cinematic' }].map((t) => (
+                                                    <button key={t.id} onClick={() => setQuality(t.id)} className={`flex-1 py-3 text-xs font-semibold tracking-wide rounded-[16px] z-10 relative transition-colors ${quality === t.id ? 'text-black' : 'text-gray-500 hover:text-black'}`}>
+                                                        {quality === t.id && <motion.div layoutId="q-pill" transition={smoothTransition} className="absolute inset-0 bg-white rounded-[16px] -z-10 shadow-sm border border-gray-200" />}
+                                                        {t.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-xs font-semibold tracking-wider text-gray-500 mb-4 uppercase">4. Target timeline</label>
+                                            <div className="flex p-1.5 bg-gray-100/80 backdrop-blur-md rounded-[20px] relative border border-white/50">
+                                                {[{ id: 'standard', label: 'Standard' }, { id: 'express', label: 'Express' }].map((t) => (
+                                                    <button key={t.id} onClick={() => setSpeed(t.id)} className={`flex-1 flex items-center justify-center gap-2 py-3 text-xs font-semibold tracking-wide rounded-[16px] z-10 relative transition-colors ${speed === t.id ? 'text-black' : 'text-gray-500 hover:text-black'}`}>
+                                                        {speed === t.id && <motion.div layoutId="s-pill" transition={smoothTransition} className="absolute inset-0 bg-white rounded-[16px] -z-10 shadow-sm border border-gray-200" />}
+                                                        {t.id === 'express' ? <Zap size={14} className={speed === t.id ? "text-black" : ""} /> : <Clock size={14} />}
+                                                        {t.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Panel derecho HUD */}
+                                <div className="w-full lg:w-[400px] bg-white/40 p-8 md:p-12 flex flex-col justify-between">
+                                    <div>
+                                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-4 block">Estimated investment</span>
+                                        <div className="text-4xl font-light tracking-tighter text-black flex flex-col gap-1">
+                                            <div className="flex items-center gap-1"><span className="text-gray-400 font-medium text-2xl">$</span><AnimatedNumber value={estimate.lowerCost} /></div>
+                                            <div className="text-sm text-gray-400 font-serif italic ml-1">— to —</div>
+                                            <div className="flex items-center gap-1"><span className="text-gray-400 font-medium text-2xl">$</span><AnimatedNumber value={estimate.upperCost} /></div>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-12 space-y-4 text-sm border-t border-gray-200 pt-8">
+                                        <div className="flex justify-between items-center"><span className="text-gray-500 text-xs uppercase font-bold tracking-widest">Base setup</span><span className="font-mono text-black">Included</span></div>
+                                        <div className="flex justify-between items-center"><span className="text-gray-500 text-xs uppercase font-bold tracking-widest">Assets</span><span className="font-mono text-black">{views}x</span></div>
+                                        <div className="flex justify-between items-center"><span className="text-gray-500 text-xs uppercase font-bold tracking-widest">Tier</span><span className="font-mono text-black capitalize">{quality}</span></div>
+                                        <div className="flex justify-between items-center"><span className="text-gray-500 text-xs uppercase font-bold tracking-widest">Timeline</span><span className="font-mono text-black">~<AnimatedNumber value={estimate.days} /> Days</span></div>
+                                    </div>
+
+                                    <button onClick={() => {
+                                        onClose();
+                                        openContact({ type: 'estimate', lowerCost: estimate.lowerCost, upperCost: estimate.upperCost, days: estimate.days, config: { type, views, quality, speed } });
+                                    }} className="w-full mt-10 py-4 rounded-full bg-black text-white font-bold text-xs uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 hover:scale-105">
+                                        Lock in this scope
+                                    </button>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            );
+        }
+
+        function ProjectDetailModal({ project, onClose, openContact }) {
+            useEffect(() => {
+                const handleKey = (e) => e.key === "Escape" && onClose();
+                window.addEventListener("keydown", handleKey);
+                return () => window.removeEventListener("keydown", handleKey);
+            }, [onClose]);
+
+            return (
+                <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 sm:p-8 bg-black/20 backdrop-blur-[20px]" onClick={onClose}>
+                    <motion.div 
+                        initial={{ opacity: 0, y: 30, scale: 0.95 }} 
+                        animate={{ opacity: 1, y: 0, scale: 1 }} 
+                        exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                        transition={smoothTransition}
+                        className="relative w-full max-w-5xl bg-white/80 backdrop-blur-[60px] border border-white shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] rounded-[48px] p-6 flex flex-col md:flex-row gap-8 overflow-hidden"
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <button onClick={onClose} className="absolute top-6 right-6 z-50 p-3 rounded-full bg-white shadow-sm border border-gray-100 text-gray-500 hover:bg-black hover:text-white transition-all">
+                            <X size={18} />
+                        </button>
+
+                        <div className="w-full md:w-1/2 aspect-[4/3] rounded-[32px] overflow-hidden bg-gray-100">
+                            <img src={project.src} alt={project.alt} className="w-full h-full object-cover" />
+                        </div>
+                        
+                        <div className="w-full md:w-1/2 flex flex-col justify-center px-4 md:pr-12">
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{project.category}</span>
+                            <h3 className="text-3xl sm:text-4xl font-medium tracking-tight text-black mt-2">{project.title}</h3>
+                            <p className="text-sm text-gray-500 mt-4 leading-relaxed">{project.alt}. Developed with technical precision and photographic attention to detail, this project encapsulates the brand's vision by elevating it through immersive CGI.</p>
+                            
+                            <div className="mt-8 pt-6 border-t border-gray-200">
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-1">Discipline</span>
+                                <p className="text-black text-sm font-medium">{project.discipline}</p>
+                            </div>
+
+                            <button onClick={() => { onClose(); openContact(); }} className="mt-8 py-4 rounded-full bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 group">
+                                Inquire similar work <ArrowUpRight size={14} className="inline ml-1 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                            </button>
+                        </div>
+                    </motion.div>
+                </div>
+            );
+        }
+
+        function ContactModal({ isOpen, onClose, contactData }) {
+            const [status, setStatus] = useState("idle");
+            const isEstimate = contactData?.type === 'estimate';
+
+            const [formData, setFormData] = useState({ name: '', phone: '', email: '', details: '' });
+
+            useEffect(() => {
+                if (isOpen && isEstimate) {
+                    const detailsText = `I would like to request a formal proposal based on my estimate:\n\n` +
+                        `- Category: ${contactData.config.type}\n` +
+                        `- Views: ${contactData.config.views}\n` +
+                        `- Quality: ${contactData.config.quality}\n` +
+                        `- Timeline: ${contactData.config.speed}\n` +
+                        `- Estimated Investment: $${contactData.lowerCost.toLocaleString()} - $${contactData.upperCost.toLocaleString()}\n\n` +
+                        `Additional project details: `;
+                    setFormData(prev => ({ ...prev, details: detailsText }));
+                } else if (!isOpen) {
+                    setFormData({ name: '', phone: '', email: '', details: '' });
+                    setStatus("idle");
+                }
+            }, [isOpen, contactData]);
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                setStatus("submitting");
+                setTimeout(() => {
+                    setStatus("success");
+                    setTimeout(() => { onClose(); setStatus("idle"); }, 3000);
+                }, 1500);
+            };
+
+            return (
+                <AnimatePresence>
+                    {isOpen && (
+                        <motion.div 
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}
+                            className="fixed inset-0 z-[90] flex items-center justify-center p-4 bg-black/20 backdrop-blur-[20px]"
+                            onClick={onClose}
+                        >
+                            <motion.div 
+                                initial={{ opacity: 0, y: 30, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 20, scale: 0.98 }} transition={smoothTransition}
+                                className="relative w-full max-w-2xl p-10 sm:p-16 bg-white/80 backdrop-blur-[60px] border border-white shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] rounded-[48px]"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <button onClick={onClose} className="absolute top-6 right-6 p-3 rounded-full bg-white text-gray-500 shadow-sm border border-gray-100 hover:bg-black hover:text-white transition-all">
+                                    <X size={18} />
+                                </button>
+                                
+                                {status === "success" ? (
+                                    <div className="py-12 text-center">
+                                        <div className="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-full bg-black text-white"><Check size={28} /></div>
+                                        <h3 className="text-3xl font-medium tracking-tight text-black">Request sent.</h3>
+                                        <p className="mt-3 text-sm text-gray-500 max-w-xs mx-auto">We will review the details and get back to you within 24 hours.</p>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-2 block">{isEstimate ? "Your estimate" : "Contact"}</span>
+                                        <h3 className="text-3xl sm:text-4xl font-medium tracking-tight mb-8 text-black">Let's discuss your project.</h3>
+                                        
+                                        <form className="space-y-6" onSubmit={handleSubmit}>
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                                <div>
+                                                    <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-2">Name / Company</label>
+                                                    <input type="text" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-0 py-3 bg-transparent border-b border-gray-200 text-black placeholder-gray-300 focus:outline-none focus:border-black transition-colors" placeholder="e.g. John Doe" />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-2">Phone</label>
+                                                    <input type="tel" required value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full px-0 py-3 bg-transparent border-b border-gray-200 text-black placeholder-gray-300 focus:outline-none focus:border-black transition-colors" placeholder="+1 555 000 000" />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-2">Email address</label>
+                                                <input type="email" required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full px-0 py-3 bg-transparent border-b border-gray-200 text-black placeholder-gray-300 focus:outline-none focus:border-black transition-colors" placeholder="hello@company.com" />
+                                            </div>
+                                            <div>
+                                                <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-2">Project details</label>
+                                                <textarea required rows="4" value={formData.details} onChange={e => setFormData({...formData, details: e.target.value})} className="w-full px-0 py-3 bg-transparent border-b border-gray-200 text-black placeholder-gray-300 focus:outline-none focus:border-black transition-colors resize-none" placeholder="Tell us more..."></textarea>
+                                            </div>
+                                            <button type="submit" disabled={status === "submitting"} className="w-full mt-6 py-4 rounded-full bg-black text-white font-bold text-xs uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 disabled:opacity-50 hover:-translate-y-0.5 group">
+                                                {status === "submitting" ? "Sending..." : "Submit request"}
+                                            </button>
+                                        </form>
+                                    </div>
+                                )}
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            );
+        }
+
+        function Footer() {
+            return (
+                <footer className="py-12 border-t border-gray-100 bg-white text-gray-500 text-sm">
+                    <div className="max-w-[1380px] mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-6">
+                        <LionLogo className="opacity-50" />
+                        <div className="text-xs uppercase tracking-widest font-semibold flex gap-8">
+                            <a href="#" className="hover:text-black transition">Instagram</a>
+                            <a href="#" className="hover:text-black transition">Behance</a>
+                        </div>
+                    </div>
+                </footer>
+            );
+        }
+
+        function CalculatorFAB({ onClick }) {
+            const { scrollY } = useScroll();
+            const [isHidden, setIsHidden] = useState(false);
+
+            useMotionValueEvent(scrollY, "change", (latest) => {
+                setIsHidden(latest < 500); 
+            });
+
+            return (
+                <AnimatePresence>
+                    {!isHidden && (
+                        <motion.button 
+                            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+                            onClick={onClick}
+                            className="fixed bottom-6 right-6 z-40 bg-black text-white px-5 py-4 rounded-full shadow-[0_12px_40px_rgba(0,0,0,0.2)] flex items-center gap-3 hover:scale-105 hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 group"
+                        >
+                            <CalculatorIcon size={20} />
+                            <span className="text-[10px] font-bold uppercase tracking-widest hidden sm:inline-block max-w-0 group-hover:max-w-[150px] overflow-hidden whitespace-nowrap transition-all duration-500">Project estimator</span>
+                        </motion.button>
+                    )}
+                </AnimatePresence>
+            );
+        }
+
+        // --- MAIN APP ---
+        function App() {
+            const [activeSection, setActiveSection] = useState("home");
+            const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+            const [isCalcModalOpen, setIsCalcModalOpen] = useState(false);
+            const [previewProject, setPreviewProject] = useState(null);
+            const [contactData, setContactData] = useState(null);
+            
+            const scrollTo = (id) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                    setActiveSection(id);
+                }
+            };
+
+            const openContact = (data = null) => {
+                setIsCalcModalOpen(false); 
+                setPreviewProject(null);
+                setContactData(data);
+                setIsContactModalOpen(true);
+            };
+
+            return (
+                <div className="min-h-screen relative bg-white">
+                    <Header activeSection={activeSection} scrollTo={scrollTo} openContact={openContact} />
+                    
+                    {/* Main content scales back gently when popups open */}
+                    <main className={`transition-all duration-700 ease-[0.16,1,0.3,1] ${isContactModalOpen || isCalcModalOpen || previewProject ? "scale-[0.98] opacity-50 pointer-events-none select-none blur-[4px]" : ""}`}>
+                        <Hero scrollTo={scrollTo} />
+                        <KineticGallerySection onSelectProject={setPreviewProject} />
+                        <ProcessSection />
+                        <AboutSection />
+                    </main>
+                    
+                    <Footer />
+                    
+                    <CalculatorFAB onClick={() => setIsCalcModalOpen(true)} />
+                    <CalculatorModal isOpen={isCalcModalOpen} onClose={() => setIsCalcModalOpen(false)} openContact={openContact} />
+                    <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} contactData={contactData} />
+                    
+                    <AnimatePresence>
+                        {previewProject && <ProjectDetailModal project={previewProject} onClose={() => setPreviewProject(null)} openContact={openContact} />}
+                    </AnimatePresence>
+                </div>
+            );
+        }
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
 </body>
 </html>
+
+
+
+
