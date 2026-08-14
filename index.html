@@ -48,10 +48,6 @@
         @keyframes shimmer {
             100% { transform: translateX(150%); }
         }
-        /* Inversión del SVG blanco a negro para tema claro minimalista */
-        .logo-invert {
-            filter: invert(1);
-        }
         /* Regla recomendada para dimensiones responsivas del logo */
         .site-logo {
             display: block;
@@ -154,10 +150,11 @@
         const smoothTransition = { duration: 0.7, ease: [0.16, 1, 0.3, 1] };
         
         // --- FÍSICAS DE ANIMACIÓN ---
-        // Efecto Genie Apple (Para botones a modales)
+        // Efecto Genie Apple (Para botones a modales) - Mantiene el rebote fluido
         const genieSpring = { type: "spring", damping: 22, stiffness: 220, mass: 0.8 };
-        // Vuelo rápido y fluido sin rebotes para la galería (FLIP animation)
-        const fluidFlight = { type: "tween", ease: [0.16, 1, 0.3, 1], duration: 0.5 };
+        
+        // Vuelo rápido y fluido sin rebotes para la galería (FLIP animation real)
+        const fluidFlight = { type: "tween", ease: [0.16, 1, 0.3, 1], duration: 0.55 };
 
         // --- MOTOR CINÉTICO DE GALERÍA ---
         function KineticEngine({ items, onProjectClick, interactive, paused, previewProject }) {
@@ -170,6 +167,7 @@
             const isDragging = useRef(false);
 
             useAnimationFrame((t, delta) => {
+                // Pausamos el scroll cuando un proyecto está abierto para mantener el grid estable
                 if (prefersReducedMotion || !wrapperRef.current || paused) return;
                 
                 let vDelta = (targetVelocity.current - currentVelocity.current) * 0.05;
@@ -229,8 +227,16 @@
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 grid-flow-dense gap-3 md:gap-5 p-4 md:p-8">
                     {items.map((item, idx) => {
                         const isCurrentPreview = previewProject && previewProject.id === item.id && !isDuplicate;
+                        
+                        // Si la foto está seleccionada y no es un duplicado, la OMITIMOS de la cuadrícula
+                        // Esto hace que el resto de elementos fluyan orgánicamente para rellenar su espacio.
+                        if (isCurrentPreview) return null;
+
                         return (
-                            <article 
+                            <motion.article 
+                                layout
+                                layoutId={!isDuplicate ? `card-wrapper-${item.id}` : undefined}
+                                transition={fluidFlight}
                                 key={isDuplicate ? `dup-${item.id}-${idx}` : item.id} 
                                 onClick={(e) => {
                                     if (interactive) {
@@ -238,27 +244,26 @@
                                         onProjectClick(item, e);
                                     }
                                 }} 
-                                className={`group relative overflow-hidden bg-transparent cursor-pointer ${getSpanClass(item.ratio)}`}
+                                className={`group relative cursor-pointer ${getSpanClass(item.ratio)}`}
                             >
-                                {/* El contenedor y la imagen actúan como el objeto a animar (layoutId) */}
                                 <motion.div 
-                                    layoutId={!isDuplicate ? `image-container-${item.id}` : undefined} 
-                                    transition={fluidFlight}
-                                    style={{ opacity: isCurrentPreview ? 0 : 1 }}
-                                    className="relative w-full h-full min-h-[320px] md:min-h-[420px] overflow-hidden bg-gray-200 rounded-[20px]"
+                                    className="relative w-full h-full min-h-[320px] md:min-h-[420px]"
                                 >
+                                    {/* La imagen muta su tamaño físico puro (de tarjeta a pop-up) */}
                                     <motion.img 
                                         layoutId={!isDuplicate ? `image-${item.id}` : undefined} 
                                         transition={fluidFlight}
                                         src={item.src} alt={item.alt} loading="lazy" 
-                                        className="h-full w-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 ease-[0.16,1,0.3,1] group-hover:scale-105" 
+                                        className="h-full w-full object-cover rounded-[20px] grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 ease-[0.16,1,0.3,1] shadow-sm" 
                                     />
-                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-6 flex flex-col justify-end text-white pointer-events-none">
+                                    <motion.div 
+                                        className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-6 flex flex-col justify-end text-white pointer-events-none rounded-[20px]"
+                                    >
                                         <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/70 mb-2">{item.category}</span>
                                         <h3 className="text-xl font-medium tracking-tight text-white">{item.title}</h3>
-                                    </div>
+                                    </motion.div>
                                 </motion.div>
-                            </article>
+                            </motion.article>
                         );
                     })}
                 </div>
@@ -298,10 +303,9 @@
                         animate={{
                             y: isScrolled ? 0 : 24,
                             borderRadius: isScrolled ? "0px" : "9999px",
-                            backgroundColor: isScrolled ? "rgba(255, 255, 255, 0.96)" : "rgba(255, 255, 255, 0.82)",
-                            // Sombra difuminada (fade) cuando está expandida, sin borde
+                            backgroundColor: isScrolled ? "rgba(255, 255, 255, 0.95)" : "rgba(255, 255, 255, 0.82)",
                             boxShadow: isScrolled 
-                                ? "0px 16px 40px -16px rgba(0,0,0,0.15)" 
+                                ? "0px 4px 20px rgba(0,0,0,0.03)" 
                                 : "0px 12px 30px -10px rgba(0,0,0,0.06), inset 0px 0px 0px 1px rgba(0,0,0,0.06)",
                         }}
                         transition={smoothTransition}
@@ -312,7 +316,7 @@
                             transition={smoothTransition} 
                             onClick={() => scrollTo("home")} 
                             aria-label="LionRenders home"
-                            className="flex items-center justify-center shrink-0 cursor-pointer select-none"
+                            className="flex items-center justify-center shrink-0 cursor-pointer select-none px-4"
                         >
                             <LionLogo />
                         </motion.button>
@@ -465,7 +469,7 @@
                                 initial={{ opacity: 0, scale: 0.98 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.98 }}
-                                transition={fluidFlight}
+                                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                                 className="fixed inset-0 z-[60] bg-white cursor-ns-resize"
                             >
                                 <button onClick={() => setIsExpanded(false)} className="absolute top-8 right-8 z-[70] p-4 rounded-full bg-white/80 backdrop-blur-md border border-gray-200 shadow-xl text-black hover:bg-black hover:text-white transition-all">
@@ -565,7 +569,6 @@
                 };
             }, [type, views, quality, speed]);
 
-            // Apple Genie Origin calculation
             const originX = typeof window !== 'undefined' ? (origin.x / window.innerWidth) * 100 + '%' : '50%';
             const originY = typeof window !== 'undefined' ? (origin.y / window.innerHeight) * 100 + '%' : '50%';
 
@@ -581,9 +584,9 @@
                             onClick={onClose}
                         >
                             <motion.div 
-                                initial={{ opacity: 0, scale: 0.2 }} 
+                                initial={{ opacity: 0, scale: 0 }} 
                                 animate={{ opacity: 1, scale: 1 }} 
-                                exit={{ opacity: 0, scale: 0.2 }} 
+                                exit={{ opacity: 0, scale: 0 }} 
                                 style={{ transformOrigin: `${originX} ${originY}` }}
                                 transition={genieSpring}
                                 className="relative w-full max-w-5xl bg-white/70 backdrop-blur-[60px] rounded-[48px] overflow-hidden flex flex-col lg:flex-row shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] border border-white"
@@ -692,46 +695,43 @@
 
             return (
                 <div className="fixed inset-0 z-[80] flex items-center justify-center p-4 sm:p-8" onClick={onClose}>
-                    {/* Fondo desenfocado para destacar el modal sobre la galería pausada */}
+                    {/* Fondo desenfocado que aísla el modal de la galería en pausa */}
                     <motion.div 
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} 
-                        transition={{ duration: 0.3 }}
-                        className="absolute inset-0 bg-white/70 backdrop-blur-md" 
+                        transition={{ duration: 0.4 }}
+                        className="absolute inset-0 bg-white/50 backdrop-blur-[12px]" 
                     />
                     
-                    {/* El contenedor general del modal aparece de forma difuminada (fade in),
-                        MIENTRAS que la imagen vuela en su interior de forma impecable. */}
+                    {/* Contenedor del Modal que Vuela matemáticamente */}
                     <motion.div 
-                        initial={{ opacity: 0, scale: 0.98 }} 
-                        animate={{ opacity: 1, scale: 1 }} 
-                        exit={{ opacity: 0, scale: 0.98 }}
+                        layoutId={`card-wrapper-${project.id}`}
                         transition={fluidFlight}
                         className="relative w-full max-w-5xl bg-white/80 backdrop-blur-[60px] border border-white shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] rounded-[48px] p-6 flex flex-col md:flex-row gap-8 overflow-hidden z-10"
                         onClick={e => e.stopPropagation()}
                     >
-                        <button onClick={onClose} className="absolute top-6 right-6 z-50 p-3 rounded-full bg-white shadow-[0_4px_10px_rgba(0,0,0,0.1)] border border-gray-100 text-gray-500 hover:bg-black hover:text-white transition-all hover:scale-105">
-                            <X size={18} />
-                        </button>
-
-                        {/* Este div vuela matemáticamente desde su posición en el grid usando fluidFlight */}
-                        <motion.div 
-                            layoutId={`image-container-${project.id}`} 
-                            transition={fluidFlight}
-                            className="w-full md:w-1/2 aspect-[4/3] rounded-[32px] overflow-hidden bg-gray-100 relative z-20"
+                        <motion.button 
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} 
+                            onClick={onClose} 
+                            className="absolute top-6 right-6 z-50 p-3 rounded-full bg-white shadow-[0_4px_10px_rgba(0,0,0,0.1)] border border-gray-100 text-gray-500 hover:bg-black hover:text-white transition-all hover:scale-105"
                         >
+                            <X size={18} />
+                        </motion.button>
+
+                        <div className="w-full md:w-1/2 aspect-[4/3] rounded-[32px] overflow-hidden bg-gray-100">
+                            {/* La imagen muta puramente en tamaño sin cortes */}
                             <motion.img 
                                 layoutId={`image-${project.id}`} 
                                 transition={fluidFlight}
-                                src={project.src} alt={project.alt} className="w-full h-full object-cover" 
+                                src={project.src} alt={project.alt} className="w-full h-full object-cover rounded-[32px]" 
                             />
-                        </motion.div>
+                        </div>
                         
-                        {/* El texto se difumina una vez la tarjeta llega */}
+                        {/* El texto se revela suavemente tras iniciar el vuelo */}
                         <motion.div 
-                            initial={{ opacity: 0, x: 20 }} 
-                            animate={{ opacity: 1, x: 0, transition: { delay: 0.1, duration: 0.4 } }} 
+                            initial={{ opacity: 0, x: 10 }} 
+                            animate={{ opacity: 1, x: 0, transition: { delay: 0.15, duration: 0.4 } }} 
                             exit={{ opacity: 0, transition: { duration: 0.1 } }} 
-                            className="w-full md:w-1/2 flex flex-col justify-center px-4 md:pr-12 relative z-20"
+                            className="w-full md:w-1/2 flex flex-col justify-center px-4 md:pr-12"
                         >
                             <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{project.category}</span>
                             <h3 className="text-3xl sm:text-4xl font-medium tracking-tight text-black mt-2">{project.title}</h3>
@@ -782,7 +782,6 @@
                 }, 1500);
             };
 
-            // Apple Genie Origin calculation
             const originX = typeof window !== 'undefined' ? (origin.x / window.innerWidth) * 100 + '%' : '50%';
             const originY = typeof window !== 'undefined' ? (origin.y / window.innerHeight) * 100 + '%' : '50%';
 
@@ -795,9 +794,9 @@
                             onClick={onClose}
                         >
                             <motion.div 
-                                initial={{ opacity: 0, scale: 0.2 }} 
+                                initial={{ opacity: 0, scale: 0 }} 
                                 animate={{ opacity: 1, scale: 1 }} 
-                                exit={{ opacity: 0, scale: 0.2 }} 
+                                exit={{ opacity: 0, scale: 0 }} 
                                 style={{ transformOrigin: `${originX} ${originY}` }}
                                 transition={genieSpring}
                                 className="relative w-full max-w-2xl p-10 sm:p-16 bg-white/80 backdrop-blur-[60px] shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] rounded-[48px]"
@@ -898,7 +897,6 @@
             const [previewProject, setPreviewProject] = useState(null);
             const [contactData, setContactData] = useState(null);
             
-            // Estados para capturar las coordenadas del último clic
             const [contactOrigin, setContactOrigin] = useState({ x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0 });
             const [calcOrigin, setCalcOrigin] = useState({ x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0 });
             
@@ -926,8 +924,7 @@
                 <div className="min-h-screen relative bg-white">
                     <Header activeSection={activeSection} scrollTo={scrollTo} openContact={openContact} />
                     
-                    {/* El main permanece fijo y sin efectos (no se encoge ni se desenfoca) para evitar parpadeos,
-                        haciendo que el vuelo de la tarjeta (FLIP) sea limpio, estable y muy natural. */}
+                    {/* El fondo se queda sólido para que el modal vole en primer plano libremente */}
                     <main>
                         <Hero scrollTo={scrollTo} />
                         <KineticGallerySection onSelectProject={setPreviewProject} previewProject={previewProject} />
@@ -958,4 +955,5 @@
     </script>
 </body>
 </html>
+
 
