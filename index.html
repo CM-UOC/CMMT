@@ -48,6 +48,10 @@
         @keyframes shimmer {
             100% { transform: translateX(150%); }
         }
+        /* Inversión del SVG blanco a negro para tema claro minimalista */
+        .logo-invert {
+            filter: invert(1);
+        }
         /* Regla recomendada para dimensiones responsivas del logo */
         .site-logo {
             display: block;
@@ -149,11 +153,14 @@
 
         const smoothTransition = { duration: 0.7, ease: [0.16, 1, 0.3, 1] };
         
-        // New liquid bounce physics for popups
-        const liquidBounce = { type: "spring", damping: 18, stiffness: 200, mass: 0.8 };
+        // --- FÍSICAS DE ANIMACIÓN ---
+        // Efecto Genie Apple (Para botones a modales)
+        const genieSpring = { type: "spring", damping: 22, stiffness: 220, mass: 0.8 };
+        // Vuelo rápido y fluido sin rebotes para la galería (FLIP animation)
+        const fluidFlight = { type: "tween", ease: [0.16, 1, 0.3, 1], duration: 0.5 };
 
         // --- MOTOR CINÉTICO DE GALERÍA ---
-        function KineticEngine({ items, onProjectClick, interactive }) {
+        function KineticEngine({ items, onProjectClick, interactive, paused, previewProject }) {
             const containerRef = useRef(null);
             const wrapperRef = useRef(null);
             const prefersReducedMotion = useReducedMotion();
@@ -163,7 +170,7 @@
             const isDragging = useRef(false);
 
             useAnimationFrame((t, delta) => {
-                if (prefersReducedMotion || !wrapperRef.current) return;
+                if (prefersReducedMotion || !wrapperRef.current || paused) return;
                 
                 let vDelta = (targetVelocity.current - currentVelocity.current) * 0.05;
                 if (isNaN(vDelta)) vDelta = 0;
@@ -185,7 +192,7 @@
             });
 
             const handlePointerMove = (e) => {
-                if (prefersReducedMotion || isDragging.current || !containerRef.current || !interactive) return;
+                if (prefersReducedMotion || isDragging.current || !containerRef.current || !interactive || paused) return;
                 const rect = containerRef.current.getBoundingClientRect();
                 if (rect.height === 0) return; 
                 
@@ -199,13 +206,13 @@
             };
 
             const handlePointerLeave = () => {
-                if (prefersReducedMotion || !interactive) return;
+                if (prefersReducedMotion || !interactive || paused) return;
                 isDragging.current = false;
                 targetVelocity.current = -0.3;
             };
 
             const handleWheel = (e) => {
-                if (prefersReducedMotion || !interactive) return;
+                if (prefersReducedMotion || !interactive || paused) return;
                 yPos.current -= e.deltaY * 0.6;
             };
 
@@ -220,26 +227,40 @@
 
             const renderMosaicGrid = (isDuplicate = false) => (
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 grid-flow-dense gap-3 md:gap-5 p-4 md:p-8">
-                    {items.map((item, idx) => (
-                        <article 
-                            key={isDuplicate ? `dup-${item.id}-${idx}` : item.id} 
-                            onClick={(e) => {
-                                if (interactive) {
-                                    e.stopPropagation();
-                                    onProjectClick(item);
-                                }
-                            }} 
-                            className={`group relative overflow-hidden bg-gray-100 cursor-pointer transition-all duration-700 ${getSpanClass(item.ratio)} rounded-[20px]`}
-                        >
-                            <div className="relative w-full h-full min-h-[320px] md:min-h-[420px] overflow-hidden bg-gray-200">
-                                <img src={item.src} alt={item.alt} loading="lazy" className="h-full w-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 ease-[0.16,1,0.3,1] group-hover:scale-105" />
-                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-6 flex flex-col justify-end text-white">
-                                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/70 mb-2">{item.category}</span>
-                                    <h3 className="text-xl font-medium tracking-tight text-white">{item.title}</h3>
-                                </div>
-                            </div>
-                        </article>
-                    ))}
+                    {items.map((item, idx) => {
+                        const isCurrentPreview = previewProject && previewProject.id === item.id && !isDuplicate;
+                        return (
+                            <article 
+                                key={isDuplicate ? `dup-${item.id}-${idx}` : item.id} 
+                                onClick={(e) => {
+                                    if (interactive) {
+                                        e.stopPropagation();
+                                        onProjectClick(item, e);
+                                    }
+                                }} 
+                                className={`group relative overflow-hidden bg-transparent cursor-pointer ${getSpanClass(item.ratio)}`}
+                            >
+                                {/* El contenedor y la imagen actúan como el objeto a animar (layoutId) */}
+                                <motion.div 
+                                    layoutId={!isDuplicate ? `image-container-${item.id}` : undefined} 
+                                    transition={fluidFlight}
+                                    style={{ opacity: isCurrentPreview ? 0 : 1 }}
+                                    className="relative w-full h-full min-h-[320px] md:min-h-[420px] overflow-hidden bg-gray-200 rounded-[20px]"
+                                >
+                                    <motion.img 
+                                        layoutId={!isDuplicate ? `image-${item.id}` : undefined} 
+                                        transition={fluidFlight}
+                                        src={item.src} alt={item.alt} loading="lazy" 
+                                        className="h-full w-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 ease-[0.16,1,0.3,1] group-hover:scale-105" 
+                                    />
+                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-6 flex flex-col justify-end text-white pointer-events-none">
+                                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/70 mb-2">{item.category}</span>
+                                        <h3 className="text-xl font-medium tracking-tight text-white">{item.title}</h3>
+                                    </div>
+                                </motion.div>
+                            </article>
+                        );
+                    })}
                 </div>
             );
 
@@ -277,10 +298,11 @@
                         animate={{
                             y: isScrolled ? 0 : 24,
                             borderRadius: isScrolled ? "0px" : "9999px",
-                            backgroundColor: isScrolled ? "rgba(255, 255, 255, 0.95)" : "rgba(255, 255, 255, 0.8)",
+                            backgroundColor: isScrolled ? "rgba(255, 255, 255, 0.96)" : "rgba(255, 255, 255, 0.82)",
+                            // Sombra difuminada (fade) cuando está expandida, sin borde
                             boxShadow: isScrolled 
-                                ? "0px 4px 20px rgba(0,0,0,0.03)" 
-                                : "0px 12px 30px -10px rgba(0,0,0,0.05), inset 0px 0px 0px 1px rgba(0,0,0,0.05)",
+                                ? "0px 16px 40px -16px rgba(0,0,0,0.15)" 
+                                : "0px 12px 30px -10px rgba(0,0,0,0.06), inset 0px 0px 0px 1px rgba(0,0,0,0.06)",
                         }}
                         transition={smoothTransition}
                         className={`pointer-events-auto relative flex items-center justify-between gap-1 backdrop-blur-[32px] overflow-hidden ${isScrolled ? 'w-full px-6 md:px-12 py-4' : 'w-[calc(100%-3rem)] max-w-fit p-1.5'}`}
@@ -383,7 +405,7 @@
             );
         }
 
-        function KineticGallerySection({ onSelectProject }) {
+        function KineticGallerySection({ onSelectProject, previewProject }) {
             const [filter, setFilter] = useState("All");
             const [isExpanded, setIsExpanded] = useState(false);
             const categories = ["All", "Architecture", "Cosmetics", "Fragrance", "Furniture", "Automotive", "Technology"];
@@ -422,17 +444,18 @@
                         className="relative w-full h-[90vh] min-h-[750px] border-y border-gray-100 group cursor-pointer"
                         onClick={() => setIsExpanded(true)}
                     >
-                        {/* Gradientes de niebla (superior e inferior) */}
-                        <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-white via-white/80 to-transparent z-20 pointer-events-none transition-opacity duration-500" />
-                        <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-white via-white/80 to-transparent z-20 pointer-events-none transition-opacity duration-500" />
+                        {/* Gradientes de niebla (superior e inferior) que desaparecen al expandir */}
+                        <div className={`absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-white via-white/80 to-transparent z-20 pointer-events-none transition-opacity duration-700 ease-in-out ${isExpanded ? 'opacity-0' : 'opacity-100'}`} />
+                        <div className={`absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-white via-white/80 to-transparent z-20 pointer-events-none transition-opacity duration-700 ease-in-out ${isExpanded ? 'opacity-0' : 'opacity-100'}`} />
                         
                         <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none transition-opacity duration-700">
-                            <span className="bg-black text-white px-6 py-3 rounded-full text-xs font-bold tracking-widest uppercase shadow-[0_10px_40px_rgba(0,0,0,0.2)] opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            <span className={`bg-black text-white px-6 py-3 rounded-full text-xs font-bold tracking-widest uppercase shadow-[0_10px_40px_rgba(0,0,0,0.2)] transition-opacity duration-500 ${isExpanded ? 'opacity-0' : 'opacity-0 group-hover:opacity-100'}`}>
                                 Click to unveil
                             </span>
                         </div>
 
-                        <KineticEngine items={filteredProjects} onProjectClick={() => {}} interactive={false} />
+                        {/* Motor cinético de la vista normal */}
+                        <KineticEngine items={filteredProjects} onProjectClick={() => {}} interactive={false} paused={!!previewProject} previewProject={previewProject} />
                     </div>
 
                     {/* Vista desplegada a pantalla completa */}
@@ -442,7 +465,7 @@
                                 initial={{ opacity: 0, scale: 0.98 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.98 }}
-                                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                                transition={fluidFlight}
                                 className="fixed inset-0 z-[60] bg-white cursor-ns-resize"
                             >
                                 <button onClick={() => setIsExpanded(false)} className="absolute top-8 right-8 z-[70] p-4 rounded-full bg-white/80 backdrop-blur-md border border-gray-200 shadow-xl text-black hover:bg-black hover:text-white transition-all">
@@ -450,7 +473,7 @@
                                 </button>
                                 
                                 <div className="w-full h-full pt-16 pb-8">
-                                    <KineticEngine items={filteredProjects} onProjectClick={(item) => onSelectProject(item)} interactive={true} />
+                                    <KineticEngine items={filteredProjects} onProjectClick={(item, e) => onSelectProject(item, e)} interactive={true} paused={!!previewProject} previewProject={previewProject} />
                                 </div>
                             </motion.div>
                         )}
@@ -542,9 +565,9 @@
                 };
             }, [type, views, quality, speed]);
 
-            // Calcula la distancia desde el botón clickeado hasta el centro de la pantalla
-            const deltaX = typeof window !== 'undefined' ? origin.x - window.innerWidth / 2 : 0;
-            const deltaY = typeof window !== 'undefined' ? origin.y - window.innerHeight / 2 : 0;
+            // Apple Genie Origin calculation
+            const originX = typeof window !== 'undefined' ? (origin.x / window.innerWidth) * 100 + '%' : '50%';
+            const originY = typeof window !== 'undefined' ? (origin.y / window.innerHeight) * 100 + '%' : '50%';
 
             return (
                 <AnimatePresence>
@@ -553,19 +576,20 @@
                             initial={{ opacity: 0 }} 
                             animate={{ opacity: 1 }} 
                             exit={{ opacity: 0 }} 
-                            transition={{ duration: 0.4 }}
+                            transition={{ duration: 0.3 }}
                             className="fixed inset-0 z-[80] flex items-center justify-center p-4 bg-black/20 backdrop-blur-[10px]"
                             onClick={onClose}
                         >
                             <motion.div 
-                                initial={{ opacity: 0, x: deltaX, y: deltaY, scale: 0.05, borderRadius: "200px" }} 
-                                animate={{ opacity: 1, x: 0, y: 0, scale: 1, borderRadius: "48px" }} 
-                                exit={{ opacity: 0, x: deltaX, y: deltaY, scale: 0.05, borderRadius: "200px" }} 
-                                transition={liquidBounce}
-                                className="relative w-full max-w-5xl bg-white/60 backdrop-blur-[80px] overflow-hidden flex flex-col lg:flex-row shadow-[0_40px_120px_rgba(0,0,0,0.2),inset_0_4px_16px_rgba(255,255,255,1),inset_0_-4px_16px_rgba(255,255,255,0.4)] border border-white/80"
+                                initial={{ opacity: 0, scale: 0.2 }} 
+                                animate={{ opacity: 1, scale: 1 }} 
+                                exit={{ opacity: 0, scale: 0.2 }} 
+                                style={{ transformOrigin: `${originX} ${originY}` }}
+                                transition={genieSpring}
+                                className="relative w-full max-w-5xl bg-white/70 backdrop-blur-[60px] rounded-[48px] overflow-hidden flex flex-col lg:flex-row shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] border border-white"
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                <button onClick={onClose} className="absolute top-6 right-6 p-3 rounded-full bg-white text-gray-500 shadow-[0_4px_10px_rgba(0,0,0,0.1)] border border-gray-100 hover:bg-black hover:text-white transition-all z-20 hover:scale-105">
+                                <button onClick={onClose} className="absolute top-6 right-6 p-3 rounded-full bg-white text-gray-500 shadow-sm border border-gray-100 hover:bg-black hover:text-white transition-all z-20">
                                     <X size={18} />
                                 </button>
 
@@ -667,24 +691,48 @@
             }, [onClose]);
 
             return (
-                <div className="fixed inset-0 z-[80] flex items-center justify-center p-4 sm:p-8 bg-black/20 backdrop-blur-[20px]" onClick={onClose}>
+                <div className="fixed inset-0 z-[80] flex items-center justify-center p-4 sm:p-8" onClick={onClose}>
+                    {/* Fondo desenfocado para destacar el modal sobre la galería pausada */}
                     <motion.div 
-                        initial={{ opacity: 0, y: 30, scale: 0.8, borderRadius: "150px" }} 
-                        animate={{ opacity: 1, y: 0, scale: 1, borderRadius: "48px" }} 
-                        exit={{ opacity: 0, y: 30, scale: 0.8, borderRadius: "150px" }}
-                        transition={liquidBounce}
-                        className="relative w-full max-w-5xl bg-white/60 backdrop-blur-[80px] shadow-[0_40px_120px_rgba(0,0,0,0.2),inset_0_4px_16px_rgba(255,255,255,1),inset_0_-4px_16px_rgba(255,255,255,0.4)] border border-white/80 p-6 flex flex-col md:flex-row gap-8 overflow-hidden"
+                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} 
+                        transition={{ duration: 0.3 }}
+                        className="absolute inset-0 bg-white/70 backdrop-blur-md" 
+                    />
+                    
+                    {/* El contenedor general del modal aparece de forma difuminada (fade in),
+                        MIENTRAS que la imagen vuela en su interior de forma impecable. */}
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.98 }} 
+                        animate={{ opacity: 1, scale: 1 }} 
+                        exit={{ opacity: 0, scale: 0.98 }}
+                        transition={fluidFlight}
+                        className="relative w-full max-w-5xl bg-white/80 backdrop-blur-[60px] border border-white shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] rounded-[48px] p-6 flex flex-col md:flex-row gap-8 overflow-hidden z-10"
                         onClick={e => e.stopPropagation()}
                     >
                         <button onClick={onClose} className="absolute top-6 right-6 z-50 p-3 rounded-full bg-white shadow-[0_4px_10px_rgba(0,0,0,0.1)] border border-gray-100 text-gray-500 hover:bg-black hover:text-white transition-all hover:scale-105">
                             <X size={18} />
                         </button>
 
-                        <div className="w-full md:w-1/2 aspect-[4/3] rounded-[32px] overflow-hidden bg-gray-100">
-                            <img src={project.src} alt={project.alt} className="w-full h-full object-cover" />
-                        </div>
+                        {/* Este div vuela matemáticamente desde su posición en el grid usando fluidFlight */}
+                        <motion.div 
+                            layoutId={`image-container-${project.id}`} 
+                            transition={fluidFlight}
+                            className="w-full md:w-1/2 aspect-[4/3] rounded-[32px] overflow-hidden bg-gray-100 relative z-20"
+                        >
+                            <motion.img 
+                                layoutId={`image-${project.id}`} 
+                                transition={fluidFlight}
+                                src={project.src} alt={project.alt} className="w-full h-full object-cover" 
+                            />
+                        </motion.div>
                         
-                        <div className="w-full md:w-1/2 flex flex-col justify-center px-4 md:pr-12">
+                        {/* El texto se difumina una vez la tarjeta llega */}
+                        <motion.div 
+                            initial={{ opacity: 0, x: 20 }} 
+                            animate={{ opacity: 1, x: 0, transition: { delay: 0.1, duration: 0.4 } }} 
+                            exit={{ opacity: 0, transition: { duration: 0.1 } }} 
+                            className="w-full md:w-1/2 flex flex-col justify-center px-4 md:pr-12 relative z-20"
+                        >
                             <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{project.category}</span>
                             <h3 className="text-3xl sm:text-4xl font-medium tracking-tight text-black mt-2">{project.title}</h3>
                             <p className="text-sm text-gray-500 mt-4 leading-relaxed">{project.alt}. Developed with technical precision and photographic attention to detail, this project encapsulates the brand's vision by elevating it through immersive CGI.</p>
@@ -697,7 +745,7 @@
                             <button onClick={(e) => { onClose(); openContact(null, e); }} className="mt-8 py-4 rounded-full bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 group hover:scale-105">
                                 Inquire similar work <ArrowUpRight size={14} className="inline ml-1 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                             </button>
-                        </div>
+                        </motion.div>
                     </motion.div>
                 </div>
             );
@@ -734,27 +782,28 @@
                 }, 1500);
             };
 
-            // Distancia del botón clickeado al centro de la pantalla
-            const deltaX = typeof window !== 'undefined' ? origin.x - window.innerWidth / 2 : 0;
-            const deltaY = typeof window !== 'undefined' ? origin.y - window.innerHeight / 2 : 0;
+            // Apple Genie Origin calculation
+            const originX = typeof window !== 'undefined' ? (origin.x / window.innerWidth) * 100 + '%' : '50%';
+            const originY = typeof window !== 'undefined' ? (origin.y / window.innerHeight) * 100 + '%' : '50%';
 
             return (
                 <AnimatePresence>
                     {isOpen && (
                         <motion.div 
-                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}
                             className="fixed inset-0 z-[90] flex items-center justify-center p-4 bg-black/20 backdrop-blur-[20px]"
                             onClick={onClose}
                         >
                             <motion.div 
-                                initial={{ opacity: 0, x: deltaX, y: deltaY, scale: 0.05, borderRadius: "200px" }} 
-                                animate={{ opacity: 1, x: 0, y: 0, scale: 1, borderRadius: "48px" }} 
-                                exit={{ opacity: 0, x: deltaX, y: deltaY, scale: 0.05, borderRadius: "200px" }} 
-                                transition={liquidBounce}
-                                className="relative w-full max-w-2xl p-10 sm:p-16 bg-white/60 backdrop-blur-[80px] shadow-[0_40px_120px_rgba(0,0,0,0.2),inset_0_4px_16px_rgba(255,255,255,1),inset_0_-4px_16px_rgba(255,255,255,0.4)] border border-white/80"
+                                initial={{ opacity: 0, scale: 0.2 }} 
+                                animate={{ opacity: 1, scale: 1 }} 
+                                exit={{ opacity: 0, scale: 0.2 }} 
+                                style={{ transformOrigin: `${originX} ${originY}` }}
+                                transition={genieSpring}
+                                className="relative w-full max-w-2xl p-10 sm:p-16 bg-white/80 backdrop-blur-[60px] shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] rounded-[48px]"
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                <button onClick={onClose} className="absolute top-6 right-6 p-3 rounded-full bg-white text-gray-500 shadow-[0_4px_10px_rgba(0,0,0,0.1)] border border-gray-100 hover:bg-black hover:text-white transition-all hover:scale-105">
+                                <button onClick={onClose} className="absolute top-6 right-6 p-3 rounded-full bg-white shadow-[0_4px_10px_rgba(0,0,0,0.1)] border border-gray-100 text-gray-500 hover:bg-black hover:text-white transition-all hover:scale-105">
                                     <X size={18} />
                                 </button>
                                 
@@ -788,7 +837,7 @@
                                                 <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-2">Project details</label>
                                                 <textarea required rows="4" value={formData.details} onChange={e => setFormData({...formData, details: e.target.value})} className="w-full px-0 py-3 bg-transparent border-b border-gray-200 text-black placeholder-gray-300 focus:outline-none focus:border-black transition-colors resize-none" placeholder="Tell us more..."></textarea>
                                             </div>
-                                            <button type="submit" disabled={status === "submitting"} className="w-full mt-6 py-4 rounded-full bg-black text-white font-bold text-xs uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 disabled:opacity-50 hover:-translate-y-0.5 group">
+                                            <button type="submit" disabled={status === "submitting"} className="w-full mt-6 py-4 rounded-full bg-black text-white font-bold text-xs uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 disabled:opacity-50 hover:-translate-y-0.5 group hover:scale-105">
                                                 {status === "submitting" ? "Sending..." : "Submit request"}
                                             </button>
                                         </form>
@@ -849,7 +898,7 @@
             const [previewProject, setPreviewProject] = useState(null);
             const [contactData, setContactData] = useState(null);
             
-            // Estados para capturar las coordenadas (origen) del último clic
+            // Estados para capturar las coordenadas del último clic
             const [contactOrigin, setContactOrigin] = useState({ x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0 });
             const [calcOrigin, setCalcOrigin] = useState({ x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0 });
             
@@ -877,10 +926,11 @@
                 <div className="min-h-screen relative bg-white">
                     <Header activeSection={activeSection} scrollTo={scrollTo} openContact={openContact} />
                     
-                    {/* Main content scales back gently when popups open */}
-                    <main className={`transition-all duration-700 ease-[0.16,1,0.3,1] ${isContactModalOpen || isCalcModalOpen || previewProject ? "scale-[0.98] opacity-50 pointer-events-none select-none blur-[4px]" : ""}`}>
+                    {/* El main permanece fijo y sin efectos (no se encoge ni se desenfoca) para evitar parpadeos,
+                        haciendo que el vuelo de la tarjeta (FLIP) sea limpio, estable y muy natural. */}
+                    <main>
                         <Hero scrollTo={scrollTo} />
-                        <KineticGallerySection onSelectProject={setPreviewProject} />
+                        <KineticGallerySection onSelectProject={setPreviewProject} previewProject={previewProject} />
                         <ProcessSection />
                         <AboutSection />
                     </main>
@@ -908,5 +958,4 @@
     </script>
 </body>
 </html>
-
 
