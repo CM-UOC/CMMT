@@ -71,33 +71,33 @@
         }
         @keyframes pulse-glow-once {
             0%, 2% { opacity: 0; }
-            4%, 12% { opacity: 0.95; } /* Visible and vibrant precisely for one fast spin revolution */
-            15%, 100% { opacity: 0; }
+            5%, 16% { opacity: 1; } /* Visible and vibrant exactly for one lap (1.2s of a 6s loop) */
+            20%, 100% { opacity: 0; }
         }
         .border-glow-container {
             position: absolute;
-            inset: -1px; /* Sits tightly on the edge */
+            inset: -3px; /* Sits slightly outside the border */
             border-radius: 9999px;
-            padding: 6px; /* Deep padding makes the glow bleed into the button's interior */
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
             z-index: -1;
             overflow: hidden;
+            /* Soft radial mask allows the neon light to bleed and diffuse inwards under the frosted glass */
+            -webkit-mask: radial-gradient(circle closest-side, transparent 40%, black 85%);
+            mask: radial-gradient(circle closest-side, transparent 40%, black 85%);
+            pointer-events: none;
         }
         .border-glow-spinner {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 300%;
-            height: 300%;
-            /* Vibrant liquid glow colors */
-            background: conic-gradient(from 0deg, transparent 50%, rgba(255, 0, 127, 0.6) 80%, rgba(0, 212, 255, 1) 98%, transparent 100%);
-            /* Very fast 0.8s travel, synced perfectly with 8s cycle to do exactly 1 lap */
-            animation: spin-glow 0.8s linear infinite, pulse-glow-once 8s ease-in-out infinite;
+            width: 250%;
+            height: 250%;
+            /* Liquid neon light: Electric Cyan to Vibrant Magenta with a bright core */
+            background: conic-gradient(from 0deg, transparent 65%, rgba(0, 243, 255, 0.6) 80%, rgba(157, 0, 255, 0.9) 95%, rgba(255, 255, 255, 1) 98%, transparent 100%);
+            /* One rapid sweep per cycle */
+            animation: spin-glow 1.2s linear infinite, pulse-glow-once 6s ease-in-out infinite;
             transform-origin: center;
-            /* Heavy blur creates the liquid glass diffusion effect */
-            filter: blur(6px);
+            /* Extra blur diffuses the line into a soft glowing fluid */
+            filter: blur(5px);
         }
     </style>
 
@@ -191,7 +191,7 @@
         // --- ANIMATION PHYSICS ---
         const genieSpring = { type: "spring", damping: 24, stiffness: 260, mass: 0.7 };
         const fluidFlight = { duration: 0.6, ease: [0.16, 1, 0.3, 1] };
-        const categoryFlight = { type: "spring", damping: 26, stiffness: 280, mass: 0.8 }; // Snappy but fluid spring for categories
+        const categoryFlight = { type: "spring", damping: 26, stiffness: 280, mass: 0.8 }; 
 
         // Reusable Category Filters to support animating from Page to Full-screen Header
         const CategoryFilters = ({ categories, filter, setFilter }) => (
@@ -282,8 +282,6 @@
                     {items.map((item, idx) => {
                         const isCurrentPreview = previewProject && previewProject.id === item.id && !isDuplicate;
                         
-                        // Si la foto está seleccionada y no es un duplicado, la OMITIMOS de la cuadrícula
-                        // Esto hace que el resto de elementos fluyan orgánicamente para rellenar su espacio.
                         if (isCurrentPreview) return null;
 
                         return (
@@ -497,12 +495,13 @@
                             <h2 className="mt-3 text-4xl sm:text-5xl font-medium tracking-tight text-black">Selected works.</h2>
                         </div>
                         <div className="flex flex-wrap gap-2">
-                            {/* Standard flow layout for buttons when not in expanded gallery mode */}
+                            {/* Standard layout logic ensures the entire wrapper morphs synchronously */}
                             <AnimatePresence>
                                 {!isExpanded && (
                                     <motion.div 
                                         layoutId="category-pill-container"
-                                        className="flex flex-wrap gap-2 bg-white/0 border border-white/0 p-0 rounded-[32px]"
+                                        transition={fluidFlight}
+                                        className="flex flex-wrap gap-2 relative z-10 p-0 bg-transparent border border-transparent rounded-[32px]"
                                     >
                                         <CategoryFilters categories={categories} filter={filter} setFilter={setFilter} />
                                     </motion.div>
@@ -532,13 +531,15 @@
                                         transition={fluidFlight}
                                         className="absolute top-8 left-0 right-0 flex items-start justify-center z-[70] px-6 md:px-12 pointer-events-none"
                                     >
-                                        {/* Buttons gracefully fly up into this pill container perfectly synced */}
+                                        {/* The container morphs its background and blur seamlessly matching the layout flight */}
                                         <motion.div 
                                             layoutId="category-pill-container"
-                                            className="flex flex-wrap justify-center gap-1.5 max-w-[80%] bg-white/60 backdrop-blur-xl border border-white/60 p-2 rounded-[32px] shadow-[0_10px_40px_rgba(0,0,0,0.1)] pointer-events-auto"
+                                            transition={fluidFlight}
+                                            className="flex flex-wrap justify-center gap-1.5 max-w-[80%] p-2 relative z-10 pointer-events-auto bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_10px_40px_rgba(0,0,0,0.1)] rounded-[32px]"
                                         >
                                             <CategoryFilters categories={categories} filter={filter} setFilter={setFilter} />
                                         </motion.div>
+                                        
                                         <button onClick={(e) => { e.stopPropagation(); setIsExpanded(false); }} className="absolute right-6 md:right-12 top-0 p-3.5 rounded-full bg-white/70 backdrop-blur-xl border border-white/80 shadow-[0_10px_40px_rgba(0,0,0,0.1)] text-black hover:bg-black hover:text-white transition-all pointer-events-auto hover:scale-105">
                                             <X size={20} />
                                         </button>
@@ -945,9 +946,9 @@
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                     onClick={onClick}
-                    className="fixed bottom-6 right-6 z-40 bg-[#d4d4d4]/80 backdrop-blur-[32px] text-black h-[52px] min-w-[52px] px-4 rounded-full shadow-[0_10px_30px_-5px_rgba(0,0,0,0.15),inset_0_2px_8px_rgba(255,255,255,0.8),inset_0_-2px_8px_rgba(0,0,0,0.05)] flex items-center justify-center hover:scale-105 hover:bg-white/90 transition-all duration-300 group select-none cursor-pointer"
+                    className="fixed bottom-6 right-6 z-40 bg-[#d4d4d4]/60 backdrop-blur-[32px] text-black h-[52px] min-w-[72px] px-5 rounded-full shadow-[0_10px_30px_-5px_rgba(0,0,0,0.15),inset_0_2px_8px_rgba(255,255,255,0.8),inset_0_-2px_8px_rgba(0,0,0,0.05)] flex items-center justify-center hover:scale-105 hover:bg-white/90 transition-all duration-300 group select-none cursor-pointer"
                 >
-                    {/* Fast-traveling border shine container */}
+                    {/* Fast-traveling liquid glass glow container */}
                     <div className={`border-glow-container transition-opacity duration-300 ${(isHovered || isAnyModalOpen) ? 'opacity-0' : 'opacity-100'}`}>
                         <div className="border-glow-spinner" />
                     </div>
@@ -965,7 +966,6 @@
             const [previewProject, setPreviewProject] = useState(null);
             const [contactData, setContactData] = useState(null);
             
-            // Scroll Sync for Header Active Pill
             useEffect(() => {
                 const handleScroll = () => {
                     const sections = ["home", "work", "process", "about"];
@@ -982,7 +982,7 @@
                     setActiveSection(prev => prev !== current ? current : prev);
                 };
                 window.addEventListener("scroll", handleScroll, { passive: true });
-                handleScroll(); // Init
+                handleScroll();
                 return () => window.removeEventListener("scroll", handleScroll);
             }, []);
 
