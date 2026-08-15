@@ -64,20 +64,21 @@
             }
         }
 
-        /* Fast Traveling Glow Line for Estimator Button */
+        /* Fast, Faded Traveling Glow Line for Estimator Button */
         @keyframes spin-glow {
             0% { transform: translate(-50%, -50%) rotate(0deg); }
             100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
-        @keyframes pulse-glow {
-            0%, 20%, 80%, 100% { opacity: 0; }
-            40%, 60% { opacity: 1; }
+        @keyframes pulse-glow-once {
+            0%, 5% { opacity: 0; }
+            10%, 25% { opacity: 0.65; } /* Visible precisely for one fast spin revolution */
+            30%, 100% { opacity: 0; }
         }
         .border-glow-container {
             position: absolute;
-            inset: -2px;
+            inset: -2px; /* Pull slightly outside */
             border-radius: 9999px;
-            padding: 2px;
+            padding: 4px; /* Thicker padding so it bleeds +2px inside the button as requested */
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
@@ -90,9 +91,13 @@
             left: 50%;
             width: 300%;
             height: 300%;
-            background: conic-gradient(from 0deg, transparent 70%, rgba(255, 0, 127, 0.9) 85%, rgba(0, 212, 255, 0.9) 100%);
-            animation: spin-glow 1.2s linear infinite, pulse-glow 5s ease-in-out infinite;
+            /* Faded glow with a soft tail */
+            background: conic-gradient(from 0deg, transparent 70%, rgba(255, 0, 127, 0.3) 85%, rgba(0, 212, 255, 0.7) 100%);
+            /* Spins 1 round quickly (1.2s), synced with 8s cycle */
+            animation: spin-glow 1.2s linear infinite, pulse-glow-once 8s ease-in-out infinite;
             transform-origin: center;
+            /* Extra blur for a much softer integration */
+            filter: blur(4px);
         }
     </style>
 
@@ -186,12 +191,15 @@
         // --- ANIMATION PHYSICS ---
         const genieSpring = { type: "spring", damping: 24, stiffness: 260, mass: 0.7 };
         const fluidFlight = { duration: 0.6, ease: [0.16, 1, 0.3, 1] };
+        const categoryFlight = { type: "spring", damping: 24, stiffness: 260, mass: 0.7 }; // Fluid spring for categories
 
         // Reusable Category Filters to support animating from Page to Full-screen Header
         const CategoryFilters = ({ categories, filter, setFilter }) => (
             <>
                 {categories.map((cat) => (
                     <motion.button 
+                        layout
+                        transition={categoryFlight}
                         layoutId={`filter-btn-${cat}`}
                         key={cat} 
                         onClick={(e) => { e.stopPropagation(); setFilter(cat); }} 
@@ -273,6 +281,9 @@
                 <div className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 grid-flow-dense gap-3 md:gap-5 px-4 md:px-8 pb-8 ${interactive ? 'pt-32' : 'pt-4 md:pt-8'}`}>
                     {items.map((item, idx) => {
                         const isCurrentPreview = previewProject && previewProject.id === item.id && !isDuplicate;
+                        
+                        // Si la foto está seleccionada y no es un duplicado, la OMITIMOS de la cuadrícula
+                        // Esto hace que el resto de elementos fluyan orgánicamente para rellenar su espacio.
                         if (isCurrentPreview) return null;
 
                         return (
@@ -289,7 +300,10 @@
                                 }} 
                                 className={`group relative cursor-pointer ${getSpanClass(item.ratio)}`}
                             >
-                                <motion.div className="relative w-full h-full min-h-[320px] md:min-h-[420px]">
+                                <motion.div 
+                                    className="relative w-full h-full min-h-[320px] md:min-h-[420px]"
+                                >
+                                    {/* La imagen muta su tamaño físico puro (de tarjeta a pop-up) */}
                                     <motion.img 
                                         layoutId={!isDuplicate ? `image-${item.id}` : undefined} 
                                         transition={fluidFlight}
@@ -485,7 +499,9 @@
                         </div>
                         <div className="flex flex-wrap gap-2">
                             {/* Standard flow layout for buttons when not in expanded gallery mode */}
-                            {!isExpanded && <CategoryFilters categories={categories} filter={filter} setFilter={setFilter} />}
+                            <AnimatePresence>
+                                {!isExpanded && <CategoryFilters categories={categories} filter={filter} setFilter={setFilter} />}
+                            </AnimatePresence>
                         </div>
                     </div>
                     
@@ -506,8 +522,8 @@
                             <AnimatePresence>
                                 {isExpanded && (
                                     <motion.div 
-                                        initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
-                                        transition={{ duration: 0.4 }}
+                                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                                        transition={fluidFlight}
                                         className="absolute top-8 left-0 right-0 flex items-start justify-center z-[70] px-6 md:px-12 pointer-events-none"
                                     >
                                         <div className="flex flex-wrap justify-center gap-1.5 max-w-[80%] bg-white/50 backdrop-blur-xl border border-white/60 p-2 rounded-[32px] shadow-[0_10px_40px_rgba(0,0,0,0.1)] pointer-events-auto">
@@ -912,15 +928,18 @@
             );
         }
 
-        function CalculatorFAB({ onClick }) {
-            // Eliminated hide/show scroll logic, so the button is always present
+        function CalculatorFAB({ onClick, isAnyModalOpen }) {
+            const [isHovered, setIsHovered] = useState(false);
+
             return (
                 <button 
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
                     onClick={onClick}
                     className="fixed bottom-6 right-6 z-40 bg-[#d4d4d4]/80 backdrop-blur-[32px] text-black px-5 py-4 rounded-full shadow-[0_10px_30px_-5px_rgba(0,0,0,0.15),inset_0_2px_8px_rgba(255,255,255,0.8),inset_0_-2px_8px_rgba(0,0,0,0.05)] flex items-center gap-3 hover:scale-105 hover:bg-white/90 transition-all duration-300 group select-none cursor-pointer"
                 >
                     {/* Fast-traveling border shine container */}
-                    <div className="border-glow-container">
+                    <div className={`border-glow-container transition-opacity duration-300 ${(isHovered || isAnyModalOpen) ? 'opacity-0' : 'opacity-100'}`}>
                         <div className="border-glow-spinner" />
                     </div>
                     <CalculatorIcon size={20} className="text-black drop-shadow-sm relative z-10" />
@@ -981,6 +1000,8 @@
                 setIsContactModalOpen(true);
             };
 
+            const isAnyModalOpen = isContactModalOpen || isCalcModalOpen || !!previewProject;
+
             return (
                 <div className="min-h-screen relative bg-white">
                     <Header activeSection={activeSection} scrollTo={scrollTo} openContact={openContact} />
@@ -995,6 +1016,7 @@
                     <Footer />
                     
                     <CalculatorFAB 
+                        isAnyModalOpen={isAnyModalOpen}
                         onClick={(e) => {
                             if (e && e.clientX) setCalcOrigin({ x: e.clientX, y: e.clientY });
                             setIsCalcModalOpen(true);
