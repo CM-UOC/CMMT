@@ -3,7 +3,29 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LionRenders - 3D Visualisation Studio</title>
+    <title>LionRenders — 3D Visualisation & CGI Studio</title>
+    <meta name="description" content="LionRenders is an independent 3D visualisation studio producing high-end CGI, product renders and cinematic launch films for luxury, technology and design brands.">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="color-scheme" content="light">
+
+    <!-- Icons -->
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="./favicon.svg">
+
+    <!-- Social preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="LionRenders">
+    <meta property="og:title" content="LionRenders — 3D Visualisation & CGI Studio">
+    <meta property="og:description" content="High-end CGI, 3D product visualisation and cinematic launch films for luxury, technology and design.">
+    <meta property="og:image" content="./logo.svg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LionRenders — 3D Visualisation & CGI Studio">
+    <meta name="twitter:description" content="High-end CGI, 3D product visualisation and cinematic launch films for luxury, technology and design.">
+
+    <!-- Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -19,39 +41,86 @@
                         clay: "#b85f4d"
                     },
                     fontFamily: {
-                        sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+                        serif: ['"Instrument Serif"', 'ui-serif', 'Georgia', '"Times New Roman"', 'serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', '"SF Mono"', 'Menlo', 'Consolas', 'monospace'],
+                    },
+                    transitionTimingFunction: {
+                        'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
                     }
                 },
             },
         }
     </script>
     <style>
+        /* =========================================================
+           DESIGN TOKENS — single source of truth for motion & colour
+           ========================================================= */
+        :root {
+            --ink: #111111;
+            --clay: #b85f4d;
+            --line: #e5e5e5;
+
+            /* One easing family across CSS + JS keeps motion coherent */
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+            --dur-fast: 180ms;
+            --dur-base: 320ms;
+            --dur-slow: 600ms;
+
+            /* Just clears the scrolled header bar; each section's own top padding
+               supplies the breathing room below it. */
+            --header-h: 88px;
+        }
+
+        html {
+            /* Anchored sections stop clear of the fixed header */
+            scroll-padding-top: var(--header-h);
+            /* Reserve the scrollbar gutter permanently so locking body scroll
+               for a modal doesn't shift the whole page sideways. */
+            scrollbar-gutter: stable;
+        }
+
         body {
             background-color: #ffffff;
-            color: #111111;
+            color: var(--ink);
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            font-synthesis-weight: none;
             overflow-x: hidden;
         }
+
+        /* Inter reads better with slightly opened tracking at small sizes
+           and tightened tracking at display sizes — handled per-element. */
+        h1, h2, h3 { font-feature-settings: "kern" 1, "liga" 1, "calt" 1; }
+
+        /* Aligned figures for anything numeric (estimator HUD, stats) */
+        .tnum { font-variant-numeric: tabular-nums; }
+
         ::selection {
-            background-color: #b85f4d;
+            background-color: var(--clay);
             color: #ffffff;
         }
-        input[type=range] {
-            accent-color: #111111;
+
+        /* ---------- Focus: invisible for mouse, unmistakable for keyboard ---------- */
+        :focus { outline: none; }
+        :focus-visible {
+            outline: 2px solid var(--clay);
+            outline-offset: 3px;
+            border-radius: 6px;
         }
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
+        /* The nav morphs behind overflow:hidden, so its ring has to sit inside. */
+        header nav :focus-visible { outline-offset: -3px; }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar {
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
-        @keyframes shimmer {
-            100% { transform: translateX(150%); }
-        }
-        .logo-invert {
-            filter: invert(1);
-        }
+
+        /* ---------- Logo ---------- */
+        .logo-invert { filter: invert(1); }
         .site-logo {
             display: block;
             height: 36px;
@@ -59,13 +128,194 @@
             object-fit: contain;
         }
         @media (min-width: 900px) {
-            .site-logo {
-                height: 42px;
-            }
+            .site-logo { height: 42px; }
+        }
+
+        /* ---------- Range slider: fully custom, monochrome ---------- */
+        input[type=range].lr-range {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 22px;
+            background: transparent;
+            cursor: pointer;
+        }
+        input[type=range].lr-range::-webkit-slider-runnable-track {
+            height: 4px;
+            border-radius: 999px;
+            background: linear-gradient(to right, var(--ink) 0 var(--range-fill, 0%), #e2e2e2 var(--range-fill, 0%) 100%);
+        }
+        input[type=range].lr-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 18px;
+            width: 18px;
+            margin-top: -7px;
+            border-radius: 999px;
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.14), 0 4px 12px -2px rgba(0,0,0,0.18);
+            transition: transform var(--dur-fast) var(--ease-out-expo),
+                        box-shadow var(--dur-fast) var(--ease-out-expo);
+        }
+        input[type=range].lr-range:hover::-webkit-slider-thumb { transform: scale(1.12); }
+        input[type=range].lr-range:active::-webkit-slider-thumb {
+            transform: scale(0.96);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 2px 6px -1px rgba(0,0,0,0.2);
+        }
+        input[type=range].lr-range::-moz-range-track {
+            height: 4px;
+            border-radius: 999px;
+            background: #e2e2e2;
+        }
+        input[type=range].lr-range::-moz-range-progress {
+            height: 4px;
+            border-radius: 999px;
+            background: var(--ink);
+        }
+        input[type=range].lr-range::-moz-range-thumb {
+            height: 16px;
+            width: 16px;
+            border-radius: 999px;
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.14), 0 4px 12px -2px rgba(0,0,0,0.18);
+        }
+
+        /* ---------- Form fields: underline grows from the left on focus ---------- */
+        .lr-field { position: relative; }
+        .lr-input {
+            width: 100%;
+            padding: 0.75rem 0;
+            background: transparent;
+            color: var(--ink);
+            border: 0;
+            border-bottom: 1px solid var(--line);
+            transition: border-color var(--dur-base) var(--ease-out-expo);
+        }
+        .lr-input::placeholder { color: #d4d4d4; }
+        .lr-input:focus { outline: none; border-bottom-color: #c9c9c9; }
+        /* The focus rule is a separate layer so it can wipe in rather than snap. */
+        .lr-field::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 1px;
+            width: 100%;
+            background: var(--ink);
+            transform: scaleX(0);
+            transform-origin: left center;
+            transition: transform var(--dur-base) var(--ease-out-expo);
+            pointer-events: none;
+        }
+        .lr-field:focus-within::after { transform: scaleX(1); }
+        /* Keyboard focus is already signalled by the rule; no double ring here. */
+        .lr-input:focus-visible { outline: none; }
+
+        /* ---------- Boot screen: hides the Tailwind/Babel compile flash ---------- */
+        #boot {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            display: grid;
+            place-items: center;
+            background: #ffffff;
+            transition: opacity 700ms var(--ease-out-expo), visibility 700ms;
+        }
+        #boot.is-done {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        #boot .boot-mark {
+            width: 116px;
+            opacity: 0;
+            animation: boot-breathe 2.2s var(--ease-out-expo) 120ms infinite;
+        }
+        #boot .boot-rule {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 1px;
+            width: 100%;
+            background: rgba(17, 17, 17, 0.06);
+            overflow: hidden;
+        }
+        #boot .boot-rule::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--ink);
+            transform-origin: left center;
+            animation: boot-progress 2.4s var(--ease-out-expo) forwards;
+        }
+        #boot-fallback {
+            position: absolute;
+            bottom: 14%;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 32ch;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #8a8a8a;
+            opacity: 0;
+            transition: opacity var(--dur-slow) var(--ease-out-expo);
+        }
+        #boot-fallback.is-visible { opacity: 1; }
+        @keyframes boot-breathe {
+            0%, 100% { opacity: 0.18; }
+            50% { opacity: 0.5; }
+        }
+        @keyframes boot-progress {
+            0% { transform: scaleX(0); }
+            60% { transform: scaleX(0.72); }
+            100% { transform: scaleX(1); }
+        }
+
+        /* ---------- Scroll progress hairline ---------- */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            z-index: 50;
+            transform-origin: 0% 50%;
+            background: linear-gradient(90deg, var(--ink), var(--clay));
+            pointer-events: none;
+        }
+
+        /* ---------- Shared surfaces ---------- */
+        .panel-glass {
+            background: rgba(255, 255, 255, 0.82);
+            -webkit-backdrop-filter: blur(48px) saturate(160%);
+            backdrop-filter: blur(48px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 40px 120px -20px rgba(0, 0, 0, 0.22),
+                        0 8px 24px -8px rgba(0, 0, 0, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.95);
         }
 
         /* =========================================================
-           REFINED LIQUID-GLASS ESTIMATOR BUTTON
+           REDUCED MOTION — one global switch
+           ========================================================= */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+                scroll-behavior: auto !important;
+            }
+            #boot .boot-mark { opacity: 0.35; }
+        }
+
+        /* =========================================================
+           LIQUID-GLASS ESTIMATOR BUTTON
+           Same material language as the nav pill and modal panels;
+           the travelling highlight is clay/champagne, not neon, so the
+           page keeps its "colour only through the product" rule.
            ========================================================= */
 
         @keyframes border-travel {
@@ -87,41 +337,45 @@
             justify-content: center;
             cursor: pointer;
             user-select: none;
-            
-            /* Premium Light Grey Frosted Glass with a Faded, Subtle Border */
-            background: rgba(225, 228, 232, 0.75);
-            border: 1px solid rgba(170, 175, 185, 0.25); 
-            -webkit-backdrop-filter: blur(20px) saturate(120%);
-            backdrop-filter: blur(20px) saturate(120%);
-            /* Soft inset shadow at the bottom to define the edge naturally */
-            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.08), 
-                        inset 0 2px 10px rgba(255,255,255,0.8), 
-                        inset 0 -3px 8px rgba(160, 165, 175, 0.45);
-            
-            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+
+            /* Clean frosted white glass with a hairline edge */
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid rgba(17, 17, 17, 0.07);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            backdrop-filter: blur(24px) saturate(180%);
+            box-shadow: 0 14px 34px -10px rgba(0, 0, 0, 0.16),
+                        0 2px 6px -2px rgba(0, 0, 0, 0.06),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+                        inset 0 -1px 0 rgba(17, 17, 17, 0.04);
+
+            transition: background var(--dur-base) var(--ease-out-expo),
+                        border-color var(--dur-base) var(--ease-out-expo),
+                        box-shadow var(--dur-base) var(--ease-out-expo);
             will-change: transform;
         }
 
         .liquid-estimator-fab:hover {
-            background: rgba(240, 242, 245, 0.95);
-            border-color: rgba(150, 155, 165, 0.35);
-            box-shadow: 0 12px 35px -5px rgba(0,0,0,0.12), 
-                        inset 0 2px 10px rgba(255,255,255,0.9), 
-                        inset 0 -3px 8px rgba(160, 165, 175, 0.3);
+            background: rgba(255, 255, 255, 0.92);
+            border-color: rgba(17, 17, 17, 0.12);
+            box-shadow: 0 20px 44px -12px rgba(0, 0, 0, 0.2),
+                        0 3px 8px -2px rgba(0, 0, 0, 0.08),
+                        inset 0 1px 0 rgba(255, 255, 255, 1),
+                        inset 0 -1px 0 rgba(17, 17, 17, 0.05);
         }
 
-        /* Strict Border Mask for the Edge Glow */
+        /* Strict border mask so the highlight rides the edge only */
         .clean-border-glow {
             position: absolute;
             inset: 0;
             border-radius: 9999px;
-            padding: 2px; /* Controls border line thickness */
+            padding: 1.5px; /* border line thickness */
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.4s ease;
+            transition: opacity var(--dur-slow) var(--ease-out-expo);
             overflow: hidden;
         }
 
@@ -132,19 +386,22 @@
             left: 50%;
             width: 300%;
             height: 300%;
-            /* Faded neon gradient */
-            background: conic-gradient(from 0deg, transparent 65%, rgba(0, 243, 255, 0.6) 80%, rgba(157, 0, 255, 0.8) 95%, rgba(255, 255, 255, 1) 100%);
-            animation: border-travel 1.2s linear infinite;
+            background: conic-gradient(from 0deg,
+                        transparent 62%,
+                        rgba(184, 95, 77, 0.35) 82%,
+                        rgba(214, 158, 122, 0.75) 93%,
+                        rgba(255, 255, 255, 0.95) 100%);
+            animation: border-travel 1.6s linear infinite;
         }
 
-        /* Subtle Inner Wash under the frosted glass */
+        /* Soft inner wash under the frosted glass */
         .clean-inner-glow {
             position: absolute;
             inset: 0;
             border-radius: 9999px;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.4s ease;
+            transition: opacity var(--dur-slow) var(--ease-out-expo);
             overflow: hidden;
         }
 
@@ -155,15 +412,23 @@
             left: 50%;
             width: 300%;
             height: 300%;
-            background: conic-gradient(from 0deg, transparent 65%, rgba(0, 243, 255, 0.15) 85%, rgba(157, 0, 255, 0.25) 95%, rgba(255, 255, 255, 0.4) 100%);
-            animation: border-travel 1.2s linear infinite;
-            filter: blur(8px);
+            background: conic-gradient(from 0deg,
+                        transparent 62%,
+                        rgba(184, 95, 77, 0.1) 85%,
+                        rgba(214, 158, 122, 0.18) 95%,
+                        rgba(255, 255, 255, 0.3) 100%);
+            animation: border-travel 1.6s linear infinite;
+            filter: blur(10px);
         }
 
         /* Activation state controlled precisely by React */
         .liquid-estimator-fab.is-glowing .clean-border-glow,
         .liquid-estimator-fab.is-glowing .clean-inner-glow {
             opacity: 1;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .clean-border-glow, .clean-inner-glow { display: none; }
         }
     </style>
 
@@ -178,11 +443,42 @@
     <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
 </head>
 <body>
+    <!-- Boot screen. Tailwind's CDN build and Babel's in-browser transform both
+         finish after first paint, which would otherwise show a flash of raw,
+         unstyled markup. This holds a clean white frame until React mounts. -->
+    <div id="boot">
+        <img class="boot-mark" src="./logo.svg" alt="" aria-hidden="true">
+        <p id="boot-fallback">Still loading. If this persists, check your connection — the studio site pulls its libraries from a CDN.</p>
+        <div class="boot-rule"></div>
+    </div>
+
+    <noscript>
+        <div style="max-width:34rem;margin:22vh auto;padding:0 1.5rem;font-family:Inter,system-ui,sans-serif;text-align:center;color:#111">
+            <img src="./logo.svg" alt="LionRenders" style="height:44px;margin:0 auto 2rem;display:block">
+            <h1 style="font-size:1.5rem;font-weight:500;letter-spacing:-0.02em;margin:0 0 .75rem">JavaScript required</h1>
+            <p style="color:#777;line-height:1.7;margin:0 0 2rem">This portfolio relies on JavaScript for its gallery and estimator. Please enable it, or reach us directly.</p>
+            <a href="mailto:studio@lionrenders.com" style="color:#111;font-weight:600;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;border-bottom:1px solid #111;padding-bottom:2px;text-decoration:none">studio@lionrenders.com</a>
+        </div>
+    </noscript>
+
     <div id="root"></div>
 
+    <script>
+        // Surface a message if the CDN libraries never arrive, instead of
+        // leaving the visitor on a blank white page forever.
+        (function () {
+            var el = document.getElementById('boot-fallback');
+            setTimeout(function () {
+                if (!document.getElementById('boot').classList.contains('is-done') && el) {
+                    el.classList.add('is-visible');
+                }
+            }, 6000);
+        })();
+    </script>
+
     <script type="text/babel">
-        const { useState, useEffect, useRef, useMemo } = React;
-        const { motion, AnimatePresence, useReducedMotion, useAnimationFrame, useScroll, useMotionValueEvent, useMotionValue, useSpring } = window.Motion;
+        const { useState, useEffect, useRef, useMemo, useCallback } = React;
+        const { motion, AnimatePresence, useReducedMotion, useAnimationFrame, useScroll, useMotionValueEvent, useMotionValue, useSpring, useTransform } = window.Motion;
 
         // --- ICONS ---
         const ArrowUpRight = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>;
@@ -195,26 +491,37 @@
         const Box = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>;
         const Video = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="14" height="10" x="2" y="7" rx="2"/><path d="m16 10 4-2v8l-4-2"/></svg>;
         const Building = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>;
-        const Layers = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 17 22 12"/></svg>;
-        const CalculatorIcon = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M16 10h.01"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14v4"/><path d="M8 18h.01"/><path d="M12 18h.01"/></svg>;
+        const Layers = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>;
+        const CalculatorIcon = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>;
 
         // --- LOGO ---
-        const LionLogo = ({className=""}) => (
-            <img 
-                src="./logo.svg" 
-                alt="LionRenders" 
+        // Intrinsic dimensions let the browser reserve the right box before the
+        // SVG lands, so the nav doesn't reflow on first paint.
+        const LionLogo = ({className="", alt="LionRenders"}) => (
+            <img
+                src="./logo.svg"
+                alt={alt}
+                width="635"
+                height="233"
+                decoding="async"
                 className={`site-logo ${className}`.trim()}
             />
         );
         
         function AnimatedNumber({ value }) {
             const ref = useRef(null);
+            const initial = useRef(value);
+            const prefersReducedMotion = useReducedMotion();
             const motionValue = useMotionValue(value);
-            const springValue = useSpring(motionValue, { stiffness: 100, damping: 20 });
+            const springValue = useSpring(motionValue, { stiffness: 140, damping: 24, mass: 0.6 });
 
             useEffect(() => {
+                if (prefersReducedMotion) {
+                    if (ref.current) ref.current.textContent = Math.round(value).toLocaleString();
+                    return;
+                }
                 motionValue.set(value);
-            }, [value, motionValue]);
+            }, [value, motionValue, prefersReducedMotion]);
 
             useMotionValueEvent(springValue, "change", (latest) => {
                 if (ref.current) {
@@ -222,7 +529,10 @@
                 }
             });
 
-            return <span ref={ref}>{value.toLocaleString()}</span>;
+            // Rendered once with the mount value; the spring owns the text node from
+            // then on. Re-rendering here would snap the number to its target for a
+            // frame before the spring caught up.
+            return <span ref={ref} className="tnum">{initial.current.toLocaleString()}</span>;
         }
 
         // --- DATA ---
@@ -252,28 +562,191 @@
             { id: "about", label: "Studio" }
         ];
 
-        const smoothTransition = { duration: 0.5, ease: [0.16, 1, 0.3, 1] };
-        
+        // --- MOTION SYSTEM ---
+        // One easing family and one set of springs, reused everywhere, so every
+        // transition on the page feels like it came from the same hand.
+        const EASE = [0.16, 1, 0.3, 1];          // out-expo, matches --ease-out-expo
+
+        const smoothTransition = { duration: 0.5, ease: EASE };
+
         // --- ANIMATION PHYSICS ---
         const genieSpring = { type: "spring", damping: 24, stiffness: 260, mass: 0.7 };
-        const fluidFlight = { duration: 0.6, ease: [0.16, 1, 0.3, 1] };
-        const categoryFlight = { type: "spring", damping: 26, stiffness: 280, mass: 0.8 }; 
+        const fluidFlight = { duration: 0.6, ease: EASE };
+        const categoryFlight = { type: "spring", damping: 26, stiffness: 280, mass: 0.8 };
+        const hoverSpring = { type: "spring", stiffness: 380, damping: 30, mass: 0.6 };
+        const segmentSpring = { type: "spring", stiffness: 500, damping: 38, mass: 0.7 };
+        const revealTransition = { duration: 0.8, ease: EASE };
+
+        // =========================================================
+        //  SHARED BEHAVIOUR
+        // =========================================================
+
+        // Ref-counted body scroll lock. The expanded gallery and the modals can
+        // both be open at once; without counting, whichever closed first would
+        // release the lock and let the page scroll behind the other.
+        const scrollLock = (() => {
+            let count = 0;
+            return {
+                acquire() {
+                    if (count++ === 0) document.body.style.overflow = "hidden";
+                },
+                release() {
+                    count = Math.max(0, count - 1);
+                    if (count === 0) document.body.style.overflow = "";
+                }
+            };
+        })();
+
+        function useScrollLock(active) {
+            useEffect(() => {
+                if (!active) return;
+                scrollLock.acquire();
+                return () => scrollLock.release();
+            }, [active]);
+        }
+
+        const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])';
+
+        // Escape to close, focus moved in and trapped, focus returned to whatever
+        // opened the dialog. Applied to every overlay so they behave identically.
+        function useDialog(isOpen, onClose) {
+            const panelRef = useRef(null);
+            const restoreRef = useRef(null);
+            useScrollLock(isOpen);
+
+            useEffect(() => {
+                if (!isOpen) return;
+                restoreRef.current = document.activeElement;
+
+                const focusTimer = setTimeout(() => {
+                    const node = panelRef.current;
+                    if (!node) return;
+                    const target = node.querySelector('[data-autofocus]') || node.querySelector(FOCUSABLE);
+                    if (target) target.focus({ preventScroll: true });
+                }, 80);
+
+                const onKeyDown = (e) => {
+                    if (e.key === "Escape") {
+                        e.preventDefault();
+                        onClose();
+                        return;
+                    }
+                    if (e.key !== "Tab") return;
+                    const node = panelRef.current;
+                    if (!node) return;
+                    const items = Array.from(node.querySelectorAll(FOCUSABLE))
+                        .filter((el) => el.offsetWidth > 0 || el.offsetHeight > 0);
+                    if (!items.length) return;
+                    const first = items[0];
+                    const last = items[items.length - 1];
+                    if (e.shiftKey && document.activeElement === first) {
+                        e.preventDefault();
+                        last.focus();
+                    } else if (!e.shiftKey && document.activeElement === last) {
+                        e.preventDefault();
+                        first.focus();
+                    }
+                };
+
+                document.addEventListener("keydown", onKeyDown);
+                return () => {
+                    clearTimeout(focusTimer);
+                    document.removeEventListener("keydown", onKeyDown);
+                    const prev = restoreRef.current;
+                    if (prev && typeof prev.focus === "function") prev.focus({ preventScroll: true });
+                };
+            }, [isOpen, onClose]);
+
+            return panelRef;
+        }
+
+        // Scroll-triggered entrance. Sections arrive rather than simply existing.
+        function Reveal({ children, delay = 0, y = 28, amount = 0.3, className = "", as = "div" }) {
+            const prefersReducedMotion = useReducedMotion();
+            const Component = motion[as] || motion.div;
+
+            if (prefersReducedMotion) {
+                const Plain = as;
+                return <Plain className={className}>{children}</Plain>;
+            }
+
+            return (
+                <Component
+                    className={className}
+                    initial={{ opacity: 0, y }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount }}
+                    transition={{ ...revealTransition, delay }}
+                >
+                    {children}
+                </Component>
+            );
+        }
+
+        // Images fade up rather than snapping in as each one decodes.
+        // Inline styles so Tailwind's `transition-*` utilities can't override the
+        // fade, and so nothing competes with Framer's layout transforms.
+        function ProjectImage({ className = "", style = {}, hovered = false, ...rest }) {
+            const [loaded, setLoaded] = useState(false);
+            const prefersReducedMotion = useReducedMotion();
+
+            const attachRef = (el) => {
+                if (el && el.complete && el.naturalWidth > 0 && !loaded) setLoaded(true);
+            };
+
+            const visible = loaded || prefersReducedMotion;
+
+            return (
+                <motion.img
+                    ref={attachRef}
+                    onLoad={() => setLoaded(true)}
+                    onError={() => setLoaded(true)}
+                    className={className}
+                    style={{
+                        ...style,
+                        opacity: visible ? 1 : 0,
+                        filter: hovered ? "grayscale(0%)" : "grayscale(32%)",
+                        transition: prefersReducedMotion
+                            ? "none"
+                            : "opacity 700ms cubic-bezier(0.16,1,0.3,1), filter 600ms cubic-bezier(0.16,1,0.3,1)"
+                    }}
+                    {...rest}
+                />
+            );
+        }
 
         // Reusable Category Filters to support animating from Page to Full-screen Header
         const CategoryFilters = ({ categories, filter, setFilter }) => (
             <>
-                {categories.map((cat) => (
-                    <motion.button 
-                        layout
-                        transition={categoryFlight}
-                        layoutId={`filter-btn-${cat}`}
-                        key={cat} 
-                        onClick={(e) => { e.stopPropagation(); setFilter(cat); }} 
-                        className={`px-5 py-2 rounded-full text-xs font-semibold tracking-wide transition-colors duration-300 ${filter === cat ? "bg-black text-white" : "hover:bg-gray-200 text-gray-600 hover:text-black"}`}
-                    >
-                        {cat}
-                    </motion.button>
-                ))}
+                {categories.map((cat) => {
+                    const isActive = filter === cat;
+                    return (
+                        <motion.button
+                            layout
+                            transition={categoryFlight}
+                            layoutId={`filter-btn-${cat}`}
+                            key={cat}
+                            aria-pressed={isActive}
+                            onClick={(e) => { e.stopPropagation(); setFilter(cat); }}
+                            className={`relative px-5 py-2 rounded-full text-xs font-semibold tracking-wide transition-colors duration-300 ${isActive ? "text-white" : "text-gray-600 hover:text-black"}`}
+                        >
+                            {/* Shared pill glides between categories instead of each
+                                button flipping its own background on and off. */}
+                            {isActive && (
+                                <motion.span
+                                    layoutId="filter-active-pill"
+                                    transition={categoryFlight}
+                                    className="absolute inset-0 rounded-full bg-black"
+                                    style={{ zIndex: -1 }}
+                                />
+                            )}
+                            {!isActive && (
+                                <span className="absolute inset-0 rounded-full bg-transparent hover:bg-gray-200/70 transition-colors duration-300" style={{ zIndex: -1 }} />
+                            )}
+                            <span className="relative">{cat}</span>
+                        </motion.button>
+                    );
+                })}
             </>
         );
 
@@ -286,18 +759,41 @@
             const currentVelocity = useRef(-0.3);
             const targetVelocity = useRef(-0.3);
             const isDragging = useRef(false);
+            const [hoveredId, setHoveredId] = useState(null);
+            const [isOnScreen, setIsOnScreen] = useState(true);
+
+            // Don't burn frames animating a gallery nobody can see.
+            useEffect(() => {
+                const node = containerRef.current;
+                if (!node || typeof IntersectionObserver === "undefined") return;
+                const observer = new IntersectionObserver(
+                    ([entry]) => setIsOnScreen(entry.isIntersecting),
+                    { rootMargin: "200px" }
+                );
+                observer.observe(node);
+                return () => observer.disconnect();
+            }, []);
+
+            // A card can't stay "hovered" once the pointer is gone or the view changed.
+            useEffect(() => {
+                if (!interactive || paused) setHoveredId(null);
+            }, [interactive, paused]);
 
             useAnimationFrame((t, delta) => {
-                if (prefersReducedMotion || !wrapperRef.current || paused) return;
-                
-                let vDelta = (targetVelocity.current - currentVelocity.current) * 0.05;
+                if (prefersReducedMotion || !wrapperRef.current || paused || !isOnScreen) return;
+
+                // Frame-rate independent: a 144Hz display shouldn't scroll 2.4x
+                // faster than a 60Hz one.
+                const frameScale = Math.min(delta, 50) / 16.667;
+
+                let vDelta = (targetVelocity.current - currentVelocity.current) * Math.min(1, 0.05 * frameScale);
                 if (isNaN(vDelta)) vDelta = 0;
-                
+
                 currentVelocity.current += vDelta;
-                yPos.current += currentVelocity.current;
-                
+                yPos.current += currentVelocity.current * frameScale;
+
                 if (isNaN(yPos.current)) yPos.current = 0;
-                
+
                 const scrollHeight = wrapperRef.current.scrollHeight / 2;
                 if (scrollHeight > 0) {
                     if (yPos.current <= -scrollHeight) {
@@ -316,11 +812,15 @@
                 
                 const relativeY = e.clientY - rect.top;
                 const normalizedY = (relativeY / rect.height) * 2 - 1;
-                
-                let speed = (normalizedY * 1.5) - 0.3;
+
+                // Dead zone through the middle so small pointer jitter near the
+                // centre doesn't make the wall twitch back and forth.
+                const shaped = Math.abs(normalizedY) < 0.12 ? 0 : normalizedY;
+
+                let speed = (shaped * 1.5) - 0.3;
                 if (isNaN(speed)) speed = -0.3;
-                
-                targetVelocity.current = speed;
+
+                targetVelocity.current = Math.max(-2.4, Math.min(2.4, speed));
             };
 
             const handlePointerLeave = () => {
@@ -347,38 +847,67 @@
                 <div className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 grid-flow-dense gap-3 md:gap-5 px-4 md:px-8 pb-8 ${interactive ? 'pt-32' : 'pt-4 md:pt-8'}`}>
                     {items.map((item, idx) => {
                         const isCurrentPreview = previewProject && previewProject.id === item.id && !isDuplicate;
-                        
+
                         if (isCurrentPreview) return null;
 
+                        const cardKey = isDuplicate ? `dup-${item.id}-${idx}` : item.id;
+                        const isHovered = hoveredId === cardKey;
+
                         return (
-                            <motion.article 
+                            <motion.article
                                 layout
                                 layoutId={!isDuplicate ? `card-wrapper-${item.id}` : undefined}
                                 transition={fluidFlight}
-                                key={isDuplicate ? `dup-${item.id}-${idx}` : item.id} 
+                                key={cardKey}
+                                onPointerEnter={() => interactive && setHoveredId(cardKey)}
+                                onPointerLeave={() => interactive && setHoveredId((c) => (c === cardKey ? null : c))}
                                 onClick={(e) => {
                                     if (interactive) {
                                         e.stopPropagation();
                                         onProjectClick(item, e);
                                     }
-                                }} 
-                                className={`group relative cursor-pointer ${getSpanClass(item.ratio)}`}
+                                }}
+                                className={`group relative ${interactive ? "cursor-pointer" : ""} ${getSpanClass(item.ratio)}`}
                             >
-                                <motion.div 
-                                    className="relative w-full h-full min-h-[320px] md:min-h-[420px]"
-                                >
-                                    <motion.img 
-                                        layoutId={!isDuplicate ? `image-${item.id}` : undefined} 
+                                <div className="relative w-full h-full min-h-[320px] md:min-h-[420px]">
+                                    <ProjectImage
+                                        layoutId={!isDuplicate ? `image-${item.id}` : undefined}
                                         transition={fluidFlight}
-                                        style={{ opacity: isCurrentPreview ? 0 : 1 }}
-                                        src={item.src} alt={item.alt} loading="lazy" 
-                                        className="h-full w-full object-cover rounded-[20px] grayscale-[30%] group-hover:grayscale-0 transition-all duration-500 ease-[0.16,1,0.3,1] shadow-sm bg-gray-200" 
+                                        hovered={isHovered}
+                                        src={item.src} alt={item.alt} loading="lazy" decoding="async"
+                                        className="h-full w-full object-cover rounded-[20px] shadow-sm bg-gray-200"
                                     />
-                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-6 flex flex-col justify-end text-white pointer-events-none rounded-[20px]">
-                                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/70 mb-2">{item.category}</span>
-                                        <h3 className="text-xl font-medium tracking-tight text-white">{item.title}</h3>
+
+                                    {/* Caption sits on a gradient scrim rather than a flat wash,
+                                        so the image stays readable underneath it. */}
+                                    <div
+                                        className="absolute inset-0 p-6 flex flex-col justify-end text-white pointer-events-none rounded-[20px]"
+                                        style={{
+                                            background: "linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.32) 34%, rgba(0,0,0,0) 68%)",
+                                            opacity: isHovered ? 1 : 0,
+                                            transition: "opacity 520ms cubic-bezier(0.16,1,0.3,1)"
+                                        }}
+                                    >
+                                        <span
+                                            className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/75 mb-2"
+                                            style={{
+                                                transform: isHovered ? "translateY(0)" : "translateY(10px)",
+                                                transition: "transform 560ms cubic-bezier(0.16,1,0.3,1) 40ms"
+                                            }}
+                                        >
+                                            {item.category}
+                                        </span>
+                                        <h3
+                                            className="text-xl font-medium tracking-tight text-white"
+                                            style={{
+                                                transform: isHovered ? "translateY(0)" : "translateY(14px)",
+                                                transition: "transform 560ms cubic-bezier(0.16,1,0.3,1) 80ms"
+                                            }}
+                                        >
+                                            {item.title}
+                                        </h3>
                                     </div>
-                                </motion.div>
+                                </div>
                             </motion.article>
                         );
                     })}
@@ -393,8 +922,20 @@
                     onWheel={handleWheel}
                     className="relative w-full h-full overflow-hidden"
                 >
-                    <motion.div animate={{ opacity: interactive ? 0 : 1 }} transition={{ duration: 0.5 }} style={{ background: 'linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0.85) 30%, rgba(255,255,255,0) 100%)' }} className="absolute top-0 left-0 right-0 h-32 sm:h-56 z-20 pointer-events-none" />
-                    <motion.div animate={{ opacity: interactive ? 0 : 1 }} transition={{ duration: 0.5 }} style={{ background: 'linear-gradient(to top, #ffffff 0%, rgba(255,255,255,0.85) 30%, rgba(255,255,255,0) 100%)' }} className="absolute bottom-0 left-0 right-0 h-32 sm:h-56 z-20 pointer-events-none" />
+                    {/* Collapsed state: white fades top and bottom so the wall
+                        dissolves into the page instead of ending on a hard edge. */}
+                    <motion.div animate={{ opacity: interactive ? 0 : 1 }} transition={{ duration: 0.5, ease: EASE }} style={{ background: 'linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0.85) 30%, rgba(255,255,255,0) 100%)' }} className="absolute top-0 left-0 right-0 h-32 sm:h-56 z-20 pointer-events-none" />
+                    <motion.div animate={{ opacity: interactive ? 0 : 1 }} transition={{ duration: 0.5, ease: EASE }} style={{ background: 'linear-gradient(to top, #ffffff 0%, rgba(255,255,255,0.85) 30%, rgba(255,255,255,0) 100%)' }} className="absolute bottom-0 left-0 right-0 h-32 sm:h-56 z-20 pointer-events-none" />
+
+                    {/* Expanded state: a soft light scrim keeps the floating filter
+                        bar and close button readable over dark imagery. */}
+                    <motion.div
+                        initial={false}
+                        animate={{ opacity: interactive ? 1 : 0 }}
+                        transition={{ duration: 0.5, ease: EASE }}
+                        style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.62) 0%, rgba(255,255,255,0.28) 45%, rgba(255,255,255,0) 100%)' }}
+                        className="absolute top-0 left-0 right-0 h-40 z-20 pointer-events-none"
+                    />
 
                     <div ref={wrapperRef} className={`w-full will-change-transform ${prefersReducedMotion ? "overflow-y-auto h-full no-scrollbar" : ""}`}>
                         {renderMosaicGrid(false)}
@@ -405,27 +946,61 @@
         }
 
         // --- COMPONENTS ---
+        // Hairline reading-position indicator across the top of the page.
+        function ScrollProgress() {
+            const { scrollYProgress } = useScroll();
+            const scaleX = useSpring(scrollYProgress, { stiffness: 180, damping: 30, restDelta: 0.001 });
+            const prefersReducedMotion = useReducedMotion();
+            return (
+                <motion.div
+                    className="scroll-progress"
+                    style={{ scaleX: prefersReducedMotion ? scrollYProgress : scaleX }}
+                    aria-hidden="true"
+                />
+            );
+        }
+
         function Header({ activeSection, scrollTo, openContact }) {
             const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
             const { scrollY } = useScroll();
             const [isScrolled, setIsScrolled] = useState(false);
+            const menuRef = useRef(null);
 
             useMotionValueEvent(scrollY, "change", (latest) => {
                 setIsScrolled(latest > 20);
             });
 
+            // The mobile sheet closes the way people expect it to: Escape,
+            // a tap outside, or scrolling the page away from it.
+            useEffect(() => {
+                if (!mobileMenuOpen) return;
+                const onKey = (e) => { if (e.key === "Escape") setMobileMenuOpen(false); };
+                const onPointerDown = (e) => {
+                    if (menuRef.current && !menuRef.current.contains(e.target)) setMobileMenuOpen(false);
+                };
+                const onScroll = () => setMobileMenuOpen(false);
+                document.addEventListener("keydown", onKey);
+                document.addEventListener("pointerdown", onPointerDown);
+                window.addEventListener("scroll", onScroll, { passive: true });
+                return () => {
+                    document.removeEventListener("keydown", onKey);
+                    document.removeEventListener("pointerdown", onPointerDown);
+                    window.removeEventListener("scroll", onScroll);
+                };
+            }, [mobileMenuOpen]);
+
             return (
-                <header className="fixed top-0 left-0 right-0 z-40 flex justify-center pointer-events-none">
-                    <motion.nav 
+                <header ref={menuRef} className="fixed top-0 left-0 right-0 z-40 flex justify-center pointer-events-none">
+                    <motion.nav
                         layout
                         initial={false}
                         animate={{
                             y: isScrolled ? 0 : 24,
                             borderRadius: isScrolled ? "0px" : "9999px",
-                            backgroundColor: isScrolled ? "rgba(255, 255, 255, 0.95)" : "rgba(255, 255, 255, 0.82)",
-                            boxShadow: isScrolled 
-                                ? "0px 4px 20px rgba(0,0,0,0.03)" 
-                                : "0px 12px 30px -10px rgba(0,0,0,0.06), inset 0px 0px 0px 1px rgba(0,0,0,0.06)",
+                            backgroundColor: isScrolled ? "rgba(255, 255, 255, 0.92)" : "rgba(255, 255, 255, 0.82)",
+                            boxShadow: isScrolled
+                                ? "0px 1px 0px rgba(17,17,17,0.07), 0px 10px 30px -18px rgba(0,0,0,0.28)"
+                                : "0px 12px 30px -10px rgba(0,0,0,0.08), inset 0px 0px 0px 1px rgba(17,17,17,0.06)",
                         }}
                         transition={smoothTransition}
                         className={`pointer-events-auto relative flex items-center justify-between backdrop-blur-[32px] overflow-hidden ${isScrolled ? 'w-full px-6 md:px-12 py-4 gap-4' : 'w-[calc(100%-3rem)] max-w-fit pl-8 pr-2.5 py-2.5'}`}
@@ -447,6 +1022,7 @@
                                     <button
                                         key={item.id}
                                         onClick={() => scrollTo(item.id)}
+                                        aria-current={isActive ? "true" : undefined}
                                         className={`relative px-5 py-2.5 rounded-full text-sm font-medium transition-colors duration-300 ${
                                             isActive ? "text-black" : "text-gray-500 hover:text-black"
                                         }`}
@@ -456,7 +1032,7 @@
                                                 layoutId="activeNavPill"
                                                 className="absolute inset-0 bg-gray-100 rounded-full"
                                                 style={{ zIndex: -1 }}
-                                                transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                                                transition={{ type: "spring", stiffness: 420, damping: 34, mass: 0.7 }}
                                             />
                                         )}
                                         <span className="relative z-10">{item.label}</span>
@@ -466,36 +1042,76 @@
                         </motion.div>
 
                         <motion.div layout transition={smoothTransition} className={`hidden md:flex items-center shrink-0 group ${isScrolled ? 'pl-2' : 'pl-4'}`}>
-                            <button onClick={(e) => openContact(null, e)} className="flex items-center gap-2 px-6 py-3 rounded-full bg-black text-white text-sm font-medium transition-all duration-300 hover:bg-[#b85f4d] hover:shadow-[0_0_20px_rgba(184,95,77,0.4)] hover:scale-105">
-                                Start project <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                            </button>
+                            <motion.button
+                                onClick={(e) => openContact(null, e)}
+                                whileHover={{ scale: 1.03 }}
+                                whileTap={{ scale: 0.98 }}
+                                transition={hoverSpring}
+                                className="flex items-center gap-2 px-6 py-3 rounded-full bg-black text-white text-sm font-medium hover:bg-[#b85f4d] hover:shadow-[0_8px_24px_-6px_rgba(184,95,77,0.55)] transition-[background-color,box-shadow] duration-300 ease-out-expo"
+                            >
+                                Start project <ArrowUpRight size={14} className="transition-transform duration-300 ease-out-expo group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                            </motion.button>
                         </motion.div>
 
-                        <motion.button layout transition={smoothTransition} onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className={`grid h-10 w-10 place-items-center rounded-full bg-gray-100 text-black md:hidden pointer-events-auto shrink-0 hover:bg-gray-200 transition-all ${isScrolled ? '' : 'mr-1'}`} aria-label="Menu">
-                            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+                        <motion.button
+                            layout
+                            transition={smoothTransition}
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            className={`grid h-10 w-10 place-items-center rounded-full bg-gray-100 text-black md:hidden pointer-events-auto shrink-0 hover:bg-gray-200 transition-colors duration-300 ${isScrolled ? '' : 'mr-1'}`}
+                            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                            aria-expanded={mobileMenuOpen}
+                            aria-controls="mobile-menu"
+                        >
+                            <AnimatePresence mode="wait" initial={false}>
+                                <motion.span
+                                    key={mobileMenuOpen ? "close" : "open"}
+                                    initial={{ opacity: 0, rotate: -80, scale: 0.7 }}
+                                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                                    exit={{ opacity: 0, rotate: 80, scale: 0.7 }}
+                                    transition={{ duration: 0.22, ease: EASE }}
+                                    className="grid place-items-center"
+                                >
+                                    {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+                                </motion.span>
+                            </AnimatePresence>
                         </motion.button>
                     </motion.nav>
 
                     <AnimatePresence>
                         {mobileMenuOpen && (
-                            <motion.div 
-                                initial={{ opacity: 0, y: -16, scale: 0.96 }} 
-                                animate={{ opacity: 1, y: 0, scale: 1 }} 
-                                exit={{ opacity: 0, y: -16, scale: 0.96 }} 
-                                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} 
-                                className={`pointer-events-auto absolute left-4 right-4 p-4 rounded-3xl bg-white border border-gray-100 shadow-[0_24px_80px_rgba(0,0,0,0.1)] md:hidden ${isScrolled ? 'top-20' : 'top-28'}`}
+                            <motion.div
+                                id="mobile-menu"
+                                initial={{ opacity: 0, y: -14, scale: 0.97 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: -10, scale: 0.98, transition: { duration: 0.2, ease: EASE } }}
+                                transition={{ duration: 0.42, ease: EASE }}
+                                                className={`pointer-events-auto absolute left-4 right-4 p-4 rounded-3xl bg-white/[0.97] backdrop-blur-2xl border border-gray-100 shadow-[0_24px_80px_rgba(0,0,0,0.12)] md:hidden ${isScrolled ? 'top-20' : 'top-28'}`}
                             >
                                 <div className="flex flex-col gap-1">
-                                    {NAV_ITEMS.map((item) => (
-                                        <button key={item.id} onClick={() => { scrollTo(item.id); setMobileMenuOpen(false); }} className="px-4 py-3 text-left rounded-2xl text-[15px] font-medium text-gray-600 hover:bg-gray-50 hover:text-black transition-all">
+                                    {NAV_ITEMS.map((item, i) => (
+                                        <motion.button
+                                            key={item.id}
+                                            initial={{ opacity: 0, y: -6 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.36, ease: EASE, delay: 0.04 + i * 0.045 }}
+                                            onClick={() => { scrollTo(item.id); setMobileMenuOpen(false); }}
+                                            aria-current={activeSection === item.id ? "true" : undefined}
+                                            className={`px-4 py-3 text-left rounded-2xl text-[15px] font-medium transition-colors duration-300 ${activeSection === item.id ? 'bg-gray-50 text-black' : 'text-gray-600 hover:bg-gray-50 hover:text-black'}`}
+                                        >
                                             {item.id === 'home' ? 'LionRenders' : item.label}
-                                        </button>
+                                        </motion.button>
                                     ))}
                                     <div className="my-2 h-px bg-gray-100" />
-                                    <button onClick={(e) => { setMobileMenuOpen(false); openContact(null, e); }} className="flex items-center justify-between px-4 py-3.5 rounded-2xl bg-black text-white font-medium text-[15px] hover:bg-[#b85f4d] transition-all">
+                                    <motion.button
+                                        initial={{ opacity: 0, y: -6 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.36, ease: EASE, delay: 0.04 + NAV_ITEMS.length * 0.045 }}
+                                        onClick={(e) => { setMobileMenuOpen(false); openContact(null, e); }}
+                                        className="flex items-center justify-between px-4 py-3.5 rounded-2xl bg-black text-white font-medium text-[15px] hover:bg-[#b85f4d] transition-colors duration-300"
+                                    >
                                         <span>Start project</span>
                                         <ArrowUpRight size={18} />
-                                    </button>
+                                    </motion.button>
                                 </div>
                             </motion.div>
                         )}
@@ -504,31 +1120,97 @@
             );
         }
 
-        function Hero({ scrollTo }) {
+        // A headline line that rises out from behind a mask.
+        function MaskedLine({ children, delay = 0, className = "" }) {
+            const prefersReducedMotion = useReducedMotion();
+            if (prefersReducedMotion) return <span className={`block ${className}`}>{children}</span>;
             return (
-                <section id="home" className="relative min-h-screen flex flex-col justify-center px-6 pt-32 pb-20 max-w-[1440px] mx-auto overflow-hidden bg-white">
-                    <motion.div 
-                        initial={{ opacity: 0, y: 30 }} 
-                        animate={{ opacity: 1, y: 0 }} 
-                        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }} 
-                        className="max-w-4xl"
+                // Generous bottom room inside the clip: the serif italic has deep
+                // descenders that a tight mask would shave off.
+                <span className="block overflow-hidden pb-[0.3em] -mb-[0.3em]">
+                    <motion.span
+                        className={`block ${className}`}
+                        initial={{ y: "110%" }}
+                        animate={{ y: "0%" }}
+                        transition={{ duration: 1.15, ease: EASE, delay }}
                     >
-                        <span className="text-xs font-semibold tracking-[0.2em] text-gray-400 uppercase mb-6 block">Visualisation & CGI studio</span>
-                        <h1 className="text-[clamp(3.5rem,10vw,8.5rem)] font-medium leading-[0.9] tracking-[-0.04em] text-black">
-                            Imagined in 3D.<br />
-                            <span className="text-gray-400 italic font-serif font-light">Felt as real.</span>
+                        {children}
+                    </motion.span>
+                </span>
+            );
+        }
+
+        function Hero({ scrollTo }) {
+            const sectionRef = useRef(null);
+            const prefersReducedMotion = useReducedMotion();
+            const { scrollYProgress } = useScroll({
+                target: sectionRef,
+                offset: ["start start", "end start"]
+            });
+
+            // The hero settles back and dims slightly as the gallery takes over,
+            // instead of just sliding away at full strength.
+            const parallaxY = useTransform(scrollYProgress, [0, 1], [0, 90]);
+            const fade = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
+
+            return (
+                <section
+                    ref={sectionRef}
+                    id="home"
+                    className="relative min-h-screen flex flex-col justify-center px-6 pt-32 pb-20 max-w-[1440px] mx-auto overflow-hidden bg-white"
+                >
+                    <motion.div
+                        className="max-w-4xl"
+                        style={prefersReducedMotion ? undefined : { y: parallaxY, opacity: fade }}
+                    >
+                        <motion.span
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, ease: EASE, delay: 0.15 }}
+                            className="text-xs font-semibold tracking-[0.22em] text-gray-400 uppercase mb-6 block"
+                        >
+                            Visualisation &amp; CGI studio
+                        </motion.span>
+
+                        <h1 className="text-[clamp(3.5rem,10vw,8.5rem)] font-medium leading-[0.9] tracking-[-0.045em] text-black">
+                            <MaskedLine delay={0.25}>Imagined in 3D.</MaskedLine>
+                            <MaskedLine delay={0.38} className="text-gray-400 italic font-serif font-normal tracking-[-0.02em]">
+                                Felt as real.
+                            </MaskedLine>
                         </h1>
-                        <p className="mt-8 max-w-lg text-base md:text-lg text-gray-500 leading-relaxed font-light">
+
+                        <motion.p
+                            initial={{ opacity: 0, y: 16 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.9, ease: EASE, delay: 0.62 }}
+                            className="mt-8 max-w-lg text-base md:text-lg text-gray-500 leading-relaxed font-light"
+                        >
                             High-end CGI, 3D product visualization, and cinematic launch films engineered for luxury, technology, and design. Letting the color speak only through the product.
-                        </p>
-                        <div className="mt-12">
-                            <button onClick={() => scrollTo("work")} className="group flex items-center gap-3 text-black text-sm font-semibold uppercase tracking-widest pb-1 border-b border-black hover:text-gray-500 hover:border-gray-500 transition-all duration-300">
+                        </motion.p>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 16 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.9, ease: EASE, delay: 0.74 }}
+                            className="mt-12"
+                        >
+                            <button
+                                onClick={() => scrollTo("work")}
+                                className="group relative flex items-center gap-3 text-black text-sm font-semibold uppercase tracking-widest pb-2 hover:text-gray-500 transition-colors duration-300"
+                            >
                                 <span>View gallery</span>
-                                <motion.div animate={{ y: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}>
+                                <motion.span
+                                    className="grid place-items-center"
+                                    animate={prefersReducedMotion ? undefined : { y: [0, 4, 0] }}
+                                    transition={{ repeat: Infinity, duration: 2.4, ease: "easeInOut" }}
+                                >
                                     <ArrowDown size={16} />
-                                </motion.div>
+                                </motion.span>
+                                {/* Rule wipes in from the left on hover */}
+                                <span className="absolute bottom-0 left-0 h-px w-full bg-gray-300" />
+                                <span className="absolute bottom-0 left-0 h-px w-full bg-black origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out-expo" />
                             </button>
-                        </div>
+                        </motion.div>
                     </motion.div>
                 </section>
             );
@@ -543,21 +1225,24 @@
                 return PROJECTS.filter((p) => p.category === filter);
             }, [filter]);
 
+            // Shared ref-counted lock, so closing the gallery can't unlock the page
+            // while a project modal is still open on top of it.
+            useScrollLock(isExpanded);
+
+            // Escape leaves the full-screen wall.
             useEffect(() => {
-                if (isExpanded) {
-                    document.body.style.overflow = "hidden";
-                } else {
-                    document.body.style.overflow = "auto";
-                }
-                return () => { document.body.style.overflow = "auto"; };
+                if (!isExpanded) return;
+                const onKey = (e) => { if (e.key === "Escape") setIsExpanded(false); };
+                document.addEventListener("keydown", onKey);
+                return () => document.removeEventListener("keydown", onKey);
             }, [isExpanded]);
 
             return (
                 <section id="work" className="py-24 max-w-[1800px] mx-auto bg-white">
-                    <div className="mb-12 flex flex-col lg:flex-row lg:items-end justify-between gap-8 px-6 md:px-12 relative z-10">
+                    <Reveal className="mb-12 flex flex-col lg:flex-row lg:items-end justify-between gap-8 px-6 md:px-12 relative z-10" amount={0.4}>
                         <div>
                             <span className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400">Portfolio</span>
-                            <h2 className="mt-3 text-4xl sm:text-5xl font-medium tracking-tight text-black">Selected works.</h2>
+                            <h2 className="mt-3 text-4xl sm:text-5xl font-medium tracking-[-0.03em] text-black">Selected works.</h2>
                         </div>
                         <div className="flex flex-wrap gap-2">
                             <AnimatePresence>
@@ -572,9 +1257,19 @@
                                 )}
                             </AnimatePresence>
                         </div>
-                    </div>
-                    
-                    <div className="relative w-full h-[90vh] min-h-[750px] group cursor-pointer" onClick={() => { if(!isExpanded) setIsExpanded(true); }}>
+                    </Reveal>
+
+                    <div
+                        role={isExpanded ? undefined : "button"}
+                        tabIndex={isExpanded ? -1 : 0}
+                        aria-label={isExpanded ? undefined : "Open the full-screen gallery"}
+                        onKeyDown={(e) => {
+                            if (isExpanded) return;
+                            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setIsExpanded(true); }
+                        }}
+                        className={`relative w-full h-[90vh] min-h-[750px] group ${isExpanded ? "" : "cursor-pointer"}`}
+                        onClick={() => { if(!isExpanded) setIsExpanded(true); }}
+                    >
                         <motion.div 
                             layout
                             transition={fluidFlight}
@@ -596,14 +1291,21 @@
                                         <motion.div 
                                             layoutId="category-pill-container"
                                             transition={fluidFlight}
-                                            className="flex flex-wrap justify-center gap-1.5 max-w-[80%] p-2 relative z-10 pointer-events-auto bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_10px_40px_rgba(0,0,0,0.1)] rounded-[32px]"
+                                            className="flex flex-wrap justify-center gap-1.5 max-w-[80%] p-2 relative z-10 pointer-events-auto bg-white/75 backdrop-blur-2xl border border-white/80 shadow-[0_16px_50px_-12px_rgba(0,0,0,0.22)] rounded-[32px]"
                                         >
                                             <CategoryFilters categories={categories} filter={filter} setFilter={setFilter} />
                                         </motion.div>
-                                        
-                                        <button onClick={(e) => { e.stopPropagation(); setIsExpanded(false); }} className="absolute right-6 md:right-12 top-0 p-3.5 rounded-full bg-white/70 backdrop-blur-xl border border-white/80 shadow-[0_10px_40px_rgba(0,0,0,0.1)] text-black hover:bg-black hover:text-white transition-all pointer-events-auto hover:scale-105">
+
+                                        <motion.button
+                                            onClick={(e) => { e.stopPropagation(); setIsExpanded(false); }}
+                                            whileHover={{ scale: 1.06 }}
+                                            whileTap={{ scale: 0.94 }}
+                                            transition={hoverSpring}
+                                            aria-label="Close gallery"
+                                            className="absolute right-6 md:right-12 top-0 p-3.5 rounded-full bg-white/80 backdrop-blur-2xl border border-white/90 shadow-[0_16px_50px_-12px_rgba(0,0,0,0.22)] text-black hover:bg-black hover:text-white transition-colors duration-300 pointer-events-auto"
+                                        >
                                             <X size={20} />
-                                        </button>
+                                        </motion.button>
                                     </motion.div>
                                 )}
                             </AnimatePresence>
@@ -611,8 +1313,9 @@
                             <AnimatePresence>
                                 {!isExpanded && (
                                     <motion.div exit={{ opacity: 0 }} transition={{ duration: 0.3 }} className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none">
-                                        <span className="bg-black text-white px-6 py-3 rounded-full text-xs font-bold tracking-widest uppercase shadow-[0_10px_40px_rgba(0,0,0,0.2)] opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                        <span className="flex items-center gap-2.5 bg-black/90 backdrop-blur-md text-white pl-6 pr-5 py-3 rounded-full text-xs font-bold tracking-[0.15em] uppercase shadow-[0_16px_50px_-10px_rgba(0,0,0,0.45)] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-[opacity,transform] duration-500 ease-out-expo">
                                             Click to unveil
+                                            <ArrowUpRight size={14} />
                                         </span>
                                     </motion.div>
                                 )}
@@ -626,22 +1329,33 @@
         }
 
         function ProcessSection() {
+            const prefersReducedMotion = useReducedMotion();
             return (
                 <section id="process" className="py-24 px-6 md:px-12 max-w-[1440px] mx-auto bg-white">
-                    <div className="mb-16 max-w-2xl">
+                    <Reveal className="mb-16 max-w-2xl" amount={0.5}>
                         <span className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400">Methodology</span>
-                        <h2 className="mt-3 text-4xl sm:text-5xl font-medium tracking-tight text-black">
+                        <h2 className="mt-3 text-4xl sm:text-5xl font-medium tracking-[-0.03em] text-black">
                             From blueprint to<br />
-                            <span className="italic font-serif font-light text-gray-500">master image.</span>
+                            <span className="italic font-serif font-normal text-gray-500 tracking-[-0.01em]">master image.</span>
                         </h2>
-                    </div>
+                    </Reveal>
                     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 border-y md:border-y-0 md:border-t md:border-b border-gray-200 divide-y md:divide-y-0 md:divide-x divide-gray-200">
                         {PROCESS_STEPS.map((step, idx) => (
-                            <div key={idx} className="group p-8 bg-white transition-all duration-500 hover:bg-gray-50 flex flex-col h-full">
-                                <span className="text-3xl font-mono font-light text-gray-300 block mb-6 transition-colors duration-500 group-hover:text-black">{step.step}</span>
+                            <motion.div
+                                key={idx}
+                                initial={prefersReducedMotion ? undefined : { opacity: 0, y: 26 }}
+                                whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+                                viewport={{ once: true, amount: 0.25 }}
+                                transition={{ duration: 0.7, ease: EASE, delay: idx * 0.08 }}
+                                className="group relative p-8 bg-white transition-colors duration-500 hover:bg-gray-50 flex flex-col h-full"
+                            >
+                                {/* Accent rule draws in on hover — the only place clay
+                                    appears in the layout, so it reads as an accent. */}
+                                <span className="absolute top-0 left-0 h-px w-full bg-[#b85f4d] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-out-expo" />
+                                <span className="text-3xl font-mono font-light text-gray-300 block mb-6 transition-colors duration-500 group-hover:text-black tnum">{step.step}</span>
                                 <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 text-black">{step.title}</h3>
                                 <p className="text-sm text-gray-500 leading-relaxed font-light">{step.desc}</p>
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
                 </section>
@@ -649,30 +1363,39 @@
         }
 
         function AboutSection() {
+            const prefersReducedMotion = useReducedMotion();
+            const stats = [
+                { value: "100%", label: "Direct collaboration" },
+                { value: "CGI & film", label: "Full service" }
+            ];
             return (
                 <section id="about" className="py-24 px-6 md:px-12 max-w-[1440px] mx-auto bg-white">
-                    <div className="border border-gray-200 p-8 md:p-20 flex flex-col md:flex-row gap-16 justify-between items-start bg-gray-50 rounded-[48px]">
+                    <Reveal className="border border-gray-200 p-8 md:p-20 flex flex-col md:flex-row gap-16 md:gap-12 justify-between items-start bg-gray-50 rounded-[48px]" amount={0.2}>
                         <div className="max-w-xl">
                             <span className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400">The studio</span>
-                            <h2 className="mt-4 text-4xl sm:text-6xl font-medium tracking-tight text-black leading-[0.9]">
+                            <h2 className="mt-4 text-4xl sm:text-6xl font-medium tracking-[-0.035em] text-black leading-[0.92]">
                                 Independent.<br />
-                                <span className="font-serif italic font-light text-gray-500">Unrestricted.</span>
+                                <span className="font-serif italic font-normal text-gray-500 tracking-[-0.015em]">Unrestricted.</span>
                             </h2>
                             <p className="mt-8 text-base text-gray-500 leading-relaxed font-light">
                                 We operate without the noise or overhead of conventional agencies. You work directly with the creative directors and technical artists who craft every pixel in monochrome, letting the color speak only through your product.
                             </p>
                         </div>
-                        <div className="flex flex-col gap-10">
-                            <div>
-                                <p className="text-4xl sm:text-5xl font-light text-black tracking-tighter">100%</p>
-                                <p className="text-xs text-gray-500 uppercase tracking-widest mt-2 font-semibold">Direct collaboration</p>
-                            </div>
-                            <div>
-                                <p className="text-4xl sm:text-5xl font-light text-black tracking-tighter">CGI & film</p>
-                                <p className="text-xs text-gray-500 uppercase tracking-widest mt-2 font-semibold">Full service</p>
-                            </div>
+                        <div className="flex flex-col gap-10 md:text-right md:shrink-0">
+                            {stats.map((stat, idx) => (
+                                <motion.div
+                                    key={stat.label}
+                                    initial={prefersReducedMotion ? undefined : { opacity: 0, y: 18 }}
+                                    whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+                                    viewport={{ once: true, amount: 0.6 }}
+                                    transition={{ duration: 0.7, ease: EASE, delay: 0.18 + idx * 0.12 }}
+                                >
+                                    <p className="text-4xl sm:text-5xl font-light text-black tracking-[-0.04em] whitespace-nowrap">{stat.value}</p>
+                                    <p className="text-xs text-gray-500 uppercase tracking-widest mt-2 font-semibold">{stat.label}</p>
+                                </motion.div>
+                            ))}
                         </div>
-                    </div>
+                    </Reveal>
                 </section>
             );
         }
@@ -711,34 +1434,51 @@
             const originX = typeof window !== 'undefined' ? (origin.x / window.innerWidth) * 100 + '%' : '50%';
             const originY = typeof window !== 'undefined' ? (origin.y / window.innerHeight) * 100 + '%' : '50%';
 
+            const panelRef = useDialog(isOpen, onClose);
+            const MIN_VIEWS = 1;
+            const MAX_VIEWS = 12;
+            const rangeFill = ((views - MIN_VIEWS) / (MAX_VIEWS - MIN_VIEWS)) * 100;
+
             return (
                 <AnimatePresence>
                     {isOpen && (
-                        <motion.div 
-                            initial={{ opacity: 0 }} 
-                            animate={{ opacity: 1 }} 
-                            exit={{ opacity: 0 }} 
-                            transition={{ duration: 0.3 }}
-                            className="fixed inset-0 z-[80] flex items-center justify-center p-4 bg-black/20 backdrop-blur-[10px]"
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.32, ease: EASE }}
+                            className="fixed inset-0 z-[80] flex items-center justify-center p-4 sm:p-6 bg-black/25 backdrop-blur-[12px]"
                             onClick={onClose}
                         >
-                            <motion.div 
-                                initial={{ opacity: 0, scale: 0 }} 
-                                animate={{ opacity: 1, scale: 1 }} 
-                                exit={{ opacity: 0, scale: 0 }} 
+                            <motion.div
+                                ref={panelRef}
+                                role="dialog"
+                                aria-modal="true"
+                                aria-labelledby="estimator-title"
+                                initial={{ opacity: 0, scale: 0.88 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.22, ease: EASE } }}
                                 style={{ transformOrigin: `${originX} ${originY}` }}
                                 transition={genieSpring}
-                                className="relative w-full max-w-5xl bg-white/70 backdrop-blur-[60px] rounded-[48px] overflow-hidden flex flex-col lg:flex-row shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] border border-white"
+                                className="panel-glass relative w-full max-w-5xl max-h-[92dvh] rounded-[32px] sm:rounded-[48px] overflow-hidden flex flex-col lg:flex-row"
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                <button onClick={onClose} className="absolute top-6 right-6 p-3 rounded-full bg-white text-gray-500 shadow-sm border border-gray-100 hover:bg-black hover:text-white transition-all z-20">
+                                <motion.button
+                                    onClick={onClose}
+                                    whileHover={{ scale: 1.06 }}
+                                    whileTap={{ scale: 0.94 }}
+                                    transition={hoverSpring}
+                                    aria-label="Close estimator"
+                                    className="absolute top-5 right-5 sm:top-6 sm:right-6 p-3 rounded-full bg-white text-gray-500 shadow-[0_4px_14px_-4px_rgba(0,0,0,0.2)] border border-gray-100 hover:bg-black hover:text-white transition-colors duration-300 z-30"
+                                >
                                     <X size={18} />
-                                </button>
+                                </motion.button>
 
-                                {/* Panel izquierdo */}
-                                <div className="flex-1 p-8 md:p-12 overflow-y-auto max-h-[85vh] no-scrollbar border-b lg:border-b-0 lg:border-r border-gray-200/50">
+                                {/* Configuration panel — scrolls independently so the
+                                    estimate stays pinned in view on small screens. */}
+                                <div className="flex-1 min-h-0 p-8 md:p-12 overflow-y-auto no-scrollbar border-b lg:border-b-0 lg:border-r border-gray-200/60">
                                     <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-2 block">Project estimator</span>
-                                    <h3 className="text-3xl font-medium tracking-tight text-black mb-10">Configure your scope.</h3>
+                                    <h3 id="estimator-title" className="text-3xl font-medium tracking-[-0.03em] text-black mb-10 pr-12">Configure your scope.</h3>
 
                                     <div className="space-y-10">
                                         <div>
@@ -750,28 +1490,45 @@
                                                     { id: 'spatial', label: 'Spatial / arch', icon: <Building size={16} /> },
                                                     { id: 'interactive', label: 'Interactive', icon: <Layers size={16} /> }
                                                 ].map((item) => (
-                                                    <button key={item.id} onClick={() => setType(item.id)} className={`relative flex flex-col items-start gap-3 p-4 rounded-[20px] text-sm font-medium transition-all border ${type === item.id ? 'bg-black text-white border-black shadow-md' : 'bg-white/50 text-gray-600 border-gray-200 hover:border-gray-400 hover:bg-white'}`}>
-                                                        <span className={type === item.id ? 'text-white' : 'text-gray-400'}>{item.icon}</span>
+                                                    <motion.button
+                                                        key={item.id}
+                                                        onClick={() => setType(item.id)}
+                                                        aria-pressed={type === item.id}
+                                                        whileTap={{ scale: 0.98 }}
+                                                        transition={hoverSpring}
+                                                        className={`relative flex flex-col items-start gap-3 p-4 rounded-[20px] text-sm font-medium border transition-[background-color,border-color,color,box-shadow] duration-300 ease-out-expo ${type === item.id ? 'bg-black text-white border-black shadow-[0_10px_24px_-10px_rgba(0,0,0,0.6)]' : 'bg-white/60 text-gray-600 border-gray-200 hover:border-gray-400 hover:bg-white'}`}
+                                                    >
+                                                        <span className={`transition-colors duration-300 ${type === item.id ? 'text-white' : 'text-gray-400'}`}>{item.icon}</span>
                                                         {item.label}
-                                                    </button>
+                                                    </motion.button>
                                                 ))}
                                             </div>
                                         </div>
 
                                         <div>
                                             <div className="flex justify-between items-center mb-4">
-                                                <label className="text-xs font-semibold tracking-wider text-gray-500 uppercase">2. Quantity of assets</label>
-                                                <span className="font-mono text-sm font-medium text-black bg-white shadow-sm border border-gray-100 px-3 py-1 rounded-full">{views}</span>
+                                                <label htmlFor="asset-count" className="text-xs font-semibold tracking-wider text-gray-500 uppercase">2. Quantity of assets</label>
+                                                <span className="font-mono text-sm font-medium text-black bg-white shadow-sm border border-gray-100 px-3 py-1 rounded-full tnum">{views}</span>
                                             </div>
-                                            <input type="range" min="1" max="12" value={views} onChange={(e) => setViews(parseInt(e.target.value))} className="w-full h-1.5 bg-gray-200 rounded-full appearance-none outline-none focus:ring-2 focus:ring-black" />
+                                            <input
+                                                id="asset-count"
+                                                type="range"
+                                                min={MIN_VIEWS}
+                                                max={MAX_VIEWS}
+                                                value={views}
+                                                onChange={(e) => setViews(parseInt(e.target.value))}
+                                                aria-valuetext={`${views} ${views === 1 ? 'asset' : 'assets'}`}
+                                                className="lr-range"
+                                                style={{ "--range-fill": `${rangeFill}%` }}
+                                            />
                                         </div>
 
                                         <div>
                                             <label className="block text-xs font-semibold tracking-wider text-gray-500 mb-4 uppercase">3. Production tier</label>
                                             <div className="flex p-1.5 bg-gray-100/80 backdrop-blur-md rounded-[20px] relative border border-white/50">
                                                 {[{ id: 'standard', label: 'E-commerce' }, { id: 'campaign', label: 'Campaign' }, { id: 'cinematic', label: 'Cinematic' }].map((t) => (
-                                                    <button key={t.id} onClick={() => setQuality(t.id)} className={`flex-1 py-3 text-xs font-semibold tracking-wide rounded-[16px] z-10 relative transition-colors ${quality === t.id ? 'text-black' : 'text-gray-500 hover:text-black'}`}>
-                                                        {quality === t.id && <motion.div layoutId="q-pill" transition={smoothTransition} className="absolute inset-0 bg-white rounded-[16px] -z-10 shadow-sm border border-gray-200" />}
+                                                    <button key={t.id} onClick={() => setQuality(t.id)} aria-pressed={quality === t.id} className={`flex-1 py-3 text-xs font-semibold tracking-wide rounded-[16px] z-10 relative transition-colors duration-300 ${quality === t.id ? 'text-black' : 'text-gray-500 hover:text-black'}`}>
+                                                        {quality === t.id && <motion.div layoutId="q-pill" transition={segmentSpring} className="absolute inset-0 bg-white rounded-[16px] -z-10 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.14)] border border-gray-200" />}
                                                         {t.label}
                                                     </button>
                                                 ))}
@@ -782,8 +1539,8 @@
                                             <label className="block text-xs font-semibold tracking-wider text-gray-500 mb-4 uppercase">4. Target timeline</label>
                                             <div className="flex p-1.5 bg-gray-100/80 backdrop-blur-md rounded-[20px] relative border border-white/50">
                                                 {[{ id: 'standard', label: 'Standard' }, { id: 'express', label: 'Express' }].map((t) => (
-                                                    <button key={t.id} onClick={() => setSpeed(t.id)} className={`flex-1 flex items-center justify-center gap-2 py-3 text-xs font-semibold tracking-wide rounded-[16px] z-10 relative transition-colors ${speed === t.id ? 'text-black' : 'text-gray-500 hover:text-black'}`}>
-                                                        {speed === t.id && <motion.div layoutId="s-pill" transition={smoothTransition} className="absolute inset-0 bg-white rounded-[16px] -z-10 shadow-sm border border-gray-200" />}
+                                                    <button key={t.id} onClick={() => setSpeed(t.id)} aria-pressed={speed === t.id} className={`flex-1 flex items-center justify-center gap-2 py-3 text-xs font-semibold tracking-wide rounded-[16px] z-10 relative transition-colors duration-300 ${speed === t.id ? 'text-black' : 'text-gray-500 hover:text-black'}`}>
+                                                        {speed === t.id && <motion.div layoutId="s-pill" transition={segmentSpring} className="absolute inset-0 bg-white rounded-[16px] -z-10 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.14)] border border-gray-200" />}
                                                         {t.id === 'express' ? <Zap size={14} className={speed === t.id ? "text-black" : ""} /> : <Clock size={14} />}
                                                         {t.label}
                                                     </button>
@@ -793,30 +1550,60 @@
                                     </div>
                                 </div>
 
-                                {/* Panel derecho HUD */}
-                                <div className="w-full lg:w-[400px] bg-white/40 p-8 md:p-12 flex flex-col justify-between">
+                                {/* Estimate HUD. Stays visible while the left panel
+                                    scrolls, on every screen size. */}
+                                {/* shrink-0 at every width: the estimate keeps its natural
+                                    height and the config panel absorbs what's left, so the
+                                    CTA can never be squeezed below the fold on a phone. */}
+                                <div className="w-full lg:w-[400px] shrink-0 bg-white/45 p-8 md:p-10 lg:p-12 flex flex-col gap-8 lg:gap-10 lg:overflow-y-auto no-scrollbar">
                                     <div>
                                         <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-4 block">Estimated investment</span>
-                                        <div className="text-4xl font-light tracking-tighter text-black flex flex-col gap-1">
-                                            <div className="flex items-center gap-1"><span className="text-gray-400 font-medium text-2xl">$</span><AnimatedNumber value={estimate.lowerCost} /></div>
-                                            <div className="text-sm text-gray-400 font-serif italic ml-1">— to —</div>
-                                            <div className="flex items-center gap-1"><span className="text-gray-400 font-medium text-2xl">$</span><AnimatedNumber value={estimate.upperCost} /></div>
+                                        <div className="text-[2.4rem] leading-none font-light tracking-[-0.045em] text-black tnum flex flex-col gap-3">
+                                            <div className="flex items-baseline gap-1.5">
+                                                <span className="text-gray-400 font-normal text-xl">$</span>
+                                                <AnimatedNumber value={estimate.lowerCost} />
+                                            </div>
+                                            <div className="flex items-center gap-3" aria-hidden="true">
+                                                <span className="h-px w-6 bg-gray-300" />
+                                                <span className="text-[11px] font-serif italic text-gray-400 tracking-normal">to</span>
+                                                <span className="h-px flex-1 bg-gray-200" />
+                                            </div>
+                                            <div className="flex items-baseline gap-1.5">
+                                                <span className="text-gray-400 font-normal text-xl">$</span>
+                                                <AnimatedNumber value={estimate.upperCost} />
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div className="mt-12 space-y-4 text-sm border-t border-gray-200 pt-8">
-                                        <div className="flex justify-between items-center"><span className="text-gray-500 text-xs uppercase font-bold tracking-widest">Base setup</span><span className="font-mono text-black">Included</span></div>
-                                        <div className="flex justify-between items-center"><span className="text-gray-500 text-xs uppercase font-bold tracking-widest">Assets</span><span className="font-mono text-black">{views}x</span></div>
-                                        <div className="flex justify-between items-center"><span className="text-gray-500 text-xs uppercase font-bold tracking-widest">Tier</span><span className="font-mono text-black capitalize">{quality}</span></div>
-                                        <div className="flex justify-between items-center"><span className="text-gray-500 text-xs uppercase font-bold tracking-widest">Timeline</span><span className="font-mono text-black">~<AnimatedNumber value={estimate.days} /> Days</span></div>
+                                    {/* Full breakdown where there's room; a single compact
+                                        line on phones so the CTA stays reachable. */}
+                                    <div className="hidden lg:block space-y-4 text-sm border-t border-gray-200 pt-8">
+                                        <div className="flex justify-between items-center gap-4"><span className="text-gray-500 text-xs uppercase font-bold tracking-widest">Base setup</span><span className="font-mono text-black">Included</span></div>
+                                        <div className="flex justify-between items-center gap-4"><span className="text-gray-500 text-xs uppercase font-bold tracking-widest">Assets</span><span className="font-mono text-black tnum">{views}x</span></div>
+                                        <div className="flex justify-between items-center gap-4"><span className="text-gray-500 text-xs uppercase font-bold tracking-widest">Tier</span><span className="font-mono text-black capitalize">{quality}</span></div>
+                                        <div className="flex justify-between items-center gap-4"><span className="text-gray-500 text-xs uppercase font-bold tracking-widest">Timeline</span><span className="font-mono text-black tnum">~<AnimatedNumber value={estimate.days} /> Days</span></div>
                                     </div>
 
-                                    <button onClick={(e) => {
-                                        onClose();
-                                        openContact({ type: 'estimate', lowerCost: estimate.lowerCost, upperCost: estimate.upperCost, days: estimate.days, config: { type, views, quality, speed } }, e);
-                                    }} className="w-full mt-10 py-4 rounded-full bg-black text-white font-bold text-xs uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 hover:scale-105">
+                                    <div className="lg:hidden border-t border-gray-200 pt-5 text-xs font-mono text-gray-500 flex flex-wrap items-center gap-x-2 gap-y-1">
+                                        <span className="text-black tnum">{views}x</span>
+                                        <span className="text-gray-300">/</span>
+                                        <span className="text-black capitalize">{quality}</span>
+                                        <span className="text-gray-300">/</span>
+                                        <span className="text-black tnum">~<AnimatedNumber value={estimate.days} /> days</span>
+                                    </div>
+
+                                    <motion.button
+                                        onClick={(e) => {
+                                            onClose();
+                                            openContact({ type: 'estimate', lowerCost: estimate.lowerCost, upperCost: estimate.upperCost, days: estimate.days, config: { type, views, quality, speed } }, e);
+                                        }}
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        transition={hoverSpring}
+                                        className="w-full mt-auto shrink-0 py-4 rounded-full bg-black text-white font-bold text-xs uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_10px_30px_-8px_rgba(184,95,77,0.6)] transition-[background-color,box-shadow] duration-300 ease-out-expo"
+                                    >
                                         Lock in this scope
-                                    </button>
+                                    </motion.button>
                                 </div>
                             </motion.div>
                         </motion.div>
@@ -826,60 +1613,70 @@
         }
 
         function ProjectDetailModal({ project, onClose, openContact }) {
-            useEffect(() => {
-                const handleKey = (e) => e.key === "Escape" && onClose();
-                window.addEventListener("keydown", handleKey);
-                return () => window.removeEventListener("keydown", handleKey);
-            }, [onClose]);
+            const panelRef = useDialog(true, onClose);
 
             return (
                 <div className="fixed inset-0 z-[80] flex items-center justify-center p-4 sm:p-8" onClick={onClose}>
-                    <motion.div 
-                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} 
-                        transition={{ duration: 0.4 }}
-                        className="absolute inset-0 bg-white/50 backdrop-blur-[12px]" 
+                    <motion.div
+                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                        transition={{ duration: 0.4, ease: EASE }}
+                        className="absolute inset-0 bg-white/55 backdrop-blur-[14px]"
                     />
-                    
-                    <motion.div 
+
+                    <motion.div
+                        ref={panelRef}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby={`project-title-${project.id}`}
                         layoutId={`card-wrapper-${project.id}`}
                         transition={fluidFlight}
-                        className="relative w-full max-w-5xl bg-white/80 backdrop-blur-[60px] border border-white shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] rounded-[48px] p-6 flex flex-col md:flex-row gap-8 overflow-hidden z-10"
+                        className="panel-glass relative w-full max-w-5xl max-h-[92dvh] overflow-y-auto no-scrollbar rounded-[32px] sm:rounded-[48px] p-5 sm:p-6 flex flex-col md:flex-row gap-6 md:gap-8 z-10"
                         onClick={e => e.stopPropagation()}
                     >
-                        <motion.button 
-                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} 
-                            onClick={onClose} 
-                            className="absolute top-6 right-6 z-50 p-3 rounded-full bg-white shadow-[0_4px_10px_rgba(0,0,0,0.1)] border border-gray-100 text-gray-500 hover:bg-black hover:text-white transition-all hover:scale-105"
+                        <motion.button
+                            initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { delay: 0.2 } }} exit={{ opacity: 0 }}
+                            whileHover={{ scale: 1.06 }}
+                            whileTap={{ scale: 0.94 }}
+                            onClick={onClose}
+                            aria-label="Close project"
+                            className="absolute top-5 right-5 sm:top-6 sm:right-6 z-50 p-3 rounded-full bg-white shadow-[0_4px_14px_-4px_rgba(0,0,0,0.2)] border border-gray-100 text-gray-500 hover:bg-black hover:text-white transition-colors duration-300"
                         >
                             <X size={18} />
                         </motion.button>
 
-                        <div className="w-full md:w-1/2 aspect-[4/3] rounded-[32px] overflow-hidden bg-gray-100">
-                            <motion.img 
-                                layoutId={`image-${project.id}`} 
+                        <div className="w-full md:w-1/2 shrink-0 aspect-[4/3] rounded-[24px] sm:rounded-[32px] overflow-hidden bg-gray-100">
+                            <motion.img
+                                layoutId={`image-${project.id}`}
                                 transition={fluidFlight}
-                                src={project.src} alt={project.alt} className="w-full h-full object-cover rounded-[32px]" 
+                                src={project.src} alt={project.alt}
+                                className="w-full h-full object-cover rounded-[24px] sm:rounded-[32px]"
                             />
                         </div>
-                        
-                        <motion.div 
-                            initial={{ opacity: 0, x: 10 }} 
-                            animate={{ opacity: 1, x: 0, transition: { delay: 0.15, duration: 0.4 } }} 
-                            exit={{ opacity: 0, transition: { duration: 0.1 } }} 
-                            className="w-full md:w-1/2 flex flex-col justify-center px-4 md:pr-12"
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0, transition: { delay: 0.18, duration: 0.5, ease: EASE } }}
+                            exit={{ opacity: 0, transition: { duration: 0.1 } }}
+                            className="w-full md:w-1/2 flex flex-col justify-center px-2 sm:px-4 pb-2 md:pr-12"
                         >
                             <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{project.category}</span>
-                            <h3 className="text-3xl sm:text-4xl font-medium tracking-tight text-black mt-2">{project.title}</h3>
+                            <h3 id={`project-title-${project.id}`} className="text-3xl sm:text-4xl font-medium tracking-[-0.03em] text-black mt-2">{project.title}</h3>
                             <p className="text-sm text-gray-500 mt-4 leading-relaxed">{project.alt}. Developed with technical precision and photographic attention to detail, this project encapsulates the brand's vision by elevating it through immersive CGI.</p>
-                            
+
                             <div className="mt-8 pt-6 border-t border-gray-200">
                                 <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-1">Discipline</span>
                                 <p className="text-black text-sm font-medium">{project.discipline}</p>
                             </div>
 
-                            <button onClick={(e) => { onClose(); openContact(null, e); }} className="mt-8 py-4 rounded-full bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 group hover:scale-105">
-                                Inquire similar work <ArrowUpRight size={14} className="inline ml-1 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                            </button>
+                            <motion.button
+                                onClick={(e) => { onClose(); openContact(null, e); }}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                transition={hoverSpring}
+                                className="mt-8 py-4 rounded-full bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_10px_30px_-8px_rgba(184,95,77,0.6)] transition-[background-color,box-shadow] duration-300 ease-out-expo group"
+                            >
+                                Inquire similar work <ArrowUpRight size={14} className="inline ml-1 transition-transform duration-300 ease-out-expo group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                            </motion.button>
                         </motion.div>
                     </motion.div>
                 </div>
@@ -908,72 +1705,133 @@
                 }
             }, [isOpen, contactData]);
 
+            // Timers are tracked so closing the dialog mid-submit doesn't leave
+            // them running and re-fire onClose after the user has moved on.
+            const timersRef = useRef([]);
+            useEffect(() => () => timersRef.current.forEach(clearTimeout), []);
+            useEffect(() => {
+                if (!isOpen) {
+                    timersRef.current.forEach(clearTimeout);
+                    timersRef.current = [];
+                }
+            }, [isOpen]);
+
             const handleSubmit = (e) => {
                 e.preventDefault();
                 setStatus("submitting");
-                setTimeout(() => {
+                timersRef.current.push(setTimeout(() => {
                     setStatus("success");
-                    setTimeout(() => { onClose(); setStatus("idle"); }, 3000);
-                }, 1500);
+                    timersRef.current.push(setTimeout(() => { onClose(); setStatus("idle"); }, 3000));
+                }, 1500));
             };
 
             const originX = typeof window !== 'undefined' ? (origin.x / window.innerWidth) * 100 + '%' : '50%';
             const originY = typeof window !== 'undefined' ? (origin.y / window.innerHeight) * 100 + '%' : '50%';
 
+            const panelRef = useDialog(isOpen, onClose);
+
             return (
                 <AnimatePresence>
                     {isOpen && (
-                        <motion.div 
-                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}
-                            className="fixed inset-0 z-[90] flex items-center justify-center p-4 bg-black/20 backdrop-blur-[20px]"
+                        <motion.div
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.32, ease: EASE }}
+                            className="fixed inset-0 z-[90] flex items-center justify-center p-4 sm:p-6 bg-black/25 backdrop-blur-[20px]"
                             onClick={onClose}
                         >
-                            <motion.div 
-                                initial={{ opacity: 0, scale: 0 }} 
-                                animate={{ opacity: 1, scale: 1 }} 
-                                exit={{ opacity: 0, scale: 0 }} 
+                            <motion.div
+                                ref={panelRef}
+                                role="dialog"
+                                aria-modal="true"
+                                aria-labelledby="contact-title"
+                                initial={{ opacity: 0, scale: 0.88 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.22, ease: EASE } }}
                                 style={{ transformOrigin: `${originX} ${originY}` }}
                                 transition={genieSpring}
-                                className="relative w-full max-w-2xl p-10 sm:p-16 bg-white/80 backdrop-blur-[60px] shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] rounded-[48px]"
+                                className="panel-glass relative w-full max-w-2xl max-h-[92dvh] overflow-y-auto no-scrollbar p-8 sm:p-12 md:p-16 rounded-[32px] sm:rounded-[48px]"
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                <button onClick={onClose} className="absolute top-6 right-6 p-3 rounded-full bg-white shadow-[0_4px_10px_rgba(0,0,0,0.1)] border border-gray-100 text-gray-500 hover:bg-black hover:text-white transition-all hover:scale-105">
+                                <motion.button
+                                    onClick={onClose}
+                                    whileHover={{ scale: 1.06 }}
+                                    whileTap={{ scale: 0.94 }}
+                                    transition={hoverSpring}
+                                    aria-label="Close contact form"
+                                    className="absolute top-5 right-5 sm:top-6 sm:right-6 p-3 rounded-full bg-white shadow-[0_4px_14px_-4px_rgba(0,0,0,0.2)] border border-gray-100 text-gray-500 hover:bg-black hover:text-white transition-colors duration-300 z-20"
+                                >
                                     <X size={18} />
-                                </button>
-                                
+                                </motion.button>
+
                                 {status === "success" ? (
-                                    <div className="py-12 text-center">
-                                        <div className="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-full bg-black text-white"><Check size={28} /></div>
-                                        <h3 className="text-3xl font-medium tracking-tight text-black">Request sent.</h3>
-                                        <p className="mt-3 text-sm text-gray-500 max-w-xs mx-auto">We will review the details and get back to you within 24 hours.</p>
+                                    <div className="py-12 text-center" role="status" aria-live="polite">
+                                        <motion.div
+                                            initial={{ scale: 0.6, opacity: 0 }}
+                                            animate={{ scale: 1, opacity: 1 }}
+                                            transition={{ type: "spring", stiffness: 320, damping: 20, mass: 0.7 }}
+                                            className="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-full bg-black text-white"
+                                        >
+                                            <Check size={28} />
+                                        </motion.div>
+                                        <motion.h3
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.5, ease: EASE, delay: 0.12 }}
+                                            className="text-3xl font-medium tracking-[-0.03em] text-black"
+                                        >
+                                            Request sent.
+                                        </motion.h3>
+                                        <motion.p
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.5, ease: EASE, delay: 0.2 }}
+                                            className="mt-3 text-sm text-gray-500 max-w-xs mx-auto"
+                                        >
+                                            We will review the details and get back to you within 24 hours.
+                                        </motion.p>
                                     </div>
                                 ) : (
                                     <div>
                                         <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-2 block">{isEstimate ? "Your estimate" : "Contact"}</span>
-                                        <h3 className="text-3xl sm:text-4xl font-medium tracking-tight mb-8 text-black">Let's discuss your project.</h3>
-                                        
+                                        <h3 id="contact-title" className="text-3xl sm:text-4xl font-medium tracking-[-0.03em] mb-8 text-black pr-12">Let's discuss your project.</h3>
+
                                         <form className="space-y-6" onSubmit={handleSubmit}>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                                <div>
-                                                    <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-2">Name / Company</label>
-                                                    <input type="text" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-0 py-3 bg-transparent border-b border-gray-200 text-black placeholder-gray-300 focus:outline-none focus:border-black transition-colors" placeholder="e.g. John Doe" />
+                                                <div className="lr-field">
+                                                    <label htmlFor="contact-name" className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-2">Name / Company</label>
+                                                    <input id="contact-name" data-autofocus type="text" required autoComplete="organization" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="lr-input" placeholder="e.g. John Doe" />
                                                 </div>
-                                                <div>
-                                                    <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-2">Phone</label>
-                                                    <input type="tel" required value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full px-0 py-3 bg-transparent border-b border-gray-200 text-black placeholder-gray-300 focus:outline-none focus:border-black transition-colors" placeholder="+1 555 000 000" />
+                                                <div className="lr-field">
+                                                    <label htmlFor="contact-phone" className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-2">Phone</label>
+                                                    <input id="contact-phone" type="tel" required autoComplete="tel" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="lr-input" placeholder="+1 555 000 000" />
                                                 </div>
                                             </div>
-                                            <div>
-                                                <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-2">Email address</label>
-                                                <input type="email" required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full px-0 py-3 bg-transparent border-b border-gray-200 text-black placeholder-gray-300 focus:outline-none focus:border-black transition-colors" placeholder="hello@company.com" />
+                                            <div className="lr-field">
+                                                <label htmlFor="contact-email" className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-2">Email address</label>
+                                                <input id="contact-email" type="email" required autoComplete="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="lr-input" placeholder="hello@company.com" />
                                             </div>
-                                            <div>
-                                                <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-2">Project details</label>
-                                                <textarea required rows="4" value={formData.details} onChange={e => setFormData({...formData, details: e.target.value})} className="w-full px-0 py-3 bg-transparent border-b border-gray-200 text-black placeholder-gray-300 focus:outline-none focus:border-black transition-colors resize-none" placeholder="Tell us more..."></textarea>
+                                            <div className="lr-field">
+                                                <label htmlFor="contact-details" className="block text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-2">Project details</label>
+                                                <textarea id="contact-details" required rows="4" value={formData.details} onChange={e => setFormData({...formData, details: e.target.value})} className="lr-input resize-none" placeholder="Tell us more..."></textarea>
                                             </div>
-                                            <button type="submit" disabled={status === "submitting"} className="w-full mt-6 py-4 rounded-full bg-black text-white font-bold text-xs uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 disabled:opacity-50 hover:-translate-y-0.5 group hover:scale-105">
-                                                {status === "submitting" ? "Sending..." : "Submit request"}
-                                            </button>
+                                            <motion.button
+                                                type="submit"
+                                                disabled={status === "submitting"}
+                                                whileHover={status === "submitting" ? undefined : { scale: 1.02 }}
+                                                whileTap={status === "submitting" ? undefined : { scale: 0.98 }}
+                                                transition={hoverSpring}
+                                                className="w-full mt-6 py-4 rounded-full bg-black text-white font-bold text-xs uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_10px_30px_-8px_rgba(184,95,77,0.6)] transition-[background-color,box-shadow,opacity] duration-300 ease-out-expo disabled:opacity-50 disabled:cursor-wait"
+                                            >
+                                                <span className="inline-flex items-center justify-center gap-2.5">
+                                                    {status === "submitting" && (
+                                                        <motion.span
+                                                            className="h-3 w-3 rounded-full border-[1.5px] border-white/35 border-t-white"
+                                                            animate={{ rotate: 360 }}
+                                                            transition={{ repeat: Infinity, duration: 0.7, ease: "linear" }}
+                                                        />
+                                                    )}
+                                                    {status === "submitting" ? "Sending" : "Submit request"}
+                                                </span>
+                                            </motion.button>
                                         </form>
                                     </div>
                                 )}
@@ -984,14 +1842,33 @@
             );
         }
 
-        function Footer() {
+        function Footer({ openContact }) {
+            const year = new Date().getFullYear();
             return (
-                <footer className="py-12 border-t border-gray-100 bg-white text-gray-500 text-sm">
-                    <div className="max-w-[1380px] mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-6">
-                        <LionLogo className="opacity-50" />
-                        <div className="text-xs uppercase tracking-widest font-semibold flex gap-8">
-                            <a href="#" className="hover:text-black transition">Instagram</a>
-                            <a href="#" className="hover:text-black transition">Behance</a>
+                // Bottom padding clears the floating estimator button, which used
+                // to sit on top of the social links on wide screens.
+                <footer className="pt-14 pb-28 md:pb-20 border-t border-gray-100 bg-white text-gray-500 text-sm">
+                    <div className="max-w-[1380px] mx-auto px-6 md:px-12 flex flex-col gap-10">
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                            <div className="flex flex-col gap-4">
+                                <LionLogo className="opacity-60 transition-opacity duration-300 hover:opacity-100" />
+                                <button
+                                    onClick={(e) => openContact(null, e)}
+                                    className="group relative self-start text-black text-sm font-medium pb-1"
+                                >
+                                    Start a project
+                                    <span className="absolute bottom-0 left-0 h-px w-full bg-gray-300" />
+                                    <span className="absolute bottom-0 left-0 h-px w-full bg-black origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out-expo" />
+                                </button>
+                            </div>
+                            <div className="text-xs uppercase tracking-widest font-semibold flex gap-8 md:pr-20">
+                                <a href="#" className="hover:text-black transition-colors duration-300">Instagram</a>
+                                <a href="#" className="hover:text-black transition-colors duration-300">Behance</a>
+                            </div>
+                        </div>
+                        <div className="flex flex-col sm:flex-row justify-between gap-3 pt-8 border-t border-gray-100 text-[11px] uppercase tracking-[0.14em] text-gray-400">
+                            <span>&copy; {year} LionRenders</span>
+                            <span className="md:pr-20">Visualisation &amp; CGI studio</span>
                         </div>
                     </div>
                 </footer>
@@ -1004,9 +1881,9 @@
             const [isGlowingTick, setIsGlowingTick] = useState(false);
             const glowTimeoutRef = useRef(null);
 
-            // Exactly 1.2s matches the CSS spin duration for ONE clean lap
-            const GLOW_DURATION = 1200; 
-            const GLOW_INTERVAL = 6000; 
+            // Matches the CSS spin duration exactly, for ONE clean lap
+            const GLOW_DURATION = 1600;
+            const GLOW_INTERVAL = 7000;
 
             useEffect(() => {
                 if (prefersReducedMotion) return;
@@ -1033,14 +1910,27 @@
             const strictlyGlowing = isGlowingTick && !isHovered && !isAnyModalOpen;
 
             return (
-                <motion.button 
+                <motion.button
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
+                    onFocus={() => setIsHovered(true)}
+                    onBlur={() => setIsHovered(false)}
                     onClick={onClick}
-                    initial={false}
+                    aria-label="Open the project estimator"
+                    aria-hidden={isAnyModalOpen}
+                    tabIndex={isAnyModalOpen ? -1 : 0}
+                    initial={prefersReducedMotion ? false : { opacity: 0, y: 20, scale: 0.9 }}
+                    animate={{
+                        opacity: 1, y: 0, scale: 1,
+                        // Entrance timing lives here so the delay can't leak into
+                        // the hover/tap springs below.
+                        transition: prefersReducedMotion
+                            ? { duration: 0 }
+                            : { type: "spring", stiffness: 300, damping: 26, mass: 0.8, delay: 1.1 }
+                    }}
+                    transition={{ type: "spring", stiffness: 360, damping: 26, mass: 0.65 }}
                     whileHover={prefersReducedMotion ? undefined : { y: -2, scale: 1.025 }}
                     whileTap={prefersReducedMotion ? undefined : { y: 0, scale: 0.975 }}
-                    transition={{ type: "spring", stiffness: 360, damping: 26, mass: 0.65 }}
                     className={`liquid-estimator-fab group ${strictlyGlowing ? "is-glowing" : ""}`}
                 >
                     {/* Flawlessly contained edge highlight */}
@@ -1076,24 +1966,54 @@
             const [previewProject, setPreviewProject] = useState(null);
             const [contactData, setContactData] = useState(null);
             
+            // Scroll spy, coalesced into one measurement per frame. The old version
+            // read layout on every scroll event, which thrashed on trackpads.
             useEffect(() => {
-                const handleScroll = () => {
+                let frame = null;
+
+                const measure = () => {
+                    frame = null;
                     const sections = ["home", "work", "process", "about"];
                     let current = "home";
-                    for (const id of sections) {
-                        const el = document.getElementById(id);
-                        if (el) {
-                            const rect = el.getBoundingClientRect();
-                            if (rect.top <= window.innerHeight * 0.4) {
+
+                    // At the very bottom nothing can cross the 40% line any more, so
+                    // pin the last section — otherwise the footer leaves "Studio" unlit.
+                    const atBottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 2;
+                    if (atBottom) {
+                        current = sections[sections.length - 1];
+                    } else {
+                        for (const id of sections) {
+                            const el = document.getElementById(id);
+                            if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.4) {
                                 current = id;
                             }
                         }
                     }
-                    setActiveSection(prev => prev !== current ? current : prev);
+                    setActiveSection(prev => (prev !== current ? current : prev));
                 };
-                window.addEventListener("scroll", handleScroll, { passive: true });
-                handleScroll();
-                return () => window.removeEventListener("scroll", handleScroll);
+
+                const onScroll = () => {
+                    if (frame === null) frame = requestAnimationFrame(measure);
+                };
+
+                window.addEventListener("scroll", onScroll, { passive: true });
+                window.addEventListener("resize", onScroll, { passive: true });
+                measure();
+                return () => {
+                    if (frame !== null) cancelAnimationFrame(frame);
+                    window.removeEventListener("scroll", onScroll);
+                    window.removeEventListener("resize", onScroll);
+                };
+            }, []);
+
+            // Hand off from the boot screen once the first real frame is painted.
+            useEffect(() => {
+                const boot = document.getElementById("boot");
+                if (!boot) return;
+                const id = requestAnimationFrame(() => {
+                    requestAnimationFrame(() => boot.classList.add("is-done"));
+                });
+                return () => cancelAnimationFrame(id);
             }, []);
 
             const [contactOrigin, setContactOrigin] = useState({ x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0 });
@@ -1123,16 +2043,17 @@
 
             return (
                 <div className="min-h-screen relative bg-white">
+                    <ScrollProgress />
                     <Header activeSection={activeSection} scrollTo={scrollTo} openContact={openContact} />
-                    
+
                     <main>
                         <Hero scrollTo={scrollTo} />
                         <KineticGallerySection onSelectProject={setPreviewProject} previewProject={previewProject} />
                         <ProcessSection />
                         <AboutSection />
                     </main>
-                    
-                    <Footer />
+
+                    <Footer openContact={openContact} />
                     
                     <CalculatorFAB 
                         isAnyModalOpen={isAnyModalOpen}
