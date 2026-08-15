@@ -88,19 +88,26 @@
             cursor: pointer;
             user-select: none;
             
-            /* Premium Light Grey Frosted Glass */
+            /* Premium Light Grey Frosted Glass with a Faded, Subtle Border */
             background: rgba(225, 228, 232, 0.75);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(170, 175, 185, 0.25); 
             -webkit-backdrop-filter: blur(20px) saturate(120%);
             backdrop-filter: blur(20px) saturate(120%);
-            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1), inset 0 2px 10px rgba(255,255,255,0.9);
+            /* Soft inset shadow at the bottom to define the edge naturally */
+            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.08), 
+                        inset 0 2px 10px rgba(255,255,255,0.8), 
+                        inset 0 -3px 8px rgba(160, 165, 175, 0.45);
             
-            transition: background 0.3s ease;
+            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
             will-change: transform;
         }
 
         .liquid-estimator-fab:hover {
             background: rgba(240, 242, 245, 0.95);
+            border-color: rgba(150, 155, 165, 0.35);
+            box-shadow: 0 12px 35px -5px rgba(0,0,0,0.12), 
+                        inset 0 2px 10px rgba(255,255,255,0.9), 
+                        inset 0 -3px 8px rgba(160, 165, 175, 0.3);
         }
 
         /* Strict Border Mask for the Edge Glow */
@@ -1151,5 +1158,7 @@
     </script>
 </body>
 </html>
+
+
 
 
