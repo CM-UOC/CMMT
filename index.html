@@ -64,40 +64,99 @@
             }
         }
 
-        /* Fast, Vibrant Liquid Glass Glow for Estimator Button */
-        @keyframes spin-glow {
+        /* =========================================================
+           REFINED LIQUID-GLASS ESTIMATOR BUTTON
+           ========================================================= */
+
+        @keyframes border-travel {
             0% { transform: translate(-50%, -50%) rotate(0deg); }
             100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
-        @keyframes pulse-glow-once {
-            0%, 2% { opacity: 0; }
-            5%, 16% { opacity: 1; } /* Visible and vibrant exactly for one lap (1.2s of a 6s loop) */
-            20%, 100% { opacity: 0; }
-        }
-        .border-glow-container {
-            position: absolute;
-            inset: -3px; /* Sits slightly outside the border */
+
+        .liquid-estimator-fab {
+            position: fixed;
+            right: 1.5rem;
+            bottom: 1.5rem;
+            z-index: 40;
+            height: 56px;
+            min-width: 72px;
+            padding: 0 18px;
             border-radius: 9999px;
-            z-index: -1;
-            overflow: hidden;
-            /* Soft radial mask allows the neon light to bleed and diffuse inwards under the frosted glass */
-            -webkit-mask: radial-gradient(circle closest-side, transparent 40%, black 85%);
-            mask: radial-gradient(circle closest-side, transparent 40%, black 85%);
-            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            
+            /* Premium Light Grey Frosted Glass */
+            background: rgba(225, 228, 232, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            -webkit-backdrop-filter: blur(20px) saturate(120%);
+            backdrop-filter: blur(20px) saturate(120%);
+            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1), inset 0 2px 10px rgba(255,255,255,0.9);
+            
+            transition: background 0.3s ease;
+            will-change: transform;
         }
-        .border-glow-spinner {
+
+        .liquid-estimator-fab:hover {
+            background: rgba(240, 242, 245, 0.95);
+        }
+
+        /* Strict Border Mask for the Edge Glow */
+        .clean-border-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 9999px;
+            padding: 2px; /* Controls border line thickness */
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            overflow: hidden;
+        }
+
+        .clean-border-glow::after {
+            content: '';
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 250%;
-            height: 250%;
-            /* Liquid neon light: Electric Cyan to Vibrant Magenta with a bright core */
-            background: conic-gradient(from 0deg, transparent 65%, rgba(0, 243, 255, 0.6) 80%, rgba(157, 0, 255, 0.9) 95%, rgba(255, 255, 255, 1) 98%, transparent 100%);
-            /* One rapid sweep per cycle */
-            animation: spin-glow 1.2s linear infinite, pulse-glow-once 6s ease-in-out infinite;
-            transform-origin: center;
-            /* Extra blur diffuses the line into a soft glowing fluid */
-            filter: blur(5px);
+            width: 300%;
+            height: 300%;
+            /* Faded neon gradient */
+            background: conic-gradient(from 0deg, transparent 65%, rgba(0, 243, 255, 0.6) 80%, rgba(157, 0, 255, 0.8) 95%, rgba(255, 255, 255, 1) 100%);
+            animation: border-travel 1.2s linear infinite;
+        }
+
+        /* Subtle Inner Wash under the frosted glass */
+        .clean-inner-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 9999px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            overflow: hidden;
+        }
+
+        .clean-inner-glow::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: conic-gradient(from 0deg, transparent 65%, rgba(0, 243, 255, 0.15) 85%, rgba(157, 0, 255, 0.25) 95%, rgba(255, 255, 255, 0.4) 100%);
+            animation: border-travel 1.2s linear infinite;
+            filter: blur(8px);
+        }
+
+        /* Activation state controlled precisely by React */
+        .liquid-estimator-fab.is-glowing .clean-border-glow,
+        .liquid-estimator-fab.is-glowing .clean-inner-glow {
+            opacity: 1;
         }
     </style>
 
@@ -327,7 +386,6 @@
                     onWheel={handleWheel}
                     className="relative w-full h-full overflow-hidden"
                 >
-                    {/* Organic Fog Fades anchoring directly to the scroll view container */}
                     <motion.div animate={{ opacity: interactive ? 0 : 1 }} transition={{ duration: 0.5 }} style={{ background: 'linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0.85) 30%, rgba(255,255,255,0) 100%)' }} className="absolute top-0 left-0 right-0 h-32 sm:h-56 z-20 pointer-events-none" />
                     <motion.div animate={{ opacity: interactive ? 0 : 1 }} transition={{ duration: 0.5 }} style={{ background: 'linear-gradient(to top, #ffffff 0%, rgba(255,255,255,0.85) 30%, rgba(255,255,255,0) 100%)' }} className="absolute bottom-0 left-0 right-0 h-32 sm:h-56 z-20 pointer-events-none" />
 
@@ -495,7 +553,6 @@
                             <h2 className="mt-3 text-4xl sm:text-5xl font-medium tracking-tight text-black">Selected works.</h2>
                         </div>
                         <div className="flex flex-wrap gap-2">
-                            {/* Standard layout logic ensures the entire wrapper morphs synchronously */}
                             <AnimatePresence>
                                 {!isExpanded && (
                                     <motion.div 
@@ -510,7 +567,6 @@
                         </div>
                     </div>
                     
-                    {/* The Seamless Expandable Gallery Container */}
                     <div className="relative w-full h-[90vh] min-h-[750px] group cursor-pointer" onClick={() => { if(!isExpanded) setIsExpanded(true); }}>
                         <motion.div 
                             layout
@@ -523,7 +579,6 @@
                             }}
                             className="bg-white overflow-hidden"
                         >
-                            {/* Floating Transparent Pill Header for Full-Screen Gallery */}
                             <AnimatePresence>
                                 {isExpanded && (
                                     <motion.div 
@@ -531,7 +586,6 @@
                                         transition={fluidFlight}
                                         className="absolute top-8 left-0 right-0 flex items-start justify-center z-[70] px-6 md:px-12 pointer-events-none"
                                     >
-                                        {/* The container morphs its background and blur seamlessly matching the layout flight */}
                                         <motion.div 
                                             layoutId="category-pill-container"
                                             transition={fluidFlight}
@@ -794,7 +848,6 @@
                         </motion.button>
 
                         <div className="w-full md:w-1/2 aspect-[4/3] rounded-[32px] overflow-hidden bg-gray-100">
-                            {/* La imagen muta puramente en tamaño sin cortes */}
                             <motion.img 
                                 layoutId={`image-${project.id}`} 
                                 transition={fluidFlight}
@@ -939,22 +992,72 @@
         }
 
         function CalculatorFAB({ onClick, isAnyModalOpen }) {
+            const prefersReducedMotion = useReducedMotion();
             const [isHovered, setIsHovered] = useState(false);
+            const [isGlowingTick, setIsGlowingTick] = useState(false);
+            const glowTimeoutRef = useRef(null);
+
+            // Exactly 1.2s matches the CSS spin duration for ONE clean lap
+            const GLOW_DURATION = 1200; 
+            const GLOW_INTERVAL = 6000; 
+
+            useEffect(() => {
+                if (prefersReducedMotion) return;
+
+                const playGlow = () => {
+                    setIsGlowingTick(true);
+                    glowTimeoutRef.current = window.setTimeout(() => {
+                        setIsGlowingTick(false);
+                    }, GLOW_DURATION);
+                };
+
+                // Wait 1.5s after load, then pulse every 6s
+                const initialTimeout = setTimeout(playGlow, 1500);
+                const interval = setInterval(playGlow, GLOW_INTERVAL);
+
+                return () => {
+                    clearTimeout(initialTimeout);
+                    clearTimeout(glowTimeoutRef.current);
+                    clearInterval(interval);
+                };
+            }, [prefersReducedMotion]);
+
+            // Immediately abort the glow if the mouse enters or the modal opens
+            const strictlyGlowing = isGlowingTick && !isHovered && !isAnyModalOpen;
 
             return (
-                <button 
+                <motion.button 
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                     onClick={onClick}
-                    className="fixed bottom-6 right-6 z-40 bg-[#d4d4d4]/60 backdrop-blur-[32px] text-black h-[52px] min-w-[72px] px-5 rounded-full shadow-[0_10px_30px_-5px_rgba(0,0,0,0.15),inset_0_2px_8px_rgba(255,255,255,0.8),inset_0_-2px_8px_rgba(0,0,0,0.05)] flex items-center justify-center hover:scale-105 hover:bg-white/90 transition-all duration-300 group select-none cursor-pointer"
+                    initial={false}
+                    whileHover={prefersReducedMotion ? undefined : { y: -2, scale: 1.025 }}
+                    whileTap={prefersReducedMotion ? undefined : { y: 0, scale: 0.975 }}
+                    transition={{ type: "spring", stiffness: 360, damping: 26, mass: 0.65 }}
+                    className={`liquid-estimator-fab group ${strictlyGlowing ? "is-glowing" : ""}`}
                 >
-                    {/* Fast-traveling liquid glass glow container */}
-                    <div className={`border-glow-container transition-opacity duration-300 ${(isHovered || isAnyModalOpen) ? 'opacity-0' : 'opacity-100'}`}>
-                        <div className="border-glow-spinner" />
-                    </div>
-                    <CalculatorIcon size={20} className="text-black drop-shadow-sm relative z-10 shrink-0" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest hidden sm:block max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-[150px] group-hover:ml-3 transition-all duration-500 ease-[0.16,1,0.3,1] relative z-10">Project estimator</span>
-                </button>
+                    {/* Flawlessly contained edge highlight */}
+                    <div className="clean-border-glow" />
+                    {/* Internal fluid light leak */}
+                    <div className="clean-inner-glow" />
+                    
+                    <span className="relative z-10 flex items-center">
+                        <CalculatorIcon size={20} className="shrink-0 text-gray-800 drop-shadow-sm" />
+                        
+                        <motion.span 
+                            initial={false}
+                            animate={{
+                                width: isHovered ? 136 : 0,
+                                marginLeft: isHovered ? 12 : 0,
+                                opacity: isHovered ? 1 : 0
+                            }}
+                            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                            className="hidden overflow-hidden whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.14em] sm:block text-gray-900"
+                        >
+                            Project estimator
+                        </motion.span>
+                    </span>
+                </motion.button>
             );
         }
 
@@ -1048,4 +1151,5 @@
     </script>
 </body>
 </html>
+
 
