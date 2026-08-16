@@ -1,9 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LionRenders - 3D Visualisation Studio</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>LionRenders — CGI &amp; Visualisation Studio</title>
+    <meta name="description" content="LionRenders is an independent CGI studio producing product imagery and cinematic films for technology, jewellery, furniture, cosmetics and events." />
+    <meta name="theme-color" content="#08080a" />
+    <meta name="color-scheme" content="light" />
+
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./favicon.svg" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="LionRenders" />
+    <meta property="og:title" content="LionRenders — CGI &amp; Visualisation Studio" />
+    <meta property="og:description" content="High-end CGI, product visualisation and cinematic films for technology, jewellery, furniture, cosmetics and events." />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" />
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -19,7 +36,8 @@
                         clay: "#b85f4d"
                     },
                     fontFamily: {
-                        sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
+                        serif: ['"Instrument Serif"', 'serif']
                     }
                 },
             },
@@ -46,12 +64,6 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
-        @keyframes shimmer {
-            100% { transform: translateX(150%); }
-        }
-        .logo-invert {
-            filter: invert(1);
-        }
         .site-logo {
             display: block;
             height: 36px;
@@ -62,108 +74,6 @@
             .site-logo {
                 height: 42px;
             }
-        }
-
-        /* =========================================================
-           REFINED LIQUID-GLASS ESTIMATOR BUTTON
-           ========================================================= */
-
-        @keyframes border-travel {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        .liquid-estimator-fab {
-            position: fixed;
-            right: 1.5rem;
-            bottom: 1.5rem;
-            z-index: 40;
-            height: 56px;
-            min-width: 72px;
-            padding: 0 18px;
-            border-radius: 9999px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            user-select: none;
-            
-            /* Premium Light Grey Frosted Glass with a Faded, Subtle Border */
-            background: rgba(225, 228, 232, 0.75);
-            border: 1px solid rgba(170, 175, 185, 0.25); 
-            -webkit-backdrop-filter: blur(20px) saturate(120%);
-            backdrop-filter: blur(20px) saturate(120%);
-            /* Soft inset shadow at the bottom to define the edge naturally */
-            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.08), 
-                        inset 0 2px 10px rgba(255,255,255,0.8), 
-                        inset 0 -3px 8px rgba(160, 165, 175, 0.45);
-            
-            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            will-change: transform;
-        }
-
-        .liquid-estimator-fab:hover {
-            background: rgba(240, 242, 245, 0.95);
-            border-color: rgba(150, 155, 165, 0.35);
-            box-shadow: 0 12px 35px -5px rgba(0,0,0,0.12), 
-                        inset 0 2px 10px rgba(255,255,255,0.9), 
-                        inset 0 -3px 8px rgba(160, 165, 175, 0.3);
-        }
-
-        /* Strict Border Mask for the Edge Glow */
-        .clean-border-glow {
-            position: absolute;
-            inset: 0;
-            border-radius: 9999px;
-            padding: 2px; /* Controls border line thickness */
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            overflow: hidden;
-        }
-
-        .clean-border-glow::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 300%;
-            height: 300%;
-            /* Faded neon gradient */
-            background: conic-gradient(from 0deg, transparent 65%, rgba(0, 243, 255, 0.6) 80%, rgba(157, 0, 255, 0.8) 95%, rgba(255, 255, 255, 1) 100%);
-            animation: border-travel 1.2s linear infinite;
-        }
-
-        /* Subtle Inner Wash under the frosted glass */
-        .clean-inner-glow {
-            position: absolute;
-            inset: 0;
-            border-radius: 9999px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            overflow: hidden;
-        }
-
-        .clean-inner-glow::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 300%;
-            height: 300%;
-            background: conic-gradient(from 0deg, transparent 65%, rgba(0, 243, 255, 0.15) 85%, rgba(157, 0, 255, 0.25) 95%, rgba(255, 255, 255, 0.4) 100%);
-            animation: border-travel 1.2s linear infinite;
-            filter: blur(8px);
-        }
-
-        /* Activation state controlled precisely by React */
-        .liquid-estimator-fab.is-glowing .clean-border-glow,
-        .liquid-estimator-fab.is-glowing .clean-inner-glow {
-            opacity: 1;
         }
     </style>
 
@@ -178,6 +88,18 @@
     <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
 </head>
 <body>
+    <noscript>
+      <div style="max-width: 34rem; margin: 22vh auto; padding: 0 1.5rem; font-family: Inter, system-ui, sans-serif; text-align: center; color: #1d1d1f;">
+        <h1 style="font-size: 1.5rem; font-weight: 500; letter-spacing: -0.02em; margin: 0 0 0.75rem">
+          JavaScript required
+        </h1>
+        <p style="color: #86868b; line-height: 1.7; margin: 0 0 2rem">
+          This portfolio relies on JavaScript for its gallery. Please enable it, or reach us directly.
+        </p>
+        <a href="mailto:studio@lionrenders.com" style="color: #1d1d1f; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; border-bottom: 1px solid #1d1d1f; padding-bottom: 2px; text-decoration: none;">studio@lionrenders.com</a>
+      </div>
+    </noscript>
+
     <div id="root"></div>
 
     <script type="text/babel">
@@ -196,7 +118,6 @@
         const Video = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="14" height="10" x="2" y="7" rx="2"/><path d="m16 10 4-2v8l-4-2"/></svg>;
         const Building = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>;
         const Layers = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 17 22 12"/></svg>;
-        const CalculatorIcon = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M16 10h.01"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14v4"/><path d="M8 18h.01"/><path d="M12 18h.01"/></svg>;
 
         // --- LOGO ---
         const LionLogo = ({className=""}) => (
@@ -253,13 +174,10 @@
         ];
 
         const smoothTransition = { duration: 0.5, ease: [0.16, 1, 0.3, 1] };
-        
-        // --- ANIMATION PHYSICS ---
         const genieSpring = { type: "spring", damping: 24, stiffness: 260, mass: 0.7 };
         const fluidFlight = { duration: 0.6, ease: [0.16, 1, 0.3, 1] };
         const categoryFlight = { type: "spring", damping: 26, stiffness: 280, mass: 0.8 }; 
 
-        // Reusable Category Filters to support animating from Page to Full-screen Header
         const CategoryFilters = ({ categories, filter, setFilter }) => (
             <>
                 {categories.map((cat) => (
@@ -405,7 +323,7 @@
         }
 
         // --- COMPONENTS ---
-        function Header({ activeSection, scrollTo, openContact }) {
+        function Header({ activeSection, scrollTo, openEnquire }) {
             const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
             const { scrollY } = useScroll();
             const [isScrolled, setIsScrolled] = useState(false);
@@ -466,8 +384,8 @@
                         </motion.div>
 
                         <motion.div layout transition={smoothTransition} className={`hidden md:flex items-center shrink-0 group ${isScrolled ? 'pl-2' : 'pl-4'}`}>
-                            <button onClick={(e) => openContact(null, e)} className="flex items-center gap-2 px-6 py-3 rounded-full bg-black text-white text-sm font-medium transition-all duration-300 hover:bg-[#b85f4d] hover:shadow-[0_0_20px_rgba(184,95,77,0.4)] hover:scale-105">
-                                Start project <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                            <button onClick={(e) => openEnquire(e)} className="flex items-center gap-2 px-6 py-3 rounded-full bg-black text-white text-sm font-medium transition-all duration-300 hover:bg-[#b85f4d] hover:shadow-[0_0_20px_rgba(184,95,77,0.4)] hover:scale-105">
+                                Enquire <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                             </button>
                         </motion.div>
 
@@ -492,8 +410,8 @@
                                         </button>
                                     ))}
                                     <div className="my-2 h-px bg-gray-100" />
-                                    <button onClick={(e) => { setMobileMenuOpen(false); openContact(null, e); }} className="flex items-center justify-between px-4 py-3.5 rounded-2xl bg-black text-white font-medium text-[15px] hover:bg-[#b85f4d] transition-all">
-                                        <span>Start project</span>
+                                    <button onClick={(e) => { setMobileMenuOpen(false); openEnquire(e); }} className="flex items-center justify-between px-4 py-3.5 rounded-2xl bg-black text-white font-medium text-[15px] hover:bg-[#b85f4d] transition-all">
+                                        <span>Enquire</span>
                                         <ArrowUpRight size={18} />
                                     </button>
                                 </div>
@@ -677,7 +595,82 @@
             );
         }
 
-        function CalculatorModal({ isOpen, onClose, openContact, origin }) {
+        // --- ENQUIRE SELECTION MODAL ---
+        function EnquireModal({ isOpen, onClose, openEstimator, openContact, origin }) {
+            const originX = typeof window !== 'undefined' ? (origin.x / window.innerWidth) * 100 + '%' : '50%';
+            const originY = typeof window !== 'undefined' ? (origin.y / window.innerHeight) * 100 + '%' : '50%';
+
+            return (
+                <AnimatePresence>
+                    {isOpen && (
+                        <motion.div 
+                            initial={{ opacity: 0 }} 
+                            animate={{ opacity: 1 }} 
+                            exit={{ opacity: 0 }} 
+                            transition={{ duration: 0.3 }}
+                            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 bg-black/40 backdrop-blur-md"
+                            onClick={onClose}
+                        >
+                            <motion.div 
+                                initial={{ opacity: 0, scale: 0.95, y: 20 }} 
+                                animate={{ opacity: 1, scale: 1, y: 0 }} 
+                                exit={{ opacity: 0, scale: 0.95, y: 20 }} 
+                                style={{ transformOrigin: `${originX} ${originY}` }}
+                                transition={genieSpring}
+                                className="relative w-full max-w-[840px] bg-[#E9EAEB] rounded-[32px] p-8 md:p-12 shadow-[0_40px_100px_rgba(0,0,0,0.15)] overflow-hidden"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <button onClick={onClose} className="absolute top-6 right-6 p-3 rounded-full bg-white shadow-sm border border-gray-100 text-gray-500 hover:bg-black hover:text-white transition-all z-20">
+                                    <X size={18} />
+                                </button>
+
+                                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-3 block">LionRenders</span>
+                                <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-black mb-5">Start a project</h2>
+                                <p className="text-gray-500 mb-10 text-[15px]">Two ways in. Work out a scope first, or send the brief straight over.</p>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+                                    {/* Left Card - Estimate */}
+                                    <button 
+                                        onClick={() => { onClose(); setTimeout(openEstimator, 300); }} 
+                                        className="group relative flex flex-col text-left bg-[#F5F5F7] rounded-[24px] p-8 border border-clay/40 hover:border-clay hover:shadow-lg transition-all duration-300"
+                                    >
+                                        <div className="w-12 h-12 rounded-full bg-[#E5E6E8] flex items-center justify-center mb-6 text-black group-hover:scale-105 transition-transform duration-300">
+                                            <Layers size={20} />
+                                        </div>
+                                        <h3 className="text-xl font-medium text-black mb-3">Estimate a project</h3>
+                                        <p className="text-sm text-gray-500 leading-relaxed mb-10 flex-1">
+                                            Configure the deliverables, quantity and timeline, and see an indicative scope you can send through as a proposal request.
+                                        </p>
+                                        <div className="text-sm font-semibold text-black flex items-center gap-1.5 group-hover:text-clay transition-colors">
+                                            Configure scope <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                                        </div>
+                                    </button>
+
+                                    {/* Right Card - Discuss */}
+                                    <button 
+                                        onClick={() => { onClose(); setTimeout(openContact, 300); }} 
+                                        className="group relative flex flex-col text-left bg-[#F5F5F7] rounded-[24px] p-8 border border-transparent hover:border-gray-300 hover:shadow-lg transition-all duration-300"
+                                    >
+                                        <div className="w-12 h-12 rounded-full bg-[#E5E6E8] flex items-center justify-center mb-6 text-black group-hover:scale-105 transition-transform duration-300">
+                                            <Video size={20} />
+                                        </div>
+                                        <h3 className="text-xl font-medium text-black mb-3">Discuss a project</h3>
+                                        <p className="text-sm text-gray-500 leading-relaxed mb-10 flex-1">
+                                            Already have a brief, or something that needs scoping by hand? Send it over and we will read it properly.
+                                        </p>
+                                        <div className="text-sm font-semibold text-black flex items-center gap-1.5 group-hover:text-black transition-colors">
+                                            Send a brief <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                                        </div>
+                                    </button>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            )
+        }
+
+        function CalculatorModal({ isOpen, onClose, openContact }) {
             const [type, setType] = useState('product'); 
             const [views, setViews] = useState(3);
             const [quality, setQuality] = useState('standard'); 
@@ -708,9 +701,6 @@
                 };
             }, [type, views, quality, speed]);
 
-            const originX = typeof window !== 'undefined' ? (origin.x / window.innerWidth) * 100 + '%' : '50%';
-            const originY = typeof window !== 'undefined' ? (origin.y / window.innerHeight) * 100 + '%' : '50%';
-
             return (
                 <AnimatePresence>
                     {isOpen && (
@@ -723,10 +713,9 @@
                             onClick={onClose}
                         >
                             <motion.div 
-                                initial={{ opacity: 0, scale: 0 }} 
-                                animate={{ opacity: 1, scale: 1 }} 
-                                exit={{ opacity: 0, scale: 0 }} 
-                                style={{ transformOrigin: `${originX} ${originY}` }}
+                                initial={{ opacity: 0, scale: 0.95, y: 20 }} 
+                                animate={{ opacity: 1, scale: 1, y: 0 }} 
+                                exit={{ opacity: 0, scale: 0.95, y: 20 }} 
                                 transition={genieSpring}
                                 className="relative w-full max-w-5xl bg-white/70 backdrop-blur-[60px] rounded-[48px] overflow-hidden flex flex-col lg:flex-row shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] border border-white"
                                 onClick={(e) => e.stopPropagation()}
@@ -812,7 +801,6 @@
                                     </div>
 
                                     <button onClick={(e) => {
-                                        onClose();
                                         openContact({ type: 'estimate', lowerCost: estimate.lowerCost, upperCost: estimate.upperCost, days: estimate.days, config: { type, views, quality, speed } }, e);
                                     }} className="w-full mt-10 py-4 rounded-full bg-black text-white font-bold text-xs uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 hover:scale-105">
                                         Lock in this scope
@@ -825,7 +813,7 @@
             );
         }
 
-        function ProjectDetailModal({ project, onClose, openContact }) {
+        function ProjectDetailModal({ project, onClose, openEnquire }) {
             useEffect(() => {
                 const handleKey = (e) => e.key === "Escape" && onClose();
                 window.addEventListener("keydown", handleKey);
@@ -877,7 +865,7 @@
                                 <p className="text-black text-sm font-medium">{project.discipline}</p>
                             </div>
 
-                            <button onClick={(e) => { onClose(); openContact(null, e); }} className="mt-8 py-4 rounded-full bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 group hover:scale-105">
+                            <button onClick={(e) => { onClose(); openEnquire(e); }} className="mt-8 py-4 rounded-full bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-[#b85f4d] hover:shadow-[0_0_30px_rgba(184,95,77,0.4)] transition-all duration-300 group hover:scale-105">
                                 Inquire similar work <ArrowUpRight size={14} className="inline ml-1 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                             </button>
                         </motion.div>
@@ -886,7 +874,7 @@
             );
         }
 
-        function ContactModal({ isOpen, onClose, contactData, origin }) {
+        function ContactModal({ isOpen, onClose, contactData }) {
             const [status, setStatus] = useState("idle");
             const isEstimate = contactData?.type === 'estimate';
 
@@ -917,9 +905,6 @@
                 }, 1500);
             };
 
-            const originX = typeof window !== 'undefined' ? (origin.x / window.innerWidth) * 100 + '%' : '50%';
-            const originY = typeof window !== 'undefined' ? (origin.y / window.innerHeight) * 100 + '%' : '50%';
-
             return (
                 <AnimatePresence>
                     {isOpen && (
@@ -929,10 +914,9 @@
                             onClick={onClose}
                         >
                             <motion.div 
-                                initial={{ opacity: 0, scale: 0 }} 
-                                animate={{ opacity: 1, scale: 1 }} 
-                                exit={{ opacity: 0, scale: 0 }} 
-                                style={{ transformOrigin: `${originX} ${originY}` }}
+                                initial={{ opacity: 0, scale: 0.95, y: 20 }} 
+                                animate={{ opacity: 1, scale: 1, y: 0 }} 
+                                exit={{ opacity: 0, scale: 0.95, y: 20 }} 
                                 transition={genieSpring}
                                 className="relative w-full max-w-2xl p-10 sm:p-16 bg-white/80 backdrop-blur-[60px] shadow-[0_40px_100px_rgba(0,0,0,0.15),inset_0_2px_4px_rgba(255,255,255,1)] rounded-[48px]"
                                 onClick={(e) => e.stopPropagation()}
@@ -986,95 +970,35 @@
 
         function Footer() {
             return (
-                <footer className="py-12 border-t border-gray-100 bg-white text-gray-500 text-sm">
-                    <div className="max-w-[1380px] mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-6">
-                        <LionLogo className="opacity-50" />
-                        <div className="text-xs uppercase tracking-widest font-semibold flex gap-8">
-                            <a href="#" className="hover:text-black transition">Instagram</a>
-                            <a href="#" className="hover:text-black transition">Behance</a>
+                <footer className="py-12 px-6 md:px-12 mt-12 border-t border-gray-100 bg-white">
+                    <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div className="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
+                            <LionLogo className="opacity-50 grayscale" />
+                            <span className="text-sm font-medium text-gray-400">© {new Date().getFullYear()} LionRenders. All rights reserved.</span>
+                        </div>
+                        <div className="flex items-center gap-6 text-sm font-medium text-gray-400">
+                            <a href="#" className="hover:text-black transition-colors">Instagram</a>
+                            <a href="#" className="hover:text-black transition-colors">Behance</a>
+                            <a href="#" className="hover:text-black transition-colors">LinkedIn</a>
                         </div>
                     </div>
                 </footer>
             );
         }
 
-        function CalculatorFAB({ onClick, isAnyModalOpen }) {
-            const prefersReducedMotion = useReducedMotion();
-            const [isHovered, setIsHovered] = useState(false);
-            const [isGlowingTick, setIsGlowingTick] = useState(false);
-            const glowTimeoutRef = useRef(null);
-
-            // Exactly 1.2s matches the CSS spin duration for ONE clean lap
-            const GLOW_DURATION = 1200; 
-            const GLOW_INTERVAL = 6000; 
-
-            useEffect(() => {
-                if (prefersReducedMotion) return;
-
-                const playGlow = () => {
-                    setIsGlowingTick(true);
-                    glowTimeoutRef.current = window.setTimeout(() => {
-                        setIsGlowingTick(false);
-                    }, GLOW_DURATION);
-                };
-
-                // Wait 1.5s after load, then pulse every 6s
-                const initialTimeout = setTimeout(playGlow, 1500);
-                const interval = setInterval(playGlow, GLOW_INTERVAL);
-
-                return () => {
-                    clearTimeout(initialTimeout);
-                    clearTimeout(glowTimeoutRef.current);
-                    clearInterval(interval);
-                };
-            }, [prefersReducedMotion]);
-
-            // Immediately abort the glow if the mouse enters or the modal opens
-            const strictlyGlowing = isGlowingTick && !isHovered && !isAnyModalOpen;
-
-            return (
-                <motion.button 
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
-                    onClick={onClick}
-                    initial={false}
-                    whileHover={prefersReducedMotion ? undefined : { y: -2, scale: 1.025 }}
-                    whileTap={prefersReducedMotion ? undefined : { y: 0, scale: 0.975 }}
-                    transition={{ type: "spring", stiffness: 360, damping: 26, mass: 0.65 }}
-                    className={`liquid-estimator-fab group ${strictlyGlowing ? "is-glowing" : ""}`}
-                >
-                    {/* Flawlessly contained edge highlight */}
-                    <div className="clean-border-glow" />
-                    {/* Internal fluid light leak */}
-                    <div className="clean-inner-glow" />
-                    
-                    <span className="relative z-10 flex items-center">
-                        <CalculatorIcon size={20} className="shrink-0 text-gray-800 drop-shadow-sm" />
-                        
-                        <motion.span 
-                            initial={false}
-                            animate={{
-                                width: isHovered ? 136 : 0,
-                                marginLeft: isHovered ? 12 : 0,
-                                opacity: isHovered ? 1 : 0
-                            }}
-                            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                            className="hidden overflow-hidden whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.14em] sm:block text-gray-900"
-                        >
-                            Project estimator
-                        </motion.span>
-                    </span>
-                </motion.button>
-            );
-        }
-
         // --- MAIN APP ---
         function App() {
             const [activeSection, setActiveSection] = useState("home");
+            
+            // Modal States
+            const [isEnquireModalOpen, setIsEnquireModalOpen] = useState(false);
             const [isContactModalOpen, setIsContactModalOpen] = useState(false);
             const [isCalcModalOpen, setIsCalcModalOpen] = useState(false);
             const [previewProject, setPreviewProject] = useState(null);
+            
+            // Shared state logic
             const [contactData, setContactData] = useState(null);
+            const [modalOrigin, setModalOrigin] = useState({ x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0 });
             
             useEffect(() => {
                 const handleScroll = () => {
@@ -1096,9 +1020,6 @@
                 return () => window.removeEventListener("scroll", handleScroll);
             }, []);
 
-            const [contactOrigin, setContactOrigin] = useState({ x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0 });
-            const [calcOrigin, setCalcOrigin] = useState({ x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0 });
-            
             const scrollTo = (id) => {
                 const el = document.getElementById(id);
                 if (el) {
@@ -1107,23 +1028,27 @@
                 }
             };
 
-            const openContact = (data = null, e = null) => {
-                if (e && e.clientX) {
-                    setContactOrigin({ x: e.clientX, y: e.clientY });
-                } else {
-                    setContactOrigin({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
-                }
-                setIsCalcModalOpen(false); 
-                setPreviewProject(null);
-                setContactData(data);
-                setIsContactModalOpen(true);
+            // Global Actions
+            const openEnquire = (e = null) => {
+                if (e && e.clientX) setModalOrigin({ x: e.clientX, y: e.clientY });
+                setIsEnquireModalOpen(true);
             };
 
-            const isAnyModalOpen = isContactModalOpen || isCalcModalOpen || !!previewProject;
+            const handleOpenEstimator = () => {
+                setIsEnquireModalOpen(false);
+                setTimeout(() => setIsCalcModalOpen(true), 150); // Fluid chained opening
+            };
+
+            const handleOpenContact = (data = null) => {
+                setIsEnquireModalOpen(false);
+                setIsCalcModalOpen(false);
+                setContactData(data);
+                setTimeout(() => setIsContactModalOpen(true), 150);
+            };
 
             return (
                 <div className="min-h-screen relative bg-white">
-                    <Header activeSection={activeSection} scrollTo={scrollTo} openContact={openContact} />
+                    <Header activeSection={activeSection} scrollTo={scrollTo} openEnquire={openEnquire} />
                     
                     <main>
                         <Hero scrollTo={scrollTo} />
@@ -1134,20 +1059,35 @@
                     
                     <Footer />
                     
-                    <CalculatorFAB 
-                        isAnyModalOpen={isAnyModalOpen}
-                        onClick={(e) => {
-                            if (e && e.clientX) setCalcOrigin({ x: e.clientX, y: e.clientY });
-                            setIsCalcModalOpen(true);
-                        }} 
+                    {/* Modals Flow */}
+                    <EnquireModal 
+                        isOpen={isEnquireModalOpen} 
+                        onClose={() => setIsEnquireModalOpen(false)} 
+                        openEstimator={handleOpenEstimator}
+                        openContact={() => handleOpenContact(null)}
+                        origin={modalOrigin}
+                    />
+
+                    <CalculatorModal 
+                        isOpen={isCalcModalOpen} 
+                        onClose={() => setIsCalcModalOpen(false)} 
+                        openContact={handleOpenContact}
                     />
                     
-                    <CalculatorModal isOpen={isCalcModalOpen} onClose={() => setIsCalcModalOpen(false)} openContact={openContact} origin={calcOrigin} />
-                    
-                    <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} contactData={contactData} origin={contactOrigin} />
+                    <ContactModal 
+                        isOpen={isContactModalOpen} 
+                        onClose={() => setIsContactModalOpen(false)} 
+                        contactData={contactData} 
+                    />
                     
                     <AnimatePresence>
-                        {previewProject && <ProjectDetailModal project={previewProject} onClose={() => setPreviewProject(null)} openContact={openContact} />}
+                        {previewProject && (
+                            <ProjectDetailModal 
+                                project={previewProject} 
+                                onClose={() => setPreviewProject(null)} 
+                                openEnquire={openEnquire} 
+                            />
+                        )}
                     </AnimatePresence>
                 </div>
             );
@@ -1158,7 +1098,4 @@
     </script>
 </body>
 </html>
-
-
-
 
