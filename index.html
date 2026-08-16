@@ -424,30 +424,47 @@
 
         function Hero({ scrollTo }) {
             return (
-                <section id="home" className="relative min-h-screen flex flex-col justify-center px-6 pt-32 pb-20 max-w-[1440px] mx-auto overflow-hidden bg-white">
-                    <motion.div 
-                        initial={{ opacity: 0, y: 30 }} 
-                        animate={{ opacity: 1, y: 0 }} 
-                        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }} 
-                        className="max-w-4xl"
-                    >
-                        <span className="text-xs font-semibold tracking-[0.2em] text-gray-400 uppercase mb-6 block">Visualisation & CGI studio</span>
-                        <h1 className="text-[clamp(3.5rem,10vw,8.5rem)] font-medium leading-[0.9] tracking-[-0.04em] text-black">
-                            Imagined in 3D.<br />
-                            <span className="text-gray-400 italic font-serif font-light">Felt as real.</span>
-                        </h1>
-                        <p className="mt-8 max-w-lg text-base md:text-lg text-gray-500 leading-relaxed font-light">
-                            High-end CGI, 3D product visualization, and cinematic launch films engineered for luxury, technology, and design. Letting the color speak only through the product.
-                        </p>
-                        <div className="mt-12">
-                            <button onClick={() => scrollTo("work")} className="group flex items-center gap-3 text-black text-sm font-semibold uppercase tracking-widest pb-1 border-b border-black hover:text-gray-500 hover:border-gray-500 transition-all duration-300">
-                                <span>View gallery</span>
-                                <motion.div animate={{ y: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}>
-                                    <ArrowDown size={16} />
-                                </motion.div>
-                            </button>
-                        </div>
-                    </motion.div>
+                <section id="home" className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-white">
+                    {/* Cinematic Background Video */}
+                    <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
+                        <video 
+                            autoPlay 
+                            loop 
+                            muted={true} 
+                            playsInline 
+                            className="absolute inset-0 w-full h-full object-cover scale-105"
+                            style={{ filter: 'grayscale(100%) opacity(0.7)' }}
+                            /* Highly reliable abstract CGI looping video */
+                            src="https://videos.pexels.com/video-files/3129671/3129671-hd_1920_1080_30fps.mp4" 
+                        />
+                        {/* Seamless gradient overlay to ensure text legibility and fade beautifully into the gallery */}
+                        <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-white/60 to-white"></div>
+                    </div>
+
+                    <div className="relative z-10 w-full max-w-[1440px] mx-auto px-6 pt-32 pb-20">
+                        <motion.div 
+                            initial={{ opacity: 0, y: 30 }} 
+                            animate={{ opacity: 1, y: 0 }} 
+                            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }} 
+                            className="max-w-4xl"
+                        >
+                            <span className="text-xs font-semibold tracking-[0.2em] text-gray-400 uppercase mb-6 block">Visualisation & CGI studio</span>
+                            <h1 className="text-[clamp(3.5rem,10vw,8.5rem)] font-medium leading-[0.9] tracking-[-0.04em] text-black">
+                                Rendered.
+                            </h1>
+                            <p className="mt-8 max-w-lg text-base md:text-lg text-gray-500 leading-relaxed font-light">
+                                High-end CGI, 3D product visualization, and cinematic launch films engineered for luxury, technology, and design. Letting the color speak only through the product.
+                            </p>
+                            <div className="mt-12">
+                                <button onClick={() => scrollTo("work")} className="group flex items-center gap-3 text-black text-sm font-semibold uppercase tracking-widest pb-1 border-b border-black hover:text-gray-500 hover:border-gray-500 transition-all duration-300">
+                                    <span>View gallery</span>
+                                    <motion.div animate={{ y: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}>
+                                        <ArrowDown size={16} />
+                                    </motion.div>
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
                 </section>
             );
         }
@@ -1098,4 +1115,7 @@
     </script>
 </body>
 </html>
+
+
+
 
