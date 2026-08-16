@@ -340,13 +340,13 @@
                         animate={{
                             y: isScrolled ? 0 : 24,
                             borderRadius: isScrolled ? "0px" : "9999px",
-                            backgroundColor: isScrolled ? "rgba(255, 255, 255, 0.95)" : "rgba(255, 255, 255, 0.82)",
+                            backgroundColor: isScrolled ? "rgba(255, 255, 255, 0.95)" : "rgba(255, 255, 255, 0.55)",
                             boxShadow: isScrolled 
-                                ? "0px 4px 20px rgba(0,0,0,0.03)" 
-                                : "0px 12px 30px -10px rgba(0,0,0,0.06), inset 0px 0px 0px 1px rgba(0,0,0,0.06)",
+                                ? "0px 10px 30px -10px rgba(0,0,0,0.08), inset 0px -1px 0px rgba(0,0,0,0.05)" 
+                                : "0px 20px 40px -10px rgba(0,0,0,0.15), inset 0px 2px 4px rgba(255,255,255,0.9), inset 0px -2px 6px rgba(255,255,255,0.4), inset 0px 0px 0px 1px rgba(255,255,255,0.6)",
                         }}
                         transition={smoothTransition}
-                        className={`pointer-events-auto relative flex items-center justify-between backdrop-blur-[32px] overflow-hidden ${isScrolled ? 'w-full px-6 md:px-12 py-4 gap-4' : 'w-[calc(100%-3rem)] max-w-fit pl-8 pr-2.5 py-2.5'}`}
+                        className={`pointer-events-auto relative flex items-center justify-between backdrop-blur-[24px] backdrop-saturate-[180%] overflow-hidden ${isScrolled ? 'w-full px-6 md:px-12 py-4 gap-4' : 'w-[calc(100%-3rem)] max-w-fit pl-8 pr-2.5 py-2.5'}`}
                     >
                         <motion.button 
                             layout 
@@ -1115,6 +1115,7 @@
     </script>
 </body>
 </html>
+
 
 
 
