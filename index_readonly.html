@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>LionRenders — Combined Source (read-only)</title>
+    <meta name="description" content="Read-only single-file view of the LionRenders repository source." />
+    <style>
+      :root{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Inter,"Helvetica Neue",Arial;margin:0}
+      body{background:#0b0b0c;color:#e6eef6;padding:24px}
+      header{max-width:1200px;margin:0 auto 18px}
+      h1{font-weight:600;margin:0 0 6px;font-size:20px}
+      p.lead{margin:0 0 10px;color:#c7d2df}
+      .controls{display:flex;gap:10px;align-items:center;margin:12px 0}
+      .btn{background:#0f1724;border:1px solid #1f2937;padding:8px 12px;border-radius:8px;color:#e6eef6;text-decoration:none}
+      .container{max-width:1200px;margin:0 auto}
+      pre{white-space:pre-wrap;word-break:break-word;background:#071018;padding:18px;border-radius:12px;border:1px solid #102230;color:#cfe8ff;overflow:auto;max-height:76vh}
+      footer{max-width:1200px;margin:18px auto;color:#9fb0c8;font-size:13px}
+      .notice{background:#08202b;border-left:4px solid #2b8db8;padding:10px;border-radius:8px;margin:12px 0;color:#bfe7ff}
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>LionRenders — Combined repository source (read-only)</h1>
+      <p class="lead">This page displays the complete concatenated text source extracted from the <code>CM-UOC/lionrenderwebproject</code> repository. It is a read-only view for inspection and copying. The file is regenerated and stored in this repository as <code>lionrenderwebproject-all.txt</code>.</p>
+      <div class="controls">
+        <a class="btn" id="downloadBtn" href="https://raw.githubusercontent.com/CM-UOC/LR2/main/lionrenderwebproject-all.txt" target="_blank" rel="noopener">Open raw text file</a>
+        <a class="btn" id="openRawInNew" href="https://github.com/CM-UOC/LR2/blob/main/lionrenderwebproject-all.txt" target="_blank" rel="noopener">View on GitHub</a>
+        <span style="color:#9fb0c8;font-size:13px">If the content is large the browser may take a moment to load.</span>
+      </div>
+      <div class="notice">This is a read-only, non-executable aggregation of the source files — it inlines the text dump for convenient browsing. It is not a runnable build of the React site.</div>
+    </header>
+
+    <main class="container">
+      <pre id="content">Loading combined source…</pre>
+    </main>
+
+    <footer>
+      <div>Source: https://github.com/CM-UOC/lionrenderwebproject</div>
+      <div style="margin-top:6px">Generated file in this repo: <code>lionrenderwebproject-all.txt</code></div>
+    </footer>
+
+    <script>
+      // Fetch the combined text file from the raw GitHub URL and inject it into the pre element.
+      (function(){
+        const pre = document.getElementById('content');
+        const rawUrl = 'https://raw.githubusercontent.com/CM-UOC/LR2/main/lionrenderwebproject-all.txt';
+        fetch(rawUrl).then(res=>{
+          if(!res.ok) throw new Error('Failed to load: '+res.status);
+          return res.text();
+        }).then(text=>{
+          // sanitize: replace < with &lt; to avoid accidental HTML parsing
+          pre.textContent = text;
+        }).catch(err=>{
+          pre.textContent = 'Error loading combined file: '+err.message+"\n\nYou can also open the raw file directly: "+rawUrl;
+        });
+      })();
+    </script>
+  </body>
+</html>
