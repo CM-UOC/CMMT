@@ -1,0 +1,2940 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Cristian Malpica is a Barcelona-based product professional connecting customer insight, commercial strategy, data, design, and operations to turn complexity into clear product direction.">
+  <meta name="theme-color" content="#07100d">
+  <meta property="og:title" content="Cristian Malpica | Product Manager and Systems Thinker">
+  <meta property="og:description" content="A cinematic product portfolio about turning signals, constraints, and human needs into product direction that can endure.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cm-uoc.github.io/CMMT/">
+  <meta property="og:image" content="https://cm-uoc.github.io/CMMT/og.png">
+  <meta property="og:image:width" content="1731">
+  <meta property="og:image:height" content="909">
+  <meta property="og:image:alt" content="Cristian Malpica. Product Manager, Systems Thinker, Barcelona. A planetary form transforming into an iris.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cristian Malpica | Product Manager and Systems Thinker">
+  <meta name="twitter:description" content="Product direction for systems that refuse to stay simple.">
+  <meta name="twitter:image" content="https://cm-uoc.github.io/CMMT/og.png">
+  <link rel="canonical" href="https://cm-uoc.github.io/CMMT/">
+  <!-- Replace with the final production URL before launch. -->
+  <title>Cristian Malpica | Product Manager, Systems Thinker &amp; Sustainable Innovator</title>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      root.className = 'js';
+      try {
+        var saved = localStorage.getItem('cristian-theme');
+        root.dataset.theme = saved === 'light' || saved === 'dark'
+          ? saved
+          : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      } catch (error) {
+        root.dataset.theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+
+      window.addEventListener('DOMContentLoaded', function () {
+        var revealReady = false;
+        try {
+          initInterface();
+          initCinema();
+          root.classList.add('motion-ready');
+          revealReady = true;
+        } catch (error) {
+          root.classList.remove('motion-ready');
+        }
+
+        if (!revealReady) {
+          document.querySelectorAll('.reveal').forEach(function (item) {
+            item.classList.add('is-visible');
+          });
+        }
+      });
+
+      function initInterface() {
+        var body = document.body;
+        var themeButton = document.getElementById('theme-toggle');
+        var themeMeta = document.querySelector('meta[name="theme-color"]');
+        var menuButton = document.getElementById('menu-toggle');
+        var mobileMenu = document.getElementById('mobile-menu');
+        var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        var systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+        var revealItems = document.querySelectorAll('.reveal');
+        var sections = document.querySelectorAll('[data-nav-section]');
+        var navLinks = document.querySelectorAll('[data-nav-link]');
+        var progress = document.getElementById('page-progress');
+        var copyButton = document.getElementById('copy-email');
+        var copyStatus = document.getElementById('copy-status');
+        var year = document.getElementById('year');
+        var scrollFrame = 0;
+
+        year.textContent = String(new Date().getFullYear());
+
+        function setTheme(theme, persist) {
+          root.dataset.theme = theme;
+          var dark = theme === 'dark';
+          themeButton.setAttribute('aria-pressed', dark ? 'true' : 'false');
+          themeButton.setAttribute('aria-label', dark ? 'Switch to paper mode' : 'Switch to dark mode');
+          themeButton.querySelector('[data-theme-word]').textContent = dark ? 'Paper' : 'Void';
+          themeMeta.setAttribute('content', dark ? '#07100d' : '#f4f3ed');
+          if (persist) {
+            try {
+              localStorage.setItem('cristian-theme', theme);
+            } catch (error) {
+              // The preference remains active for this visit.
+            }
+          }
+          window.dispatchEvent(new CustomEvent('portfolio-theme-change'));
+        }
+
+        setTheme(root.dataset.theme || 'light', false);
+        themeButton.addEventListener('click', function () {
+          setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark', true);
+        });
+
+        systemTheme.addEventListener('change', function (event) {
+          try {
+            if (localStorage.getItem('cristian-theme')) return;
+          } catch (error) {
+            // Follow the system setting if storage is unavailable.
+          }
+          setTheme(event.matches ? 'dark' : 'light', false);
+        });
+
+        function setMenu(open, focusFirst) {
+          mobileMenu.hidden = !open;
+          menuButton.setAttribute('aria-expanded', open ? 'true' : 'false');
+          menuButton.querySelector('.menu-word').textContent = open ? 'Close' : 'Menu';
+          body.classList.toggle('menu-open', open);
+          if (open && focusFirst) {
+            window.requestAnimationFrame(function () {
+              var firstLink = mobileMenu.querySelector('a');
+              if (firstLink) firstLink.focus();
+            });
+          }
+        }
+
+        menuButton.addEventListener('click', function () {
+          var willOpen = mobileMenu.hidden;
+          setMenu(willOpen, willOpen);
+        });
+
+        mobileMenu.querySelectorAll('a').forEach(function (link) {
+          link.addEventListener('click', function () {
+            setMenu(false, false);
+          });
+        });
+
+        document.addEventListener('keydown', function (event) {
+          if (event.key === 'Escape' && !mobileMenu.hidden) {
+            setMenu(false, false);
+            menuButton.focus();
+          }
+        });
+
+        if ('IntersectionObserver' in window && !reduceMotion.matches) {
+          var revealObserver = new IntersectionObserver(function (entries, observer) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+              }
+            });
+          }, { threshold: .09, rootMargin: '0px 0px -5% 0px' });
+          revealItems.forEach(function (item) {
+            revealObserver.observe(item);
+          });
+        } else {
+          revealItems.forEach(function (item) {
+            item.classList.add('is-visible');
+          });
+        }
+
+        function markActive(id, tone) {
+          body.dataset.tone = tone || 'paper';
+          navLinks.forEach(function (link) {
+            var active = link.dataset.navLink === id;
+            link.dataset.active = active ? 'true' : 'false';
+            if (active) link.setAttribute('aria-current', 'location');
+            else link.removeAttribute('aria-current');
+          });
+        }
+
+        if ('IntersectionObserver' in window) {
+          var sectionObserver = new IntersectionObserver(function (entries) {
+            var visible = entries.filter(function (entry) {
+              return entry.isIntersecting;
+            }).sort(function (a, b) {
+              return b.intersectionRatio - a.intersectionRatio;
+            });
+            if (visible.length) {
+              markActive(visible[0].target.dataset.navSection, visible[0].target.dataset.tone);
+            }
+          }, { rootMargin: '-18% 0px -58% 0px', threshold: [0, .1, .25, .5] });
+          sections.forEach(function (section) {
+            sectionObserver.observe(section);
+          });
+        }
+
+        function updatePageProgress() {
+          scrollFrame = 0;
+          var maximum = document.documentElement.scrollHeight - window.innerHeight;
+          var value = maximum > 0 ? window.scrollY / maximum : 0;
+          progress.style.transform = 'scaleX(' + Math.min(Math.max(value, 0), 1) + ')';
+        }
+
+        window.addEventListener('scroll', function () {
+          if (!scrollFrame) scrollFrame = window.requestAnimationFrame(updatePageProgress);
+        }, { passive: true });
+        updatePageProgress();
+
+        function fallbackCopy(text) {
+          var field = document.createElement('textarea');
+          field.value = text;
+          field.setAttribute('readonly', '');
+          field.style.position = 'fixed';
+          field.style.opacity = '0';
+          document.body.appendChild(field);
+          field.select();
+          var copied = false;
+          try {
+            copied = document.execCommand('copy');
+          } catch (error) {
+            copied = false;
+          }
+          document.body.removeChild(field);
+          return copied;
+        }
+
+        copyButton.addEventListener('click', function () {
+          var email = 'cmalpica25@icloud.com';
+          function finish(copied) {
+            copyStatus.textContent = copied ? 'Email address copied.' : 'Copy unavailable. Please select the email address.';
+            copyButton.textContent = copied ? 'Copied' : 'Copy unavailable';
+            window.setTimeout(function () {
+              copyButton.textContent = 'Copy email';
+            }, 2200);
+          }
+          if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(email).then(function () {
+              finish(true);
+            }).catch(function () {
+              finish(fallbackCopy(email));
+            });
+          } else {
+            finish(fallbackCopy(email));
+          }
+        });
+
+        reduceMotion.addEventListener('change', function () {
+          if (reduceMotion.matches) {
+            revealItems.forEach(function (item) {
+              item.classList.add('is-visible');
+            });
+          }
+        });
+      }
+
+      function initCinema() {
+        var canvas = document.getElementById('cinema');
+        var context = canvas.getContext('2d');
+        if (!context) return;
+
+        var aperture = document.getElementById('blueprint');
+        var stage = document.getElementById('aperture-stage');
+        var intro = document.getElementById('aperture-intro');
+        var quote = document.getElementById('aperture-quote');
+        var resolve = document.getElementById('aperture-resolve');
+        var prompt = document.getElementById('scroll-prompt');
+        var beats = Array.prototype.slice.call(document.querySelectorAll('.look-beat'));
+        var cinematicSections = document.querySelectorAll('[data-canvas-scene]');
+        var methodSteps = document.querySelectorAll('[data-method-step]');
+        var signalButtons = document.querySelectorAll('[data-signal]');
+        var signalReadout = document.getElementById('signal-readout');
+        var reduceQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        var finePointer = window.matchMedia('(pointer: fine)');
+        var state = {
+          width: 0,
+          height: 0,
+          dpr: 1,
+          scene: 0,
+          hero: 0,
+          method: 0,
+          human: 0,
+          pointerX: .5,
+          pointerY: .5,
+          activeSignal: 0,
+          apertureTop: 0,
+          apertureTravel: 1,
+          humanTop: 0,
+          humanTravel: 1,
+          running: false,
+          frame: 0,
+          lastTime: 0
+        };
+
+        var nodes = [
+          { x: .57, y: .24 }, { x: .74, y: .17 }, { x: .88, y: .34 },
+          { x: .77, y: .51 }, { x: .91, y: .68 }, { x: .69, y: .78 },
+          { x: .51, y: .65 }, { x: .61, y: .47 }
+        ];
+        var connections = [[0,1],[0,7],[1,2],[1,7],[2,3],[2,4],[3,4],[3,7],[4,5],[5,6],[5,7],[6,7],[0,6]];
+
+        function clamp(value, min, max) {
+          return Math.min(Math.max(value, min), max);
+        }
+
+        function smooth(value) {
+          value = clamp(value, 0, 1);
+          return value * value * (3 - 2 * value);
+        }
+
+        function range(value, start, end) {
+          return smooth((value - start) / Math.max(end - start, .0001));
+        }
+
+        function windowed(value, start, peak, end) {
+          return range(value, start, peak) * (1 - range(value, peak, end));
+        }
+
+        function lerp(start, end, amount) {
+          return start + (end - start) * amount;
+        }
+
+        function resizeCanvas() {
+          state.dpr = Math.min(window.devicePixelRatio || 1, 1.7);
+          state.width = window.innerWidth;
+          state.height = window.innerHeight;
+          canvas.width = Math.round(state.width * state.dpr);
+          canvas.height = Math.round(state.height * state.dpr);
+          canvas.style.width = state.width + 'px';
+          canvas.style.height = state.height + 'px';
+          context.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
+          measureScenes();
+          draw(performance.now());
+        }
+
+        function measureScenes() {
+          state.apertureTop = aperture.offsetTop;
+          state.apertureTravel = Math.max(aperture.offsetHeight - window.innerHeight, 1);
+          var human = document.getElementById('human');
+          state.humanTop = human.offsetTop;
+          state.humanTravel = Math.max(human.offsetHeight - window.innerHeight, 1);
+        }
+
+        function updateAperture() {
+          state.hero = clamp((window.scrollY - state.apertureTop) / state.apertureTravel, 0, 1);
+          var p = state.hero;
+          var introOpacity = 1 - range(p, .08, .27);
+          var quoteOpacity = windowed(p, .25, .44, .68);
+          var resolveOpacity = range(p, .71, .87);
+          intro.style.cssText = 'opacity:' + introOpacity.toFixed(3) + ';transform:translate3d(0,' + ((1 - introOpacity) * -18).toFixed(1) + 'px,0)';
+          quote.style.cssText = 'opacity:' + quoteOpacity.toFixed(3) + ';transform:translate3d(0,' + ((1 - quoteOpacity) * 18).toFixed(1) + 'px,0)';
+          resolve.style.cssText = 'opacity:' + resolveOpacity.toFixed(3) + ';transform:translate3d(0,' + ((1 - resolveOpacity) * 16).toFixed(1) + 'px,0)';
+          prompt.style.opacity = String(1 - range(p, .02, .18));
+          var windows = [[.10,.19,.30],[.27,.38,.49],[.46,.57,.70]];
+          beats.forEach(function (beat, index) {
+            var opacity = windowed(p, windows[index][0], windows[index][1], windows[index][2]);
+            beat.style.cssText = 'opacity:' + opacity.toFixed(3) + ';transform:translate3d(0,' + ((1 - opacity) * 12).toFixed(1) + 'px,0)';
+          });
+        }
+
+        function updateScrollState() {
+          updateAperture();
+          state.human = clamp((window.scrollY - state.humanTop) / state.humanTravel, 0, 1);
+          if (reduceQuery.matches) draw(performance.now());
+        }
+
+        var scrollTick = 0;
+        window.addEventListener('scroll', function () {
+          if (!scrollTick) {
+            scrollTick = window.requestAnimationFrame(function () {
+              scrollTick = 0;
+              updateScrollState();
+            });
+          }
+        }, { passive: true });
+
+        if (finePointer.matches && !reduceQuery.matches) {
+          window.addEventListener('pointermove', function (event) {
+            state.pointerX = event.clientX / Math.max(window.innerWidth, 1);
+            state.pointerY = event.clientY / Math.max(window.innerHeight, 1);
+          }, { passive: true });
+        }
+
+        if ('IntersectionObserver' in window) {
+          var sceneObserver = new IntersectionObserver(function (entries) {
+            var visible = entries.filter(function (entry) {
+              return entry.isIntersecting;
+            }).sort(function (a, b) {
+              return b.intersectionRatio - a.intersectionRatio;
+            });
+            if (visible.length) {
+              state.scene = Number(visible[0].target.dataset.canvasScene);
+            }
+          }, { threshold: [0, .05, .2, .5], rootMargin: '-15% 0px -45% 0px' });
+          cinematicSections.forEach(function (section) {
+            sceneObserver.observe(section);
+          });
+
+          var methodObserver = new IntersectionObserver(function (entries) {
+            var visible = entries.filter(function (entry) {
+              return entry.isIntersecting;
+            }).sort(function (a, b) {
+              return b.intersectionRatio - a.intersectionRatio;
+            });
+            if (visible.length) {
+              state.method = Number(visible[0].target.dataset.methodStep);
+              methodSteps.forEach(function (step) {
+                step.dataset.active = Number(step.dataset.methodStep) === state.method ? 'true' : 'false';
+              });
+              document.querySelectorAll('.method-progress span').forEach(function (line, index) {
+                line.classList.toggle('is-active', index <= state.method);
+              });
+            }
+          }, { rootMargin: '-25% 0px -45% 0px', threshold: [.1, .35, .65] });
+          methodSteps.forEach(function (step) {
+            methodObserver.observe(step);
+          });
+        }
+
+        signalButtons.forEach(function (button, index) {
+          function activate() {
+            state.activeSignal = index;
+            signalButtons.forEach(function (item, itemIndex) {
+              var selected = itemIndex === index;
+              item.dataset.active = selected ? 'true' : 'false';
+              item.setAttribute('aria-pressed', selected ? 'true' : 'false');
+            });
+            signalReadout.textContent = button.dataset.signalDetail;
+            if (reduceQuery.matches) draw(performance.now());
+          }
+          button.addEventListener('click', activate);
+          button.addEventListener('focus', activate);
+          button.addEventListener('pointerenter', activate);
+        });
+
+        function clear() {
+          context.clearRect(0, 0, state.width, state.height);
+        }
+
+        function circle(x, y, radius, fill, alpha) {
+          context.globalAlpha = alpha;
+          context.beginPath();
+          context.arc(x, y, Math.max(radius, 0), 0, Math.PI * 2);
+          context.fillStyle = fill;
+          context.fill();
+          context.globalAlpha = 1;
+        }
+
+        function drawAperture(time) {
+          var w = state.width;
+          var h = state.height;
+          var p = reduceQuery.matches ? .56 : state.hero;
+          var mobile = w < 720;
+          var centreX = w * (mobile ? .52 : .73) + (state.pointerX - .5) * 12;
+          var centreY = h * (mobile ? .64 : .50) + (state.pointerY - .5) * 8;
+          var base = Math.min(w, h) * (mobile ? .14 : .16);
+          var orbit = 1 - range(p, .16, .44);
+          var planet = 1 - range(p, .34, .68);
+          var eye = range(p, .27, .55);
+          var pupil = range(p, .40, .68);
+          var tunnel = range(p, .72, .98);
+          var breath = reduceQuery.matches ? 1 : 1 + Math.sin(time / 1450) * .025;
+
+          context.save();
+          context.globalAlpha = planet * .48;
+          for (var star = 0; star < 42; star += 1) {
+            var starX = ((star * 89.31) % 100) / 100 * w;
+            var starY = ((star * 47.17) % 100) / 100 * h;
+            var starSize = star % 9 === 0 ? 1.45 : .65;
+            circle(starX, starY, starSize, star % 7 === 0 ? '#77d4dc' : '#eff1e9', .2 + (star % 5) * .08);
+          }
+          context.restore();
+
+          var glow = context.createRadialGradient(centreX, centreY, base * .12, centreX, centreY, base * 3.6);
+          glow.addColorStop(0, 'rgba(119,212,220,' + (planet * .38).toFixed(3) + ')');
+          glow.addColorStop(.18, 'rgba(226,167,125,' + (planet * .24).toFixed(3) + ')');
+          glow.addColorStop(.45, 'rgba(200,255,69,' + (planet * .08).toFixed(3) + ')');
+          glow.addColorStop(1, 'rgba(7,16,13,0)');
+          circle(centreX, centreY, base * 3.6, glow, 1);
+
+          context.save();
+          context.translate(centreX, centreY);
+          context.rotate(-.18);
+          context.scale(1, .34);
+          context.globalAlpha = orbit * .62;
+          context.strokeStyle = '#77d4dc';
+          context.lineWidth = 1;
+          for (var orbital = 0; orbital < 3; orbital += 1) {
+            context.beginPath();
+            context.arc(0, 0, base * (1.42 + orbital * .22), 0, Math.PI * 2);
+            context.stroke();
+          }
+          context.restore();
+
+          if (orbit > 0) {
+            var orbitAngle = reduceQuery.matches ? -.55 : time / 4200;
+            circle(
+              centreX + Math.cos(orbitAngle) * base * 1.52,
+              centreY + Math.sin(orbitAngle) * base * .52,
+              3,
+              '#c8ff45',
+              orbit
+            );
+          }
+
+          var planetGradient = context.createRadialGradient(centreX - base * .48, centreY - base * .42, base * .04, centreX, centreY, base * 1.12);
+          planetGradient.addColorStop(0, '#d9f7ea');
+          planetGradient.addColorStop(.16, '#77d4dc');
+          planetGradient.addColorStop(.45, '#0f4b3b');
+          planetGradient.addColorStop(.82, '#0a1713');
+          planetGradient.addColorStop(1, '#020706');
+          circle(centreX, centreY, base * breath * (1 - tunnel * .12), planetGradient, planet);
+
+          context.save();
+          context.globalAlpha = planet * .7;
+          context.strokeStyle = '#a8e8d0';
+          context.lineWidth = 1.5;
+          context.beginPath();
+          context.arc(centreX, centreY, base * breath, -.8 * Math.PI, .36 * Math.PI);
+          context.stroke();
+          context.restore();
+          circle(centreX + base * .36, centreY + base * .08, base * .92, '#07100d', planet * .56);
+
+          if (eye > 0) {
+            context.save();
+            context.globalAlpha = eye * (1 - tunnel);
+            context.strokeStyle = '#eff1e9';
+            context.lineWidth = 1;
+            context.beginPath();
+            context.moveTo(centreX - base * 2.65, centreY);
+            context.bezierCurveTo(centreX - base * 1.05, centreY - base * 1.75, centreX + base * 1.05, centreY - base * 1.75, centreX + base * 2.65, centreY);
+            context.bezierCurveTo(centreX + base * 1.05, centreY + base * 1.75, centreX - base * 1.05, centreY + base * 1.75, centreX - base * 2.65, centreY);
+            context.stroke();
+            context.strokeStyle = 'rgba(119,212,220,.68)';
+            for (var ring = 1; ring < 6; ring += 1) {
+              context.beginPath();
+              context.arc(centreX, centreY, base * (.42 + ring * .14), 0, Math.PI * 2);
+              context.stroke();
+            }
+            context.restore();
+          }
+
+          circle(centreX, centreY, base * lerp(.04, .34, pupil), '#07100d', pupil);
+          if (pupil > 0) {
+            circle(centreX - base * .11, centreY - base * .11, base * .035, '#eff1e9', pupil * .85 * (1 - tunnel));
+          }
+
+          if (tunnel > 0) {
+            var maximum = Math.hypot(w, h);
+            circle(centreX, centreY, lerp(base * .34, maximum, tunnel), '#07100d', 1);
+            context.globalAlpha = 1 - tunnel;
+            context.strokeStyle = '#77d4dc';
+            context.lineWidth = 1;
+            for (var tunnelRing = 0; tunnelRing < 5; tunnelRing += 1) {
+              context.beginPath();
+              context.arc(centreX, centreY, base * (.6 + tunnelRing * .28) * (1 + tunnel * 2.4), 0, Math.PI * 2);
+              context.stroke();
+            }
+            context.globalAlpha = 1;
+          }
+        }
+
+        function drawNetwork(time) {
+          var w = state.width;
+          var h = state.height;
+          var mobile = w < 760;
+          var offsetX = mobile ? -.14 : 0;
+          var pulse = reduceQuery.matches ? 0 : Math.sin(time / 1200) * 2;
+          context.lineWidth = 1;
+          connections.forEach(function (pair, index) {
+            var a = nodes[pair[0]];
+            var b = nodes[pair[1]];
+            var active = pair.indexOf(state.activeSignal) !== -1 || pair.indexOf(7) !== -1;
+            context.globalAlpha = active ? .55 : .16;
+            context.strokeStyle = active ? '#c8ff45' : '#a8e8d0';
+            context.beginPath();
+            context.moveTo(w * (a.x + offsetX), h * a.y);
+            context.lineTo(w * (b.x + offsetX), h * b.y);
+            context.stroke();
+            if (!reduceQuery.matches && index % 3 === 0) {
+              var flow = ((time / 2800) + index * .17) % 1;
+              circle(
+                lerp(w * (a.x + offsetX), w * (b.x + offsetX), flow),
+                lerp(h * a.y, h * b.y, flow),
+                1.8,
+                '#77d4dc',
+                active ? .78 : .3
+              );
+            }
+          });
+          nodes.forEach(function (node, index) {
+            var active = index === state.activeSignal || index === 7 || index === state.method + 1;
+            var radius = active ? 5.5 + pulse * .18 : 2.7;
+            circle(w * (node.x + offsetX), h * node.y, radius + 8, '#c8ff45', active ? .08 : .015);
+            circle(w * (node.x + offsetX), h * node.y, radius, active ? '#c8ff45' : '#a8e8d0', active ? 1 : .5);
+          });
+          context.globalAlpha = .22;
+          context.strokeStyle = '#77d4dc';
+          context.beginPath();
+          var scanY = h * (.14 + ((time / 7000) % 1) * .72);
+          context.moveTo(w * (mobile ? .28 : .46), scanY);
+          context.lineTo(w * .98, scanY);
+          context.stroke();
+          context.globalAlpha = 1;
+        }
+
+        function drawTrail(time) {
+          var w = state.width;
+          var h = state.height;
+          var progress = reduceQuery.matches ? .62 : state.human;
+          context.lineWidth = 1;
+          for (var layer = 0; layer < 11; layer += 1) {
+            context.globalAlpha = .09 + layer * .012;
+            context.strokeStyle = layer % 3 === 0 ? '#77d4dc' : '#a8e8d0';
+            context.beginPath();
+            for (var x = -40; x <= w + 40; x += 12) {
+              var y = h * .58 + Math.sin(x * .008 + layer * .38) * (38 + layer * 3) + layer * 17;
+              if (x === -40) context.moveTo(x, y);
+              else context.lineTo(x, y);
+            }
+            context.stroke();
+          }
+          context.globalAlpha = .82;
+          context.strokeStyle = '#c8ff45';
+          context.lineWidth = 1.5;
+          context.beginPath();
+          for (var tx = 0; tx <= w; tx += 7) {
+            var ty = h * .62 + Math.sin(tx * .011) * 52 + Math.sin(tx * .027) * 11;
+            if (tx === 0) context.moveTo(tx, ty);
+            else context.lineTo(tx, ty);
+          }
+          context.stroke();
+          var markerX = w * progress;
+          var markerY = h * .62 + Math.sin(markerX * .011) * 52 + Math.sin(markerX * .027) * 11;
+          circle(markerX, markerY, 18, '#c8ff45', .08);
+          circle(markerX, markerY, 4.5, '#c8ff45', 1);
+          context.globalAlpha = 1;
+        }
+
+        function drawHorizon(time) {
+          var w = state.width;
+          var h = state.height;
+          var cx = w * (w < 720 ? .5 : .74);
+          var cy = h * .76;
+          var radius = Math.min(w, h) * .22;
+          var breath = reduceQuery.matches ? 1 : 1 + Math.sin(time / 1800) * .025;
+          context.globalAlpha = .32;
+          context.strokeStyle = '#a8e8d0';
+          context.lineWidth = 1;
+          context.beginPath();
+          context.moveTo(0, cy);
+          context.lineTo(w, cy);
+          context.stroke();
+          var dawn = context.createRadialGradient(cx, cy, 0, cx, cy, radius * 2.8);
+          dawn.addColorStop(0, 'rgba(200,255,69,.82)');
+          dawn.addColorStop(.24, 'rgba(226,167,125,.48)');
+          dawn.addColorStop(.6, 'rgba(119,212,220,.10)');
+          dawn.addColorStop(1, 'rgba(7,16,13,0)');
+          circle(cx, cy, radius * 2.8, dawn, 1);
+          circle(cx, cy, radius * breath, '#c8ff45', .86);
+          context.save();
+          context.globalCompositeOperation = 'source-over';
+          context.fillStyle = '#07100d';
+          context.fillRect(0, cy, w, h - cy);
+          context.restore();
+        }
+
+        function draw(time) {
+          clear();
+          if (state.scene === 0) drawAperture(time);
+          else if (state.scene === 1) drawNetwork(time);
+          else if (state.scene === 2) drawTrail(time);
+          else drawHorizon(time);
+        }
+
+        function animate(time) {
+          state.frame = 0;
+          if (!document.hidden) {
+            draw(time);
+            state.lastTime = time;
+          }
+          if (!reduceQuery.matches && !document.hidden) {
+            state.frame = window.requestAnimationFrame(animate);
+          }
+        }
+
+        function start() {
+          if (state.frame) window.cancelAnimationFrame(state.frame);
+          state.frame = 0;
+          if (reduceQuery.matches) draw(performance.now());
+          else state.frame = window.requestAnimationFrame(animate);
+        }
+
+        reduceQuery.addEventListener('change', function () {
+          start();
+          updateAperture();
+        });
+
+        document.addEventListener('visibilitychange', function () {
+          if (document.hidden && state.frame) {
+            window.cancelAnimationFrame(state.frame);
+            state.frame = 0;
+          } else if (!document.hidden) {
+            start();
+          }
+        });
+
+        window.addEventListener('resize', function () {
+          window.requestAnimationFrame(resizeCanvas);
+        }, { passive: true });
+        window.addEventListener('orientationchange', resizeCanvas);
+        window.addEventListener('portfolio-theme-change', function () {
+          if (reduceQuery.matches) draw(performance.now());
+        });
+
+        if ('ResizeObserver' in window) {
+          var resizeObserver = new ResizeObserver(function () {
+            measureScenes();
+          });
+          resizeObserver.observe(aperture);
+          resizeObserver.observe(document.getElementById('human'));
+        }
+
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(measureScenes);
+        }
+
+        resizeCanvas();
+        updateScrollState();
+        start();
+      }
+    }());
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Manrope:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f4f3ed;
+      --surface: #fffef8;
+      --ink: #0a1713;
+      --muted: rgba(10, 23, 19, .64);
+      --line: rgba(10, 23, 19, .17);
+      --soft-line: rgba(10, 23, 19, .08);
+      --forest: #0f2c23;
+      --void: #07100d;
+      --void-text: #eff1e9;
+      --void-muted: rgba(239, 241, 233, .68);
+      --void-line: rgba(239, 241, 233, .17);
+      --lime: #c8ff45;
+      --mint: #a8e8d0;
+      --water: #77d4dc;
+      --clay: #e2a77d;
+      --page: min(1280px, calc(100vw - 3rem));
+      --display: "Space Grotesk", "Manrope", Arial, sans-serif;
+      --body: "Manrope", Arial, sans-serif;
+      --mono: "DM Mono", "SFMono-Regular", Consolas, monospace;
+      --header-bg: rgba(244, 243, 237, .92);
+      --header-text: #0a1713;
+      --header-line: rgba(10, 23, 19, .17);
+    }
+
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --paper: #07100d;
+      --surface: #0d1c17;
+      --ink: #eff1e9;
+      --muted: rgba(239, 241, 233, .68);
+      --line: rgba(239, 241, 233, .17);
+      --soft-line: rgba(239, 241, 233, .08);
+      --forest: #a8e8d0;
+      --header-bg: rgba(7, 16, 13, .92);
+      --header-text: #eff1e9;
+      --header-line: rgba(239, 241, 233, .17);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-width: 320px;
+      scroll-behavior: smooth;
+      background: var(--void);
+    }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      overflow-x: hidden;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: clamp(1rem, .965rem + .14vw, 1.16rem);
+      line-height: 1.62;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body.menu-open {
+      overflow: hidden;
+    }
+
+    ::selection {
+      background: var(--lime);
+      color: #0a1713;
+    }
+
+    a {
+      color: inherit;
+      text-decoration-thickness: 1px;
+      text-underline-offset: .22em;
+    }
+
+    button,
+    summary {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    summary:focus-visible,
+    [tabindex]:focus-visible {
+      outline: 3px solid var(--lime);
+      outline-offset: 4px;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .skip-link {
+      position: fixed;
+      z-index: 200;
+      top: .75rem;
+      left: .75rem;
+      padding: .8rem 1rem;
+      background: var(--lime);
+      color: #0a1713;
+      font: 500 .72rem/1 var(--mono);
+      text-decoration: none;
+      transform: translateY(-160%);
+      transition: transform .2s ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    #cinema {
+      position: fixed;
+      z-index: 0;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .grain {
+      position: fixed;
+      z-index: 90;
+      inset: 0;
+      pointer-events: none;
+      opacity: .18;
+      background-image:
+        radial-gradient(circle at 17% 23%, rgba(255,255,255,.22) 0 .5px, transparent .75px),
+        radial-gradient(circle at 68% 71%, rgba(0,0,0,.25) 0 .5px, transparent .7px),
+        repeating-linear-gradient(0deg, transparent 0 3px, rgba(255,255,255,.025) 3px 4px);
+      background-size: 5px 5px, 7px 7px, auto;
+      mix-blend-mode: soft-light;
+    }
+
+    .page-progress {
+      position: fixed;
+      z-index: 101;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 2px;
+      background: var(--lime);
+      transform: scaleX(0);
+      transform-origin: left;
+      pointer-events: none;
+    }
+
+    .site-header {
+      position: fixed;
+      z-index: 100;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 4.25rem;
+      border-bottom: 1px solid var(--header-line);
+      background: var(--header-bg);
+      color: var(--header-text);
+      transition: background .35s ease, color .35s ease, border-color .35s ease;
+    }
+
+    body[data-tone="void"] {
+      --header-bg: rgba(7, 16, 13, .88);
+      --header-text: #eff1e9;
+      --header-line: rgba(239, 241, 233, .17);
+    }
+
+    .header-inner {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 1.5rem;
+      width: var(--page);
+      height: 100%;
+      margin: 0 auto;
+    }
+
+    .identity {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      min-width: 0;
+      text-decoration: none;
+    }
+
+    .identity-mark {
+      display: grid;
+      width: 2.15rem;
+      height: 2.15rem;
+      place-items: center;
+      border: 1px solid currentColor;
+      border-radius: 50%;
+      font: 500 .64rem/1 var(--mono);
+    }
+
+    .identity-copy {
+      display: grid;
+      gap: .13rem;
+      line-height: 1;
+    }
+
+    .identity-name {
+      font-family: var(--display);
+      font-size: .9rem;
+      font-weight: 700;
+      letter-spacing: -.035em;
+    }
+
+    .identity-role {
+      color: currentColor;
+      font: 500 .56rem/1 var(--mono);
+      letter-spacing: .07em;
+      opacity: .65;
+      text-transform: uppercase;
+    }
+
+    .identity sup {
+      margin-left: .18rem;
+      font: 500 .48rem/1 var(--mono);
+      letter-spacing: .06em;
+    }
+
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(.8rem, 2vw, 1.8rem);
+    }
+
+    .desktop-nav a {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem;
+      font: 500 .62rem/1 var(--mono);
+      letter-spacing: .055em;
+      opacity: .58;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: opacity .2s ease;
+    }
+
+    .desktop-nav a::after {
+      position: absolute;
+      right: 0;
+      bottom: .4rem;
+      left: 0;
+      height: 1px;
+      content: "";
+      background: var(--lime);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .25s ease;
+    }
+
+    .desktop-nav a:hover,
+    .desktop-nav a[data-active="true"] {
+      opacity: 1;
+    }
+
+    .desktop-nav a[data-active="true"]::after,
+    .desktop-nav a:hover::after {
+      transform: scaleX(1);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+    }
+
+    .header-link,
+    .theme-toggle,
+    .menu-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.75rem;
+      padding: 0 .78rem;
+      border: 1px solid currentColor;
+      background: transparent;
+      color: currentColor;
+      font: 500 .61rem/1 var(--mono);
+      letter-spacing: .055em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .header-link {
+      background: currentColor;
+    }
+
+    .header-link span {
+      color: var(--header-bg);
+    }
+
+    body[data-tone="void"] .header-link span {
+      color: #07100d;
+    }
+
+    .theme-toggle {
+      gap: .45rem;
+    }
+
+    .theme-dot {
+      width: .55rem;
+      height: .55rem;
+      border: 1px solid currentColor;
+      border-radius: 50%;
+      background: linear-gradient(90deg, currentColor 50%, transparent 50%);
+    }
+
+    .menu-toggle {
+      display: none;
+    }
+
+    .mobile-menu {
+      position: fixed;
+      z-index: 99;
+      top: 4.25rem;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      padding: 1.2rem max(1rem, calc((100vw - var(--page)) / 2));
+      overflow-y: auto;
+      background: var(--void);
+      color: var(--void-text);
+    }
+
+    .mobile-menu a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 4.3rem;
+      border-bottom: 1px solid var(--void-line);
+      font-family: var(--display);
+      font-size: clamp(1.5rem, 7vw, 2.5rem);
+      letter-spacing: -.055em;
+      text-decoration: none;
+    }
+
+    .mobile-menu a::after {
+      content: "↘";
+      color: var(--lime);
+      font: 500 .85rem/1 var(--mono);
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .shell {
+      width: var(--page);
+      margin: 0 auto;
+    }
+
+    .aperture {
+      position: relative;
+      height: 255svh;
+      background: var(--void);
+      color: var(--void-text);
+    }
+
+    .aperture-stage {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      min-height: 42rem;
+      overflow: clip;
+      isolation: isolate;
+    }
+
+    @supports (height: 100dvh) {
+      .aperture-stage {
+        height: 100dvh;
+      }
+    }
+
+    .aperture-stage::before {
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      content: "";
+      background:
+        linear-gradient(90deg, rgba(7,16,13,.96) 0%, rgba(7,16,13,.78) 38%, rgba(7,16,13,.12) 68%, rgba(7,16,13,.02) 100%),
+        linear-gradient(180deg, rgba(7,16,13,.58), transparent 38%, rgba(7,16,13,.35));
+      pointer-events: none;
+    }
+
+    .aperture-grid {
+      position: absolute;
+      inset: 4.25rem 0 0;
+      background-image:
+        linear-gradient(rgba(239,241,233,.065) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(239,241,233,.065) 1px, transparent 1px);
+      background-size: min(8vw, 7rem) min(8vw, 7rem);
+      mask-image: linear-gradient(90deg, rgba(0,0,0,.7), transparent 76%);
+      pointer-events: none;
+    }
+
+    .aperture-intro,
+    .aperture-quote,
+    .aperture-resolve {
+      position: absolute;
+      z-index: 2;
+      left: max(1.5rem, calc((100vw - var(--page)) / 2));
+      max-width: min(51rem, 58vw);
+      will-change: opacity, transform;
+    }
+
+    .aperture-intro {
+      top: clamp(8rem, 15vh, 10.5rem);
+    }
+
+    .aperture-quote {
+      bottom: clamp(7rem, 15vh, 10rem);
+      opacity: 0;
+    }
+
+    .aperture-resolve {
+      bottom: clamp(7rem, 14vh, 9rem);
+      opacity: 0;
+    }
+
+    .role-line,
+    .eyebrow,
+    .technical-label,
+    .chapter-index,
+    .project-status,
+    .coordinate-label,
+    .footer-line {
+      font: 500 clamp(.62rem, .6rem + .08vw, .72rem)/1.4 var(--mono);
+      letter-spacing: .085em;
+      text-transform: uppercase;
+    }
+
+    .role-line,
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .7rem;
+      margin: 0 0 1.2rem;
+      color: var(--void-muted);
+    }
+
+    .role-line::before,
+    .eyebrow::before {
+      width: 2rem;
+      height: 1px;
+      content: "";
+      background: var(--lime);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p {
+      margin-top: 0;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: var(--display);
+      text-wrap: balance;
+    }
+
+    .aperture h1 {
+      max-width: 10.5ch;
+      margin: 0 0 1.35rem;
+      font-size: clamp(3.75rem, 8vw, 8.5rem);
+      font-weight: 600;
+      letter-spacing: -.085em;
+      line-height: .86;
+    }
+
+    .aperture h1 .within {
+      position: relative;
+      display: inline;
+      color: var(--lime);
+    }
+
+    .aperture h1 .within::after {
+      position: absolute;
+      right: -.06em;
+      bottom: .02em;
+      left: -.06em;
+      height: .05em;
+      content: "";
+      background: var(--lime);
+    }
+
+    .value-line {
+      max-width: 46rem;
+      margin-bottom: 1.5rem;
+      color: var(--void-muted);
+      font-size: clamp(1.02rem, .96rem + .25vw, 1.22rem);
+      line-height: 1.66;
+    }
+
+    .value-line strong {
+      color: var(--void-text);
+      font-weight: 600;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .7rem;
+      align-items: center;
+    }
+
+    .action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 3.05rem;
+      padding: .72rem 1rem;
+      border: 1px solid currentColor;
+      background: transparent;
+      color: inherit;
+      font: 500 .67rem/1.2 var(--mono);
+      letter-spacing: .055em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: background .2s ease, border-color .2s ease, color .2s ease, transform .2s ease;
+    }
+
+    .action-primary {
+      border-color: var(--lime);
+      background: var(--lime);
+      color: #0a1713;
+    }
+
+    .action:hover {
+      transform: translateY(-2px);
+    }
+
+    .action:not(.action-primary):hover {
+      border-color: var(--lime);
+      color: var(--lime);
+    }
+
+    .proof-mini {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem 1.1rem;
+      padding: 0;
+      margin: 1.4rem 0 0;
+      list-style: none;
+      color: var(--void-muted);
+      font: 500 .61rem/1.5 var(--mono);
+      letter-spacing: .055em;
+      text-transform: uppercase;
+    }
+
+    .proof-mini li::before {
+      margin-right: .45rem;
+      content: "●";
+      color: var(--lime);
+      font-size: .48rem;
+    }
+
+    .quote-kicker {
+      display: block;
+      margin-bottom: 1rem;
+      color: var(--lime);
+      font: 500 .66rem/1 var(--mono);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .aperture-quote p {
+      max-width: 15ch;
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(2.6rem, 5.5vw, 6rem);
+      font-weight: 500;
+      letter-spacing: -.075em;
+      line-height: .93;
+    }
+
+    .aperture-resolve h2 {
+      max-width: 10ch;
+      margin-bottom: .9rem;
+      font-size: clamp(3rem, 6.5vw, 7rem);
+      font-weight: 600;
+      letter-spacing: -.085em;
+      line-height: .87;
+    }
+
+    .aperture-resolve p {
+      max-width: 35rem;
+      margin: 0;
+      color: var(--void-muted);
+      font-size: 1rem;
+    }
+
+    .look-sequence {
+      position: absolute;
+      z-index: 2;
+      top: 50%;
+      right: max(1.5rem, calc((100vw - var(--page)) / 2));
+      width: min(20rem, 28vw);
+      transform: translateY(-50%);
+      text-align: right;
+      pointer-events: none;
+    }
+
+    .look-beat {
+      position: absolute;
+      right: 0;
+      top: 0;
+      margin: 0;
+      color: var(--void-text);
+      font: 500 clamp(.72rem, .68rem + .2vw, .92rem)/1.4 var(--mono);
+      letter-spacing: .14em;
+      opacity: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+      will-change: opacity, transform;
+    }
+
+    .scroll-prompt {
+      position: absolute;
+      z-index: 2;
+      right: max(1.5rem, calc((100vw - var(--page)) / 2));
+      bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      color: var(--void-muted);
+      font: 500 .6rem/1 var(--mono);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .scroll-prompt::before {
+      width: 2.6rem;
+      height: 1px;
+      content: "";
+      background: var(--lime);
+      animation: prompt-line 2.1s ease-in-out infinite;
+      transform-origin: left;
+    }
+
+    @keyframes prompt-line {
+      0%,
+      100% { transform: scaleX(.35); opacity: .45; }
+      50% { transform: scaleX(1); opacity: 1; }
+    }
+
+    .paper-zone {
+      position: relative;
+      z-index: 3;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .section {
+      scroll-margin-top: 4.2rem;
+      padding: clamp(5.8rem, 11vw, 10.5rem) 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, .62fr) minmax(18rem, .38fr);
+      gap: clamp(2rem, 6vw, 6rem);
+      align-items: end;
+      margin-bottom: clamp(2.6rem, 6vw, 5.5rem);
+    }
+
+    .section-head .eyebrow {
+      color: var(--muted);
+    }
+
+    .display-heading {
+      max-width: 13ch;
+      margin: 0;
+      font-size: clamp(3rem, 6.8vw, 7.4rem);
+      font-weight: 600;
+      letter-spacing: -.085em;
+      line-height: .87;
+    }
+
+    .section-intro {
+      max-width: 43rem;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(1rem, .96rem + .23vw, 1.2rem);
+      line-height: 1.7;
+    }
+
+    .proof-reel {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      border-top: 1px solid var(--ink);
+      border-left: 1px solid var(--line);
+    }
+
+    .proof-frame {
+      display: flex;
+      min-height: 24rem;
+      padding: clamp(1.3rem, 2.6vw, 2.4rem);
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      flex-direction: column;
+    }
+
+    .proof-frame:first-child {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .proof-frame .chapter-index {
+      margin-bottom: auto;
+      color: inherit;
+      opacity: .6;
+    }
+
+    .proof-frame h3 {
+      max-width: 12ch;
+      margin: 4rem 0 .8rem;
+      font-size: clamp(2rem, 3.5vw, 3.8rem);
+      font-weight: 600;
+      letter-spacing: -.07em;
+      line-height: .93;
+    }
+
+    .proof-frame p {
+      margin: 0;
+      color: inherit;
+      font-size: .9rem;
+      line-height: 1.58;
+      opacity: .72;
+    }
+
+    .proof-frame .proof-detail {
+      display: block;
+      margin-top: 1.3rem;
+      padding-top: .85rem;
+      border-top: 1px solid currentColor;
+      font: 500 .63rem/1.5 var(--mono);
+      letter-spacing: .06em;
+      opacity: .62;
+      text-transform: uppercase;
+    }
+
+    .decision-story {
+      padding-top: 0;
+    }
+
+    .decision-header {
+      display: grid;
+      grid-template-columns: minmax(0, .4fr) minmax(0, .6fr);
+      gap: 2rem;
+      align-items: end;
+      padding: clamp(2rem, 5vw, 4rem);
+      background: var(--forest);
+      color: var(--paper);
+    }
+
+    html[data-theme="dark"] .decision-header {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .decision-header h2 {
+      margin: 0;
+      font-size: clamp(3rem, 6vw, 7rem);
+      font-weight: 600;
+      letter-spacing: -.085em;
+      line-height: .87;
+    }
+
+    .decision-header p {
+      max-width: 40rem;
+      margin: 0;
+      color: inherit;
+      opacity: .72;
+    }
+
+    .decision-strip {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      border-left: 1px solid var(--line);
+    }
+
+    .decision-step {
+      min-height: 20rem;
+      padding: 1.35rem;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .decision-step .chapter-index {
+      display: block;
+      margin-bottom: 4rem;
+      color: var(--muted);
+    }
+
+    .decision-step h3 {
+      margin-bottom: .75rem;
+      font-size: clamp(1.35rem, 2.2vw, 2.3rem);
+      font-weight: 600;
+      letter-spacing: -.06em;
+      line-height: .96;
+    }
+
+    .decision-step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .84rem;
+      line-height: 1.55;
+    }
+
+    .integrity-note {
+      max-width: 52rem;
+      margin: 1.4rem 0 0 auto;
+      color: var(--muted);
+      font-size: .82rem;
+      line-height: 1.6;
+    }
+
+    .integrity-note strong {
+      color: var(--ink);
+    }
+
+    .void-zone {
+      position: relative;
+      z-index: 2;
+      background: rgba(7, 16, 13, .88);
+      color: var(--void-text);
+    }
+
+    .system-chapter {
+      scroll-margin-top: 4.2rem;
+      padding: clamp(7rem, 13vw, 12rem) 0;
+      border-top: 1px solid var(--void-line);
+    }
+
+    .system-intro {
+      display: grid;
+      grid-template-columns: minmax(0, .57fr) minmax(17rem, .43fr);
+      gap: clamp(2rem, 7vw, 7rem);
+      align-items: end;
+      min-height: 62svh;
+      padding-bottom: clamp(5rem, 10vw, 9rem);
+    }
+
+    .system-intro .eyebrow {
+      color: var(--void-muted);
+    }
+
+    .system-intro .display-heading {
+      max-width: 10ch;
+    }
+
+    .system-intro .section-intro {
+      color: var(--void-muted);
+    }
+
+    .translation-callout {
+      margin-top: 1.5rem;
+      padding: 1rem 0 1rem 1rem;
+      border-left: 2px solid var(--lime);
+      color: var(--void-text);
+      font-size: .9rem;
+      line-height: 1.6;
+    }
+
+    .signal-console {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: minmax(0, .58fr) minmax(16rem, .42fr);
+      gap: 1px;
+      border: 1px solid var(--void-line);
+      background: var(--void-line);
+    }
+
+    .signal-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      background: var(--void);
+    }
+
+    .signal-button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 4.1rem;
+      padding: .8rem 1rem;
+      border-right: 1px solid var(--void-line);
+      border-bottom: 1px solid var(--void-line);
+      background: transparent;
+      color: var(--void-muted);
+      font: 500 .66rem/1 var(--mono);
+      letter-spacing: .065em;
+      text-align: left;
+      text-transform: uppercase;
+      transition: background .2s ease, color .2s ease;
+    }
+
+    .signal-button::after {
+      width: .55rem;
+      height: .55rem;
+      content: "";
+      border: 1px solid currentColor;
+      border-radius: 50%;
+    }
+
+    .signal-button:hover,
+    .signal-button[data-active="true"] {
+      background: var(--lime);
+      color: #0a1713;
+    }
+
+    .signal-button[data-active="true"]::after {
+      background: #0a1713;
+    }
+
+    .signal-readout {
+      display: flex;
+      min-height: 16.4rem;
+      padding: clamp(1.3rem, 3vw, 2.4rem);
+      background: rgba(13, 28, 23, .92);
+      color: var(--void-muted);
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .signal-readout::before {
+      margin-bottom: auto;
+      content: "Active signal / operational meaning";
+      color: var(--lime);
+      font: 500 .61rem/1.4 var(--mono);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .method-layout {
+      display: grid;
+      grid-template-columns: minmax(13rem, .3fr) minmax(0, .7fr);
+      gap: clamp(2rem, 8vw, 8rem);
+      margin-top: clamp(6rem, 12vw, 11rem);
+    }
+
+    .method-rail {
+      position: sticky;
+      top: 7.2rem;
+      align-self: start;
+    }
+
+    .method-rail h3 {
+      max-width: 9ch;
+      margin: 0 0 1.2rem;
+      font-size: clamp(2rem, 3.4vw, 3.4rem);
+      font-weight: 600;
+      letter-spacing: -.075em;
+      line-height: .92;
+    }
+
+    .method-rail p {
+      max-width: 22rem;
+      color: var(--void-muted);
+      font-size: .86rem;
+    }
+
+    .method-progress {
+      display: flex;
+      gap: .28rem;
+      margin-top: 1.6rem;
+    }
+
+    .method-progress span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: var(--void-line);
+    }
+
+    .method-progress span.is-active {
+      background: var(--lime);
+    }
+
+    .method-steps {
+      display: grid;
+    }
+
+    .method-step {
+      display: grid;
+      align-content: center;
+      min-height: 74svh;
+      padding: clamp(2rem, 5vw, 4rem) 0;
+      border-top: 1px solid var(--void-line);
+      opacity: .46;
+      transition: opacity .45s ease;
+    }
+
+    .method-step:last-child {
+      border-bottom: 1px solid var(--void-line);
+    }
+
+    .method-step[data-active="true"] {
+      opacity: 1;
+    }
+
+    .method-step .chapter-index {
+      display: block;
+      margin-bottom: 1rem;
+      color: var(--lime);
+    }
+
+    .method-step h3 {
+      max-width: 12ch;
+      margin-bottom: .8rem;
+      font-size: clamp(2.7rem, 5.4vw, 5.9rem);
+      font-weight: 600;
+      letter-spacing: -.085em;
+      line-height: .88;
+    }
+
+    .metaphor-name {
+      display: block;
+      margin-bottom: 1.35rem;
+      color: var(--water);
+      font: 500 .68rem/1.4 var(--mono);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    .method-step p {
+      max-width: 43rem;
+      margin-bottom: 1.5rem;
+      color: var(--void-muted);
+      line-height: 1.7;
+    }
+
+    .method-output {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1px;
+      max-width: 48rem;
+      border: 1px solid var(--void-line);
+      background: var(--void-line);
+    }
+
+    .method-output span {
+      padding: .8rem;
+      background: var(--void);
+      color: var(--void-muted);
+      font: 500 .62rem/1.45 var(--mono);
+      letter-spacing: .045em;
+      text-transform: uppercase;
+    }
+
+    .lab-grid {
+      display: grid;
+      gap: 1px;
+      border: 1px solid var(--line);
+      background: var(--line);
+    }
+
+    .concept-dossier {
+      display: grid;
+      grid-template-columns: minmax(14rem, .3fr) minmax(0, .7fr);
+      background: var(--paper);
+    }
+
+    .concept-title {
+      display: flex;
+      min-height: 32rem;
+      padding: clamp(1.4rem, 3vw, 2.8rem);
+      border-right: 1px solid var(--line);
+      flex-direction: column;
+    }
+
+    .project-status {
+      max-width: 22rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .concept-title h3 {
+      max-width: 8ch;
+      margin: auto 0 1rem;
+      font-size: clamp(2.8rem, 5vw, 5.6rem);
+      font-weight: 600;
+      letter-spacing: -.085em;
+      line-height: .87;
+    }
+
+    .concept-title p {
+      max-width: 27rem;
+      margin: 0;
+      color: var(--muted);
+      font-size: .88rem;
+      line-height: 1.58;
+    }
+
+    .concept-body {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .concept-field {
+      min-height: 10.65rem;
+      padding: 1.1rem;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .concept-field h4 {
+      margin-bottom: .7rem;
+      color: var(--muted);
+      font: 500 .62rem/1.4 var(--mono);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    .concept-field p {
+      margin: 0;
+      color: var(--ink);
+      font-size: .84rem;
+      line-height: 1.55;
+    }
+
+    .human-chapter {
+      min-height: 230svh;
+      padding: clamp(7rem, 13vw, 12rem) 0;
+    }
+
+    .human-intro {
+      min-height: 80svh;
+      display: grid;
+      align-content: center;
+      max-width: 58rem;
+    }
+
+    .human-intro .eyebrow {
+      color: var(--void-muted);
+    }
+
+    .human-intro .display-heading {
+      max-width: 11ch;
+      color: var(--void-text);
+    }
+
+    .human-intro .section-intro {
+      color: var(--void-muted);
+    }
+
+    .endurance-quote {
+      max-width: 28ch;
+      margin: 2rem 0 0;
+      padding-left: 1.1rem;
+      border-left: 2px solid var(--lime);
+      color: var(--void-text);
+      font-family: var(--display);
+      font-size: clamp(1.25rem, 2.4vw, 2rem);
+      letter-spacing: -.045em;
+      line-height: 1.2;
+    }
+
+    .behaviour-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 70svh;
+      border-top: 1px solid var(--void-line);
+      border-left: 1px solid var(--void-line);
+      background: rgba(7, 16, 13, .76);
+    }
+
+    .behaviour {
+      min-height: 23rem;
+      padding: clamp(1.3rem, 2.7vw, 2.5rem);
+      border-right: 1px solid var(--void-line);
+      border-bottom: 1px solid var(--void-line);
+    }
+
+    .behaviour .chapter-index {
+      color: var(--lime);
+    }
+
+    .behaviour h3 {
+      margin: 5rem 0 .9rem;
+      font-size: clamp(2rem, 3.6vw, 3.7rem);
+      font-weight: 600;
+      letter-spacing: -.075em;
+      line-height: .9;
+    }
+
+    .behaviour p {
+      margin: 0;
+      color: var(--void-muted);
+      font-size: .88rem;
+      line-height: 1.6;
+    }
+
+    .responsibility-band {
+      display: grid;
+      grid-template-columns: minmax(0, .38fr) minmax(0, .62fr);
+      gap: 2rem;
+      margin-top: 1rem;
+      padding: clamp(1.5rem, 3vw, 2.5rem);
+      border: 1px solid var(--void-line);
+      background: rgba(13, 28, 23, .84);
+    }
+
+    .responsibility-band h3 {
+      margin: 0;
+      font-size: clamp(1.8rem, 3vw, 3.2rem);
+      font-weight: 600;
+      letter-spacing: -.07em;
+      line-height: .94;
+    }
+
+    .responsibility-band p {
+      margin: 0;
+      color: var(--void-muted);
+      font-size: .9rem;
+    }
+
+    .coordinates {
+      display: grid;
+      grid-template-columns: minmax(0, .48fr) minmax(0, .52fr);
+      gap: clamp(3rem, 8vw, 8rem);
+    }
+
+    .about-statement {
+      position: sticky;
+      top: 7rem;
+      align-self: start;
+    }
+
+    .about-statement .display-heading {
+      max-width: 10ch;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-statement p {
+      max-width: 42rem;
+      color: var(--muted);
+      line-height: 1.72;
+    }
+
+    .about-statement p strong {
+      color: var(--ink);
+    }
+
+    .coordinates-list {
+      border-top: 1px solid var(--ink);
+    }
+
+    .coordinate {
+      display: grid;
+      grid-template-columns: minmax(7rem, .25fr) minmax(0, .75fr);
+      gap: 1rem;
+      padding: 1.15rem 0 1.35rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .coordinate-label {
+      color: var(--muted);
+    }
+
+    .coordinate p {
+      margin: 0;
+      color: var(--ink);
+      font-size: .88rem;
+      line-height: 1.62;
+    }
+
+    .career-line {
+      display: grid;
+      gap: 0;
+      margin-top: 2.5rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .career-item {
+      display: grid;
+      grid-template-columns: 7rem minmax(0, 1fr);
+      gap: 1.1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .career-item time {
+      color: var(--muted);
+      font: 500 .64rem/1.5 var(--mono);
+    }
+
+    .career-item strong {
+      display: block;
+      margin-bottom: .25rem;
+      font-family: var(--display);
+      font-size: 1rem;
+      letter-spacing: -.03em;
+    }
+
+    .career-item span {
+      color: var(--muted);
+      font-size: .78rem;
+    }
+
+    .contact-scene {
+      position: relative;
+      z-index: 2;
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      scroll-margin-top: 4.2rem;
+      background: rgba(7, 16, 13, .58);
+      color: var(--void-text);
+      overflow: clip;
+    }
+
+    .contact-content {
+      position: relative;
+      z-index: 2;
+      width: var(--page);
+      margin: 0 auto;
+      padding: 8rem 0 6rem;
+    }
+
+    .contact-content .eyebrow {
+      color: var(--void-muted);
+    }
+
+    .contact-heading {
+      max-width: 12ch;
+      margin: 0 0 1.3rem;
+      font-size: clamp(3.6rem, 9vw, 10rem);
+      font-weight: 600;
+      letter-spacing: -.095em;
+      line-height: .83;
+    }
+
+    .contact-copy {
+      max-width: 43rem;
+      margin-bottom: 1.7rem;
+      color: var(--void-muted);
+      font-size: clamp(1rem, .96rem + .22vw, 1.2rem);
+    }
+
+    .contact-email {
+      display: inline-block;
+      margin: .8rem 0 1rem;
+      color: var(--void-text);
+      font-family: var(--display);
+      font-size: clamp(1.4rem, 3vw, 3rem);
+      font-weight: 500;
+      letter-spacing: -.06em;
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .contact-email:hover {
+      text-decoration: underline;
+      text-decoration-color: var(--lime);
+      text-decoration-thickness: .12em;
+    }
+
+    .copy-button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem;
+      margin-left: .8rem;
+      padding: .65rem .85rem;
+      border: 1px solid var(--void-line);
+      background: transparent;
+      color: var(--void-text);
+      font: 500 .62rem/1 var(--mono);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .copy-button:hover {
+      border-color: var(--lime);
+      color: var(--lime);
+    }
+
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+      margin-top: 1.25rem;
+    }
+
+    .contact-footnote {
+      max-width: 34rem;
+      margin-top: 2rem;
+      color: var(--void-muted);
+      font: 500 .61rem/1.6 var(--mono);
+      letter-spacing: .055em;
+      text-transform: uppercase;
+    }
+
+    .site-footer {
+      position: relative;
+      z-index: 3;
+      background: var(--void);
+      color: var(--void-muted);
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1rem;
+      width: var(--page);
+      margin: 0 auto;
+      padding: 1.3rem 0 1.55rem;
+      border-top: 1px solid var(--void-line);
+    }
+
+    .footer-line {
+      margin: 0;
+    }
+
+    .motion-ready .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .7s ease, transform .7s cubic-bezier(.2, .72, .2, 1);
+    }
+
+    .motion-ready .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .delay-1 { transition-delay: .08s !important; }
+    .delay-2 { transition-delay: .16s !important; }
+    .delay-3 { transition-delay: .24s !important; }
+
+    @media (max-width: 1050px) {
+      .desktop-nav {
+        gap: .75rem;
+      }
+
+      .identity-role {
+        display: none;
+      }
+
+      .decision-strip {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .decision-step:nth-child(4),
+      .decision-step:nth-child(5) {
+        grid-column: span 1;
+      }
+    }
+
+    @media (max-width: 900px) {
+      :root {
+        --page: min(1280px, calc(100vw - 2rem));
+      }
+
+      .desktop-nav,
+      .header-link {
+        display: none;
+      }
+
+      .menu-toggle {
+        display: inline-flex;
+      }
+
+      .aperture {
+        height: 190svh;
+      }
+
+      .aperture-stage::before {
+        background:
+          linear-gradient(180deg, rgba(7,16,13,.95) 0%, rgba(7,16,13,.8) 42%, rgba(7,16,13,.12) 72%, rgba(7,16,13,.4) 100%);
+      }
+
+      .aperture-intro,
+      .aperture-quote,
+      .aperture-resolve {
+        max-width: calc(100vw - 2rem);
+      }
+
+      .aperture h1 {
+        max-width: 10ch;
+      }
+
+      .look-sequence {
+        top: 62%;
+        right: 1rem;
+        width: 75vw;
+      }
+
+      .section-head,
+      .decision-header,
+      .system-intro,
+      .signal-console,
+      .concept-dossier,
+      .responsibility-band,
+      .coordinates {
+        grid-template-columns: 1fr;
+      }
+
+      .proof-reel {
+        grid-template-columns: 1fr;
+      }
+
+      .proof-frame {
+        min-height: 18rem;
+      }
+
+      .decision-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .decision-step {
+        min-height: 16rem;
+      }
+
+      .decision-step:last-child {
+        grid-column: 1 / -1;
+      }
+
+      .method-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .method-rail {
+        position: static;
+        padding-bottom: 1rem;
+      }
+
+      .method-step {
+        min-height: 58svh;
+      }
+
+      .concept-title {
+        min-height: 24rem;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .behaviour-grid {
+        grid-template-columns: 1fr;
+        margin-top: 48svh;
+      }
+
+      .behaviour {
+        min-height: 18rem;
+      }
+
+      .about-statement {
+        position: static;
+      }
+    }
+
+    @media (max-width: 620px) {
+      :root {
+        --page: calc(100vw - 1.25rem);
+      }
+
+      .site-header {
+        height: 3.8rem;
+      }
+
+      .header-inner {
+        gap: .55rem;
+      }
+
+      .identity-mark {
+        width: 2rem;
+        height: 2rem;
+      }
+
+      .identity-name {
+        font-size: .82rem;
+      }
+
+      .theme-toggle,
+      .menu-toggle {
+        min-height: 2.55rem;
+        padding: 0 .62rem;
+      }
+
+      .theme-toggle [data-theme-word] {
+        display: none;
+      }
+
+      .mobile-menu {
+        top: 3.8rem;
+      }
+
+      .aperture-stage {
+        min-height: 38rem;
+      }
+
+      .aperture-intro {
+        top: 6.2rem;
+      }
+
+      .aperture h1 {
+        font-size: clamp(3.45rem, 15.4vw, 5.4rem);
+      }
+
+      .value-line {
+        max-width: 31rem;
+        font-size: 1rem;
+      }
+
+      .proof-mini {
+        gap: .42rem .8rem;
+        font-size: .56rem;
+      }
+
+      .aperture-quote,
+      .aperture-resolve {
+        bottom: 6.2rem;
+      }
+
+      .aperture-quote p {
+        font-size: clamp(2.45rem, 11vw, 4rem);
+      }
+
+      .aperture-resolve h2 {
+        font-size: clamp(3rem, 13vw, 4.6rem);
+      }
+
+      .scroll-prompt {
+        right: .7rem;
+        bottom: 1rem;
+      }
+
+      .section {
+        padding: 5.5rem 0;
+      }
+
+      .display-heading {
+        font-size: clamp(3.1rem, 14vw, 5.2rem);
+      }
+
+      .decision-header {
+        padding: 1.5rem;
+      }
+
+      .decision-strip,
+      .concept-body,
+      .method-output {
+        grid-template-columns: 1fr;
+      }
+
+      .decision-step {
+        min-height: 0;
+      }
+
+      .decision-step .chapter-index {
+        margin-bottom: 2.5rem;
+      }
+
+      .signal-list {
+        grid-template-columns: 1fr;
+      }
+
+      .signal-readout {
+        min-height: 12rem;
+      }
+
+      .method-step {
+        min-height: auto;
+        padding: 5rem 0;
+        opacity: 1;
+      }
+
+      .method-step h3 {
+        font-size: clamp(3rem, 13vw, 4.8rem);
+      }
+
+      .concept-title {
+        min-height: 21rem;
+      }
+
+      .concept-field {
+        min-height: 0;
+      }
+
+      .human-chapter {
+        min-height: 185svh;
+      }
+
+      .human-intro {
+        min-height: 70svh;
+      }
+
+      .behaviour-grid {
+        margin-top: 36svh;
+      }
+
+      .coordinate,
+      .career-item {
+        grid-template-columns: 1fr;
+        gap: .45rem;
+      }
+
+      .contact-heading {
+        font-size: clamp(3.6rem, 15.6vw, 5.6rem);
+      }
+
+      .copy-button {
+        margin: .25rem 0 1rem;
+      }
+    }
+
+    @media (max-height: 700px) and (min-width: 700px) {
+      .aperture-intro {
+        top: 6rem;
+      }
+
+      .aperture h1 {
+        font-size: clamp(3.1rem, 6.8vw, 5.7rem);
+      }
+
+      .value-line {
+        font-size: .95rem;
+      }
+
+      .aperture-quote,
+      .aperture-resolve {
+        bottom: 4rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+      }
+
+      .aperture,
+      .human-chapter {
+        height: auto;
+        min-height: 0;
+      }
+
+      .aperture-stage {
+        position: relative;
+        height: auto;
+        min-height: 0;
+        padding: 8rem 0 5rem;
+        overflow: visible;
+      }
+
+      .aperture-intro,
+      .aperture-quote,
+      .aperture-resolve {
+        position: relative;
+        top: auto;
+        bottom: auto;
+        left: auto;
+        width: var(--page);
+        max-width: var(--page);
+        margin: 0 auto 4rem;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+
+      .aperture-quote p,
+      .aperture-resolve h2 {
+        max-width: 12ch;
+      }
+
+      .look-sequence,
+      .scroll-prompt {
+        display: none;
+      }
+
+      .human-intro {
+        min-height: 0;
+      }
+
+      .behaviour-grid {
+        margin-top: 5rem;
+      }
+
+      .motion-ready .reveal {
+        opacity: 1;
+        transform: none;
+      }
+
+      #cinema {
+        opacity: .5;
+      }
+    }
+  </style>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Cristian Malpica",
+      "jobTitle": "Assistant Product Manager",
+      "email": "cmalpica25@icloud.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Barcelona",
+        "addressCountry": "ES"
+      },
+      "sameAs": [
+        "https://linkedin.com/in/cristian-malpica-02551b20a"
+      ],
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Saint-Gobain IDAPLAC"
+      }
+    }
+  </script>
+</head>
+<body data-tone="void">
+  <a class="skip-link" href="#main-content">Skip to the portfolio</a>
+  <canvas id="cinema" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="page-progress" id="page-progress" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <nav class="header-inner" aria-label="Primary navigation">
+      <a class="identity" href="#blueprint" aria-label="Cristian Malpica, return to the opening">
+        <span class="identity-mark" aria-hidden="true">CM</span>
+        <span class="identity-copy">
+          <span class="identity-name">Cristian Malpica <sup>BCN</sup></span>
+          <span class="identity-role">Product Manager · Systems Thinker</span>
+        </span>
+      </a>
+
+      <div class="desktop-nav">
+        <a href="#blueprint" data-nav-link="blueprint" data-active="true" aria-current="location">Blueprint</a>
+        <a href="#evidence" data-nav-link="evidence">Evidence</a>
+        <a href="#work" data-nav-link="work">Work</a>
+        <a href="#method" data-nav-link="method">Method</a>
+        <a href="#about" data-nav-link="about">About</a>
+      </div>
+
+      <div class="header-actions">
+        <a class="header-link" href="Cristian_Malpica_CV.pdf" download><span>CV ↗</span></a>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
+          <span class="theme-dot" aria-hidden="true"></span>
+          <span data-theme-word>Void</span>
+        </button>
+        <button class="menu-toggle" id="menu-toggle" type="button" aria-controls="mobile-menu" aria-expanded="false">
+          <span class="menu-word">Menu</span>
+        </button>
+      </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobile-menu" hidden>
+      <a href="#blueprint">Blueprint</a>
+      <a href="#evidence">Evidence</a>
+      <a href="#work">Selected work</a>
+      <a href="#method">Method</a>
+      <a href="#about">About</a>
+      <a href="#contact">Initiate dialogue</a>
+      <a href="Cristian_Malpica_CV.pdf" download>Download CV</a>
+      <a href="https://linkedin.com/in/cristian-malpica-02551b20a" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="aperture" id="blueprint" data-canvas-scene="0" data-nav-section="blueprint" data-tone="void" aria-labelledby="hero-title">
+      <div class="aperture-stage" id="aperture-stage">
+        <div class="aperture-grid" aria-hidden="true"></div>
+
+        <div class="aperture-intro" id="aperture-intro">
+          <p class="role-line">Product Manager / Product Owner · Barcelona</p>
+          <h1 id="hero-title">The answers to the most complex problems lie <span class="within">within ourselves.</span></h1>
+          <p class="value-line"><strong>I am Cristian Malpica.</strong> I connect customer insight, commercial strategy, data, design, and operational reality to turn ambiguity into product direction, aligned launches, and learning.</p>
+          <div class="actions" aria-label="Recruiter shortcuts">
+            <a class="action action-primary" href="#evidence">See the evidence</a>
+            <a class="action" href="Cristian_Malpica_CV.pdf" download>Open CV</a>
+            <a class="action" href="https://linkedin.com/in/cristian-malpica-02551b20a" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+          </div>
+          <ul class="proof-mini" aria-label="Product profile">
+            <li>B2B lifecycle</li>
+            <li>SaaS</li>
+            <li>European markets</li>
+            <li>Go-to-market</li>
+            <li>Data and analytics</li>
+          </ul>
+        </div>
+
+        <div class="aperture-quote" id="aperture-quote">
+          <span class="quote-kicker">Perception / 01</span>
+          <p>The signal is already there. In people, data, and constraints.</p>
+        </div>
+
+        <div class="aperture-resolve" id="aperture-resolve">
+          <span class="quote-kicker">Direction / 02</span>
+          <h2>See the whole. Choose the next move.</h2>
+          <p>Looking inward is not introspection for its own sake. It is the discipline of finding what the system already knows, then turning it into an executable product decision.</p>
+        </div>
+
+        <div class="look-sequence" aria-hidden="true">
+          <p class="look-beat">Look outward.</p>
+          <p class="look-beat">Look closer.</p>
+          <p class="look-beat">Look within.</p>
+        </div>
+
+        <div class="scroll-prompt" id="scroll-prompt">Scroll to focus</div>
+      </div>
+    </section>
+
+    <div class="paper-zone">
+      <section class="section shell" id="evidence" data-nav-section="evidence" data-tone="paper" aria-labelledby="evidence-title">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow reveal">Proof before poetry</p>
+            <h2 class="display-heading reveal delay-1" id="evidence-title">Professional evidence, with real constraints attached.</h2>
+          </div>
+          <p class="section-intro reveal delay-2">The worldview matters because it changes the work. The work matters because it can be examined: product lifecycle decisions, commercial leadership, customer feedback, cross-functional coordination, launch readiness, and post-launch learning.</p>
+        </div>
+
+        <div class="proof-reel">
+          <article class="proof-frame reveal">
+            <span class="chapter-index">Now / 2023–Present</span>
+            <h3>Assistant Product Manager</h3>
+            <p>Saint-Gobain IDAPLAC. B2B product lifecycle work across European markets, connecting product definition, portfolio planning, market evidence, launch priorities, operations, and performance signals.</p>
+            <span class="proof-detail">Barcelona · B2B · Product lifecycle · European markets</span>
+          </article>
+          <article class="proof-frame reveal delay-1">
+            <span class="chapter-index">Before / 2020–2023</span>
+            <h3>SaaS Sales Supervisor</h3>
+            <p>Led commercial work close to customer need, onboarding, adoption, and retention. Turned feedback into positioning and go-to-market recommendations, and designed Salesforce views for decision support.</p>
+            <span class="proof-detail">SaaS · Customer signal · Commercial execution</span>
+          </article>
+          <article class="proof-frame reveal delay-2">
+            <span class="chapter-index">Range / From signal to learning</span>
+            <h3>Product logic across functions</h3>
+            <p>Discovery, market and competitor inputs, value propositions, requirements, stakeholder alignment, launch readiness, service levels, availability, KPIs, and iteration.</p>
+            <span class="proof-detail">Observe → define → align → launch → learn</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="section decision-story shell" id="work" data-nav-section="work" data-tone="paper" aria-labelledby="work-title">
+        <div class="decision-header reveal">
+          <div>
+            <p class="project-status">Professional product method · Confidential information excluded</p>
+            <h2 id="work-title">Signal to Launch</h2>
+          </div>
+          <p>A decision story about translating scattered evidence into a product direction that commercial and operational teams can actually carry. This reflects professional practice without exposing employer-confidential information or invented outcomes.</p>
+        </div>
+
+        <div class="decision-strip">
+          <article class="decision-step reveal">
+            <span class="chapter-index">01 / Ambiguity</span>
+            <h3>The problem crosses teams.</h3>
+            <p>A customer need rarely arrives neatly packaged. It appears through feedback, market movement, competitor activity, internal performance, supplier realities, and service constraints.</p>
+          </article>
+          <article class="decision-step reveal delay-1">
+            <span class="chapter-index">02 / Signals</span>
+            <h3>Make the evidence legible.</h3>
+            <p>Connect market, customer, commercial, analytics, supply-chain, and operational inputs. Separate facts from assumptions and expose the dependencies behind the opportunity.</p>
+          </article>
+          <article class="decision-step reveal delay-2">
+            <span class="chapter-index">03 / Decision</span>
+            <h3>Distil a credible direction.</h3>
+            <p>Translate the system into positioning, a value proposition, requirements, priorities, trade-offs, and a next step that can be explained and challenged.</p>
+          </article>
+          <article class="decision-step reveal">
+            <span class="chapter-index">04 / Alignment</span>
+            <h3>Prepare more than the launch.</h3>
+            <p>Coordinate Sales, marketing, analytics, supply chain, suppliers, and operational partners around readiness, adoption, handovers, and the reality after release.</p>
+          </article>
+          <article class="decision-step reveal delay-1">
+            <span class="chapter-index">05 / Learning</span>
+            <h3>Let performance change the plan.</h3>
+            <p>Use KPIs, service levels, availability, customer feedback, and post-launch signals to decide what to adjust, protect, or stop.</p>
+          </article>
+        </div>
+        <p class="integrity-note"><strong>Integrity note.</strong> Scope and decision value are described here without invented metrics, client names, portfolio values, team sizes, or confidential details.</p>
+      </section>
+    </div>
+
+    <section class="void-zone system-chapter" id="method" data-canvas-scene="1" data-nav-section="method" data-tone="void" aria-labelledby="method-title">
+      <div class="shell">
+        <div class="system-intro">
+          <div>
+            <p class="eyebrow reveal">The product system / Perception becomes direction</p>
+            <h2 class="display-heading reveal delay-1" id="method-title">When complexity enters, I build a map.</h2>
+          </div>
+          <div>
+            <p class="section-intro reveal delay-2">Markets and organisations behave as connected systems. The practical task is to trace how customer value, commercial logic, data, delivery, operations, governance, and impact affect one another.</p>
+            <p class="translation-callout reveal">The cosmic and neural parallel is a creative lens, not a scientific claim. Its professional meaning is direct: understand the relationships before optimising one isolated node.</p>
+          </div>
+        </div>
+
+        <div class="signal-console reveal" role="group" aria-label="Interactive product system signals">
+          <div class="signal-list">
+            <button class="signal-button" type="button" data-signal="Customer" data-active="true" aria-pressed="true" data-signal-detail="Customer: uncover need, friction, context, and the moments that determine whether a product earns adoption.">Customer</button>
+            <button class="signal-button" type="button" data-signal="Market" data-active="false" aria-pressed="false" data-signal-detail="Market: place customer need beside category movement, competitors, positioning, and commercial conditions.">Market</button>
+            <button class="signal-button" type="button" data-signal="Data" data-active="false" aria-pressed="false" data-signal-detail="Data: use existing qualitative and quantitative signals to test assumptions and improve judgement.">Data</button>
+            <button class="signal-button" type="button" data-signal="Delivery" data-active="false" aria-pressed="false" data-signal-detail="Delivery: align scope, dependencies, people, and pacing so that strategy becomes usable work.">Delivery</button>
+            <button class="signal-button" type="button" data-signal="Operations" data-active="false" aria-pressed="false" data-signal-detail="Operations: account for availability, service levels, suppliers, handovers, and the reality after launch.">Operations</button>
+            <button class="signal-button" type="button" data-signal="Responsibility" data-active="false" aria-pressed="false" data-signal-detail="Responsibility: make privacy, sustainability, resource use, and externalised costs visible before they become somebody else's problem.">Responsibility</button>
+          </div>
+          <p class="signal-readout" id="signal-readout" aria-live="polite">Customer: uncover need, friction, context, and the moments that determine whether a product earns adoption.</p>
+        </div>
+
+        <div class="method-layout">
+          <aside class="method-rail">
+            <span class="chapter-index">Operating system / 04 stages</span>
+            <h3>From signal to adaptation.</h3>
+            <p>The metaphor stays memorable. The Product Management translation stays visible.</p>
+            <div class="method-progress" aria-hidden="true"><span class="is-active"></span><span></span><span></span><span></span></div>
+          </aside>
+
+          <div class="method-steps">
+            <article class="method-step" data-method-step="0" data-active="true">
+              <span class="chapter-index">01 / Observe deeply</span>
+              <h3>Discover the real system.</h3>
+              <span class="metaphor-name">Mycelial empathy · Product discovery and system mapping</span>
+              <p>Listen across customers, markets, teams, and operations. Absorb user friction, market evidence, stakeholder knowledge, data signals, and constraints. Separate what is known from what is merely repeated.</p>
+              <div class="method-output"><span>Customer research</span><span>Market evidence</span><span>Assumption map</span><span>Operational constraints</span></div>
+            </article>
+
+            <article class="method-step" data-method-step="1" data-active="false">
+              <span class="chapter-index">02 / Distil possibility</span>
+              <h3>Choose what deserves to exist.</h3>
+              <span class="metaphor-name">Metabolic synthesis · Prioritisation and product definition</span>
+              <p>Turn a wide field of ideas into a focused product problem, clear value proposition, business-case questions, MVP scope, requirements, and trade-offs. A roadmap is also a record of what has been deliberately deferred.</p>
+              <div class="method-output"><span>Problem framing</span><span>Value proposition</span><span>MVP and requirements</span><span>Priority logic</span></div>
+            </article>
+
+            <article class="method-step" data-method-step="2" data-active="false">
+              <span class="chapter-index">03 / Align and launch</span>
+              <h3>Make the decision travel.</h3>
+              <span class="metaphor-name">Symbiotic deployment · Cross-functional delivery and go-to-market</span>
+              <p>Bring Sales, marketing, Customer Success, delivery, operations, and partners into a shared view of what is changing. Make readiness, positioning, onboarding, dependencies, and adoption visible before launch.</p>
+              <div class="method-output"><span>Stakeholder alignment</span><span>Launch readiness</span><span>Positioning</span><span>Adoption planning</span></div>
+            </article>
+
+            <article class="method-step" data-method-step="3" data-active="false">
+              <span class="chapter-index">04 / Learn and renew</span>
+              <h3>Let reality improve the product.</h3>
+              <span class="metaphor-name">Evolutionary stress-testing · Measurement and lifecycle learning</span>
+              <p>Use KPIs, service levels, availability, feedback, risk, and market signals to learn after launch. Reuse useful knowledge, reduce avoidable waste, and keep longer-term resilience visible beside immediate performance.</p>
+              <div class="method-output"><span>KPIs and service levels</span><span>Customer feedback</span><span>Risk signals</span><span>Lifecycle choices</span></div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="paper-zone">
+      <section class="section shell" id="lab" data-nav-section="work" data-tone="paper" aria-labelledby="lab-title">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow reveal">Product lab / Independent hypotheses</p>
+            <h2 class="display-heading reveal delay-1" id="lab-title">Imagination, with the uncertainty left visible.</h2>
+          </div>
+          <p class="section-intro reveal delay-2">Concept work shows how I frame possibility. It is not presented as shipped, validated, or adopted. Each idea includes the next evidence it would need and the responsibility it would carry.</p>
+        </div>
+
+        <div class="lab-grid">
+          <article class="concept-dossier reveal">
+            <div class="concept-title">
+              <p class="project-status">Independent concept · B2B mobility data</p>
+              <h3>Circular Mobility Intelligence</h3>
+              <p>A hypothesis for helping fleet and mobility partners turn vehicle-use signals into clearer decisions about maintenance, utilisation, downtime, asset life, and circular value.</p>
+            </div>
+            <div class="concept-body">
+              <div class="concept-field"><h4>Problem</h4><p>Signals may exist across systems, but the decision context linking them to maintenance, utilisation, and asset life can remain fragmented.</p></div>
+              <div class="concept-field"><h4>Product hypothesis</h4><p>A focused, interpretable workspace could help fleet partners identify questions worth acting on without automating every operational judgement.</p></div>
+              <div class="concept-field"><h4>First scope</h4><p>One decision journey around asset health and utilisation, with candidate inputs, uncertainty, and human review made explicit.</p></div>
+              <div class="concept-field"><h4>Next validation</h4><p>Discovery with representative partners, definition of a minimum useful signal set, prototype testing, and technical feasibility review.</p></div>
+              <div class="concept-field"><h4>Measures to test</h4><p>Decision usefulness, task completion, confidence in interpretation, and whether information supports timely operational conversations.</p></div>
+              <div class="concept-field"><h4>Responsibility</h4><p>Data minimisation, consent, privacy, interoperability, energy use, incomplete signals, and the risk of shifting cost elsewhere in the system.</p></div>
+            </div>
+          </article>
+
+          <article class="concept-dossier reveal">
+            <div class="concept-title">
+              <p class="project-status">Independent concept · Active cities · Barcelona</p>
+              <h3>Outside / In</h3>
+              <p>A personal product experiment connecting movement, nature, public mobility, accessible routes, wellbeing, and responsible urban discovery.</p>
+            </div>
+            <div class="concept-body">
+              <div class="concept-field"><h4>Problem</h4><p>Discovery tools can privilege novelty and speed over access, route context, public mobility, recovery needs, and pressure on shared spaces.</p></div>
+              <div class="concept-field"><h4>Product hypothesis</h4><p>A calmer planning layer could help people choose experiences that fit their energy, time, access needs, and impact.</p></div>
+              <div class="concept-field"><h4>First scope</h4><p>Clear route context, accessibility cues, public-mobility options, and respectful-use guidance rather than a broad social network.</p></div>
+              <div class="concept-field"><h4>Next validation</h4><p>Route research, conversations with local users and access advocates, service blueprinting, and low-fidelity journey testing.</p></div>
+              <div class="concept-field"><h4>Measures to test</h4><p>Planning confidence, comprehension of options, usefulness of accessibility information, and lower-impact choices when feasible.</p></div>
+              <div class="concept-field"><h4>Responsibility</h4><p>Route safety, inclusion, seasonal change, overcrowding, local stewardship, data restraint, and the limits of recommendations.</p></div>
+            </div>
+          </article>
+        </div>
+        <p class="integrity-note">Circular Mobility Intelligence is an independent concept. It is not affiliated with or commissioned by Volkswagen Group.</p>
+      </section>
+    </div>
+
+    <section class="void-zone human-chapter" id="human" data-canvas-scene="2" data-nav-section="about" data-tone="void" aria-labelledby="human-title">
+      <div class="shell">
+        <div class="human-intro">
+          <p class="eyebrow reveal">The human engine / Endurance becomes execution</p>
+          <h2 class="display-heading reveal delay-1" id="human-title">Pace is a product decision.</h2>
+          <p class="section-intro reveal delay-2">Mountain trails and endurance sport shaped how I work: read the terrain, protect the pace, adapt before failure, and spend energy where it changes the outcome.</p>
+          <blockquote class="endurance-quote reveal">Progress is not the loudest sprint. It is the sequence of decisions that still makes sense at kilometre thirty-five.</blockquote>
+        </div>
+
+        <div class="behaviour-grid">
+          <article class="behaviour reveal">
+            <span class="chapter-index">01 / Prioritise</span>
+            <h3>Protect the signal.</h3>
+            <p>Focus under pressure means choosing the few moves that preserve customer value, commercial purpose, and delivery energy. Activity is not the same as progress.</p>
+          </article>
+          <article class="behaviour reveal delay-1">
+            <span class="chapter-index">02 / Align</span>
+            <h3>Move as one system.</h3>
+            <p>Endurance is collective in product work. Clear dependencies, informed handovers, and honest pacing let several functions carry one direction.</p>
+          </article>
+          <article class="behaviour reveal delay-2">
+            <span class="chapter-index">03 / Learn</span>
+            <h3>Adapt before failure.</h3>
+            <p>Feedback, service levels, recovery, and iteration are not signs that the plan was weak. They are how a product remains useful under changing conditions.</p>
+          </article>
+        </div>
+
+        <div class="responsibility-band reveal">
+          <h3>Biomimetic truth, made practical.</h3>
+          <p>Nature is a design framework, not a promise of perfect outcomes. It asks whether energy is being wasted, whether outputs can become inputs, whether the system can adapt, and whether value externalises unnecessary cost. In product terms: circular lifecycles, resource awareness, durable commercial value, honest trade-offs, and responsibility for data and consequences.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="paper-zone">
+      <section class="section shell" id="about" data-nav-section="about" data-tone="paper" aria-labelledby="about-title">
+        <div class="coordinates">
+          <div class="about-statement">
+            <p class="eyebrow reveal">Coordinates / The person behind the system</p>
+            <h2 class="display-heading reveal delay-1" id="about-title">Useful where the path is not yet obvious.</h2>
+            <p class="reveal delay-2">I read organisations, markets, and products as living systems. Every decision changes the whole, so clarity, pacing, and responsibility matter. <strong>I am most useful where a problem is ambiguous, several perspectives must be connected, and the route from idea to execution is still taking shape.</strong></p>
+
+            <div class="career-line reveal">
+              <div class="career-item"><time>2023–Now</time><div><strong>Assistant Product Manager</strong><span>Saint-Gobain IDAPLAC · Barcelona</span></div></div>
+              <div class="career-item"><time>2020–2023</time><div><strong>Sales Supervisor</strong><span>Gestión de Ventas Iberia · Barcelona</span></div></div>
+              <div class="career-item"><time>2015–2019</time><div><strong>Accounting Specialist</strong><span>EMAE · Camagüey</span></div></div>
+            </div>
+          </div>
+
+          <div class="coordinates-list reveal">
+            <div class="coordinate"><span class="coordinate-label">Current role</span><p>Assistant Product Manager, Saint-Gobain IDAPLAC. Barcelona, Spain.</p></div>
+            <div class="coordinate"><span class="coordinate-label">Domains</span><p>B2B product lifecycle, SaaS, commercial strategy, customer insight, go-to-market, analytics, operations, European and international markets.</p></div>
+            <div class="coordinate"><span class="coordinate-label">Tools</span><p>Jira, Confluence, Microsoft Planner, Salesforce CRM, SAP, Odoo, Advanced Excel, SQL, Power BI, Tableau, Power Apps, Power Automate. Foundational AWS and Microsoft Azure exposure.</p></div>
+            <div class="coordinate"><span class="coordinate-label">Education</span><p>BSc Marketing and Market Research, ongoing, Universitat Oberta de Catalunya. Advanced Diploma in International Trade, 2026, Universitat Oberta de Catalunya. Associate Degree in Accounting and Finance, 2014.</p></div>
+            <div class="coordinate"><span class="coordinate-label">Languages</span><p>Spanish and English, bilingual. German, B2. French, A2.</p></div>
+            <div class="coordinate"><span class="coordinate-label">Direction</span><p>Product Manager and Product Owner opportunities across B2B, SaaS, data-informed products, mobility, digital transformation, and sustainable innovation.</p></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="contact-scene" id="contact" data-canvas-scene="3" data-nav-section="contact" data-tone="void" aria-labelledby="contact-title">
+      <div class="contact-content">
+        <p class="eyebrow reveal">Initiate dialogue / Barcelona</p>
+        <h2 class="contact-heading reveal delay-1" id="contact-title">Bring me the problem that does not fit neatly inside one team.</h2>
+        <p class="contact-copy reveal delay-2">If your product sits between customer need, commercial reality, data, and operational complexity, let us look at the whole system together.</p>
+        <div class="reveal">
+          <a class="contact-email" href="mailto:cmalpica25@icloud.com">cmalpica25@icloud.com</a>
+          <button class="copy-button" id="copy-email" type="button">Copy email</button>
+          <span class="sr-only" id="copy-status" role="status" aria-live="polite"></span>
+        </div>
+        <div class="contact-links reveal delay-1">
+          <a class="action action-primary" href="mailto:cmalpica25@icloud.com">Email Cristian</a>
+          <a class="action" href="Cristian_Malpica_CV.pdf" download>Open CV</a>
+          <a class="action" href="https://linkedin.com/in/cristian-malpica-02551b20a" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+        </div>
+        <p class="contact-footnote reveal">The next system begins with a better question. Ready to awaken the answers within your ecosystem?</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-line">Cristian Malpica · Product Manager · Systems Thinker</p>
+      <p class="footer-line">Barcelona, Spain · <span id="year">2026</span></p>
+    </div>
+  </footer>
+</body>
+</html>
