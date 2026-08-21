@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en" class="no-js" data-theme="dark" data-theme-choice="system">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Cristian Malpica | Product, Systems &amp; Sustainable Innovation</title>
+  <meta name="description" content="A cinematic portfolio by Cristian Malpica, a Barcelona-based product professional exploring systems, endurance, design, human insight, and sustainable innovation.">
+  <meta name="theme-color" content="#050a08">
+  <link rel="canonical" href="https://cm-uoc.github.io/CMMT/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cm-uoc.github.io/CMMT/">
+  <meta property="og:title" content="Cristian Malpica | Product, Systems &amp; Sustainable Innovation">
+  <meta property="og:description" content="A cinematic portfolio exploring systems, endurance, design, human insight, and sustainable innovation.">
+  <meta property="og:image" content="https://cm-uoc.github.io/CMMT/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Cristian Malpica beside an organic sphere that appears as both a planet and a human iris.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cristian Malpica | Product, Systems &amp; Sustainable Innovation">
+  <meta name="twitter:description" content="A cinematic portfolio exploring systems, endurance, design, human insight, and sustainable innovation.">
+  <meta name="twitter:image" content="https://cm-uoc.github.io/CMMT/og.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&amp;family=Manrope:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Person","name":"Cristian Malpica","url":"https://cm-uoc.github.io/CMMT/","jobTitle":"Product professional","email":"mailto:cmalpica25@icloud.com","homeLocation":{"@type":"Place","name":"Barcelona, Spain"},"sameAs":["https://linkedin.com/in/cristian-malpica-02551b20a"],"knowsAbout":["Product Management","Systems thinking","Design","Innovation","Sustainability","Data","Mobility","B2B products","SaaS"]}
+  </script>
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const scheme = matchMedia('(prefers-color-scheme: light)');
+      let stored = 'system';
+      try { stored = localStorage.getItem('cm-theme') || 'system'; } catch (_) {}
+      if (!['system', 'light', 'dark'].includes(stored)) stored = 'system';
+      const resolved = stored === 'system' ? (scheme.matches ? 'light' : 'dark') : stored;
+      root.dataset.theme = resolved;
+      root.dataset.themeChoice = stored;
+      root.classList.replace('no-js', 'js');
+
+      addEventListener('DOMContentLoaded', () => {
+        const $ = (selector, scope = document) => scope.querySelector(selector);
+        const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
+        const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
+        const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+        const themeMeta = $('meta[name="theme-color"]');
+        const themeButton = $('[data-theme-toggle]');
+        const choices = ['system', 'light', 'dark'];
+        let themeChoice = root.dataset.themeChoice || 'system';
+
+        const paintTheme = () => {
+          const active = themeChoice === 'system' ? (scheme.matches ? 'light' : 'dark') : themeChoice;
+          root.dataset.theme = active;
+          root.dataset.themeChoice = themeChoice;
+          if (themeMeta) themeMeta.content = active === 'light' ? '#f4f3ed' : '#050a08';
+          if (themeButton) {
+            themeButton.querySelector('[data-theme-label]').textContent = themeChoice[0].toUpperCase() + themeChoice.slice(1);
+            themeButton.setAttribute('aria-label', `Theme: ${themeChoice}. Activate to change theme.`);
+          }
+        };
+        themeButton?.addEventListener('click', () => {
+          themeChoice = choices[(choices.indexOf(themeChoice) + 1) % choices.length];
+          try { localStorage.setItem('cm-theme', themeChoice); } catch (_) {}
+          paintTheme();
+        });
+        scheme.addEventListener?.('change', () => { if (themeChoice === 'system') paintTheme(); });
+        paintTheme();
+
+        const prologue = $('.prologue');
+        const stage = $('[data-stage]');
+        const opening = $('[data-opening]');
+        const truth = $('[data-truth]');
+        const recognition = $('[data-recognition]');
+        const nameReveal = $('[data-name-reveal]');
+        const terrain = $('#terrain');
+        const terrainPath = $('[data-terrain-path]');
+        const terrainMarker = $('[data-terrain-marker]');
+        const terrainProgress = $('[data-terrain-progress]');
+        const pageProgress = $('[data-page-progress]');
+        let terrainLength = 0;
+        let ticking = false;
+
+        const setVisible = (element, visible) => element?.classList.toggle('is-visible', visible);
+        const render = () => {
+          ticking = false;
+          const docMax = document.documentElement.scrollHeight - innerHeight;
+          const pageP = docMax > 0 ? clamp(scrollY / docMax) : 0;
+          if (pageProgress) pageProgress.style.transform = `scaleX(${pageP})`;
+
+          if (!reduced.matches && prologue && stage) {
+            const max = prologue.offsetHeight - innerHeight;
+            const p = max > 0 ? clamp(-prologue.getBoundingClientRect().top / max) : 0;
+            stage.style.setProperty('--sphere-scale', String(.46 + p * 2.78));
+            stage.style.setProperty('--planet-opacity', String(clamp(1 - (p - .31) / .34)));
+            stage.style.setProperty('--iris-opacity', String(clamp((p - .25) / .36)));
+            stage.style.setProperty('--eye-opacity', String(clamp((p - .68) / .2)));
+            stage.style.setProperty('--pupil-scale', String(.98 - clamp((p - .52) / .4) * .2));
+            stage.style.setProperty('--atmosphere-shift', `${p * 10}%`);
+            setVisible(opening, p < .21);
+            setVisible(truth, p > .34 && p < .7);
+            setVisible(recognition, p > .61 && p < .84);
+            setVisible(nameReveal, p > .82);
+          }
+
+          if (terrain && terrainPath && !reduced.matches) {
+            const rect = terrain.getBoundingClientRect();
+            const range = terrain.offsetHeight - innerHeight * .45;
+            const p = range > 0 ? clamp((innerHeight * .6 - rect.top) / range) : 0;
+            terrainPath.style.strokeDashoffset = String(terrainLength * (1 - p));
+            if (terrainMarker && terrainLength) {
+              const point = terrainPath.getPointAtLength(terrainLength * p);
+              terrainMarker.setAttribute('cx', String(point.x));
+              terrainMarker.setAttribute('cy', String(point.y));
+            }
+            if (terrainProgress) terrainProgress.value = Math.round(p * 100);
+          }
+        };
+        const requestTick = () => {
+          if (!ticking) { ticking = true; requestAnimationFrame(render); }
+        };
+        if (terrainPath) {
+          terrainLength = terrainPath.getTotalLength();
+          terrainPath.style.strokeDasharray = String(terrainLength);
+          terrainPath.style.strokeDashoffset = reduced.matches ? '0' : String(terrainLength);
+        }
+        addEventListener('scroll', requestTick, { passive: true });
+        addEventListener('resize', requestTick, { passive: true });
+        reduced.addEventListener?.('change', () => {
+          if (terrainPath) terrainPath.style.strokeDashoffset = reduced.matches ? '0' : String(terrainLength);
+          requestTick();
+        });
+
+        const introTarget = $('#meaning');
+        $('[data-skip-intro]')?.addEventListener('click', () => {
+          introTarget?.scrollIntoView({ behavior: reduced.matches ? 'auto' : 'smooth' });
+          setTimeout(() => introTarget?.focus({ preventScroll: true }), reduced.matches ? 0 : 450);
+        });
+
+        const revealItems = $$('.reveal');
+        if ('IntersectionObserver' in window && !reduced.matches) {
+          const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-revealed');
+                observer.unobserve(entry.target);
+              }
+            });
+          }, { threshold: .14, rootMargin: '0px 0px -6% 0px' });
+          revealItems.forEach((item) => revealObserver.observe(item));
+        } else revealItems.forEach((item) => item.classList.add('is-revealed'));
+
+        const railLinks = $$('.chapter-rail a');
+        const chapters = $$('main section[id]').filter((section) => railLinks.some((link) => link.hash === `#${section.id}`));
+        if ('IntersectionObserver' in window) {
+          const chapterObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              railLinks.forEach((link) => {
+                const current = link.hash === `#${entry.target.id}`;
+                link.classList.toggle('is-current', current);
+                if (current) link.setAttribute('aria-current', 'location'); else link.removeAttribute('aria-current');
+              });
+            });
+          }, { rootMargin: '-42% 0px -48% 0px' });
+          chapters.forEach((chapter) => chapterObserver.observe(chapter));
+        }
+
+        const nodePanel = $('[data-node-panel]');
+        const nodeTitle = $('[data-node-title]');
+        const nodeCopy = $('[data-node-copy]');
+        const nodeButtons = $$('.node-button');
+        const nodeLines = $$('.node-line');
+        const activateNode = (button) => {
+          nodeButtons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+          nodeLines.forEach((line) => line.classList.toggle('is-active', line.dataset.node === button.dataset.node));
+          if (nodeTitle) nodeTitle.textContent = button.dataset.node || '';
+          if (nodeCopy) nodeCopy.textContent = button.dataset.description || '';
+          if (nodePanel) nodePanel.dataset.active = button.dataset.node || '';
+        };
+        nodeButtons.forEach((button) => {
+          button.addEventListener('click', () => activateNode(button));
+          button.addEventListener('focus', () => activateNode(button));
+          button.addEventListener('pointerenter', () => activateNode(button));
+        });
+
+        const marquee = $('.marquee-track');
+        document.addEventListener('visibilitychange', () => marquee?.classList.toggle('is-paused', document.hidden));
+        requestTick();
+      });
+    })();
+  </script>
+  <style>
+    :root {
+      --void: #050a08; --surface: #0b1511; --text: #eef0e8; --muted: rgba(238,240,232,.68); --faint: rgba(238,240,232,.48); --line: rgba(238,240,232,.15); --line-strong: rgba(238,240,232,.3); --paper: #0b1511; --paper-ink: #eef0e8; --forest: #0f2c23; --lime: #c8ff45; --mint: #a8e8d0; --water: #77d4dc; --clay: #e2a77d; --warm-white: #fffef8; --display: Manrope, Arial, sans-serif; --mono: "DM Mono", ui-monospace, monospace; --ease: cubic-bezier(.22,.8,.24,1); --gutter: clamp(1.25rem,5vw,5.5rem); --content: 82rem; color-scheme: dark;
+    }
+    [data-theme="light"] { --surface:#fffef8; --text:#0a1713; --muted:rgba(10,23,19,.7); --faint:rgba(10,23,19,.5); --line:rgba(10,23,19,.16); --line-strong:rgba(10,23,19,.32); --paper:#f4f3ed; --paper-ink:#0a1713; color-scheme:light; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--void); }
+    body { margin:0; min-width:320px; overflow-x:hidden; background:var(--surface); color:var(--text); font-family:var(--display); font-size:16px; line-height:1.55; text-rendering:optimizeLegibility; }
+    a,button,summary { color:inherit; font:inherit; } a { text-decoration-thickness:1px; text-underline-offset:.28em; } button { border:0; } ::selection { background:var(--lime); color:#07100c; } :focus-visible { outline:2px solid var(--lime); outline-offset:4px; }
+    .sr-only { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
+    .skip-link { position:fixed; z-index:200; top:1rem; left:1rem; min-height:44px; display:grid; place-items:center; transform:translateY(-180%); padding:.7rem 1rem; border-radius:999px; background:var(--lime); color:#07100c; font:500 .74rem/1 var(--mono); text-decoration:none; transition:transform .2s; } .skip-link:focus { transform:none; }
+    .page-progress { position:fixed; z-index:110; top:0; left:0; width:100%; height:2px; transform:scaleX(0); transform-origin:left; background:var(--lime); }
+    .site-header { position:fixed; z-index:100; inset:0 0 auto; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; min-height:66px; padding:.65rem var(--gutter); color:#eef0e8; mix-blend-mode:difference; pointer-events:none; } .site-header>* { pointer-events:auto; }
+    .brand { justify-self:start; display:grid; place-items:center; width:44px; height:44px; border:1px solid rgba(238,240,232,.32); border-radius:50%; font:500 .72rem/1 var(--mono); letter-spacing:.06em; text-decoration:none; }
+    .coordinates { margin:0; font:400 .64rem/1.4 var(--mono); letter-spacing:.1em; text-transform:uppercase; color:rgba(238,240,232,.68); }
+    .theme-toggle { justify-self:end; min-height:44px; padding:.55rem .9rem; border:1px solid rgba(238,240,232,.25); border-radius:999px; background:rgba(5,10,8,.2); color:#eef0e8; cursor:pointer; font:400 .66rem/1 var(--mono); letter-spacing:.06em; text-transform:uppercase; backdrop-filter:blur(8px); } .theme-toggle:hover { border-color:var(--lime); } .no-js .theme-toggle { display:none; }
+    .chapter-rail { position:fixed; z-index:90; top:50%; left:clamp(.7rem,1.6vw,1.8rem); transform:translateY(-50%); } .chapter-rail ul { display:grid; gap:.46rem; margin:0; padding:0; list-style:none; } .chapter-rail a { display:flex; align-items:center; gap:.6rem; min-width:44px; min-height:44px; text-decoration:none; color:var(--muted); } .chapter-rail a::before { content:""; flex:0 0 auto; width:5px; height:5px; border:1px solid currentColor; border-radius:50%; transition:transform .3s var(--ease),background .3s; } .chapter-rail span { opacity:0; transform:translateX(-.4rem); font:400 .62rem/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; transition:.3s var(--ease); } .chapter-rail a:hover span,.chapter-rail a:focus-visible span,.chapter-rail a.is-current span { opacity:1; transform:none; } .chapter-rail a.is-current { color:var(--lime); } .chapter-rail a.is-current::before { background:currentColor; transform:scale(1.6); }
+    main { position:relative; }
+    .prologue { --sphere-scale:.46; --planet-opacity:1; --iris-opacity:0; --eye-opacity:0; --pupil-scale:.98; min-height:350vh; background:var(--void); color:#eef0e8; }
+    .cinematic-stage { position:sticky; top:0; height:100svh; overflow:hidden; display:grid; place-items:center; isolation:isolate; background:radial-gradient(circle at 50% var(--atmosphere-shift,20%),rgba(45,93,71,.24),transparent 35%),var(--void); contain:paint; }
+    .cinematic-stage::after { content:""; position:absolute; inset:-50%; z-index:-1; opacity:.12; background-image:radial-gradient(rgba(238,240,232,.7) .45px,transparent .6px); background-size:4px 4px; animation:grain 1.2s steps(2) infinite; pointer-events:none; }
+    .orbit { position:absolute; width:min(83vw,83vh); aspect-ratio:1; border:1px solid rgba(238,240,232,.13); border-radius:50%; transform:rotate(-18deg); opacity:calc(var(--planet-opacity)*.55); } .orbit::after { content:""; position:absolute; top:13%; right:14%; width:6px; aspect-ratio:1; border-radius:50%; background:var(--lime); box-shadow:0 0 1.25rem rgba(200,255,69,.7); }
+    .celestial { position:absolute; width:min(64vw,64vh); aspect-ratio:1; transform:scale(var(--sphere-scale)); border-radius:50%; box-shadow:inset -2rem -1rem 4rem #000,inset 1rem 1rem 4rem rgba(168,232,208,.12),0 0 5rem rgba(119,212,220,.12); transition:transform .08s linear; }
+    .planet-layer,.iris-layer,.pupil { position:absolute; inset:0; border-radius:50%; }
+    .planet-layer { opacity:var(--planet-opacity); background:radial-gradient(circle at 31% 24%,rgba(168,232,208,.42),transparent 3%),repeating-radial-gradient(ellipse at 37% 56%,transparent 0 8%,rgba(168,232,208,.11) 8.4%,transparent 9.1%),conic-gradient(from 32deg,#06110c,#3e765b 8%,#10291e 19%,#75b191 27%,#09160f 38%,#275340 51%,#09100d 66%,#8ec9a7 78%,#14281f 91%,#06100b); }
+    .planet-layer::before { content:""; position:absolute; inset:-3%; border-radius:50%; background:repeating-conic-gradient(from 4deg,transparent 0 2.1deg,rgba(168,232,208,.15) 2.45deg,transparent 3.2deg); mask:radial-gradient(circle,transparent 0 15%,#000 19% 77%,transparent 79%); animation:breathe-orb 10s ease-in-out infinite; }
+    .iris-layer { opacity:var(--iris-opacity); overflow:hidden; background:repeating-conic-gradient(from 8deg,#07100c 0 1.2deg,#2f5f4b 1.6deg 2.1deg,#8bc4a6 2.5deg 2.8deg,#0a1912 3.4deg 4.2deg),radial-gradient(circle,#020504 0 20%,transparent 20.5%); mask:radial-gradient(circle,#000 0 78%,transparent 79%); }
+    .iris-layer::before { content:""; position:absolute; inset:11%; border-radius:50%; background:repeating-conic-gradient(from 20deg,transparent 0 3deg,rgba(200,255,69,.22) 3.2deg,transparent 3.8deg); mask:radial-gradient(circle,transparent 0 19%,#000 20% 80%,transparent 82%); animation:counterspin 24s linear infinite; }
+    .pupil { inset:31%; transform:scale(var(--pupil-scale)); background:radial-gradient(circle at 43% 38%,rgba(238,240,232,.06),transparent 8%),#010302; box-shadow:0 0 2.5rem rgba(0,0,0,.9); opacity:var(--iris-opacity); }
+    .eye-field { position:absolute; width:min(96vw,88rem); height:min(56vw,68vh); border-top:1px solid rgba(238,240,232,.24); border-bottom:1px solid rgba(238,240,232,.18); border-radius:52% 48%; opacity:var(--eye-opacity); transform:scaleX(calc(.72 + var(--eye-opacity)*.28)); box-shadow:inset 0 3rem 6rem rgba(168,232,208,.035); }
+    .intro-copy { position:absolute; inset:0; display:grid; place-items:center; padding:var(--gutter); text-align:center; pointer-events:none; } .intro-line { position:absolute; max-width:16ch; margin:0; opacity:0; transform:translateY(1rem); transition:opacity .7s var(--ease),transform .7s var(--ease); } .intro-line.is-visible { opacity:1; transform:none; } .intro-opening { top:17vh; max-width:30rem; font-size:clamp(1rem,2vw,1.35rem); font-weight:300; letter-spacing:.015em; } .intro-truth { font-size:clamp(2.5rem,6.5vw,7rem); font-weight:300; line-height:.94; letter-spacing:-.06em; text-wrap:balance; text-shadow:0 .1em 1em #000; } .intro-recognition { bottom:18vh; max-width:32rem; font:400 clamp(.72rem,1.1vw,.9rem)/1.7 var(--mono); letter-spacing:.09em; text-transform:uppercase; color:rgba(238,240,232,.72); }
+    .name-reveal { position:absolute; inset:auto var(--gutter) clamp(2rem,8vh,5.5rem); display:flex; justify-content:space-between; gap:2rem; align-items:end; opacity:0; transform:translateY(1rem); transition:1s var(--ease); pointer-events:none; } .name-reveal.is-visible { opacity:1; transform:none; } .name-reveal strong { font-size:clamp(3.6rem,11vw,10.5rem); font-weight:400; line-height:.78; letter-spacing:-.07em; } .name-reveal span { max-width:29rem; text-align:right; font:400 clamp(.68rem,1.1vw,.9rem)/1.65 var(--mono); letter-spacing:.07em; text-transform:uppercase; color:rgba(238,240,232,.75); }
+    .scroll-cue { position:absolute; left:var(--gutter); bottom:1.4rem; font:400 .62rem/1 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:rgba(238,240,232,.55); writing-mode:vertical-rl; } .scroll-cue::after { content:""; display:inline-block; width:1px; height:3rem; margin-top:.8rem; background:linear-gradient(var(--lime),transparent); }
+    .skip-intro { position:absolute; z-index:3; right:var(--gutter); top:5.2rem; min-height:44px; padding:.6rem 1rem; border:1px solid rgba(238,240,232,.2); border-radius:999px; background:rgba(5,10,8,.35); color:#eef0e8; cursor:pointer; font:400 .67rem/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; backdrop-filter:blur(8px); } .skip-intro:hover { border-color:var(--lime); }
+    .reduced-sequence { display:none; padding:6rem var(--gutter) 2rem; background:var(--void); } .static-frame { min-height:70svh; display:grid; grid-template-columns:minmax(12rem,1fr) minmax(14rem,1fr); gap:clamp(2rem,7vw,8rem); align-items:center; border-top:1px solid rgba(238,240,232,.15); } .static-frame p { max-width:18ch; margin:0; font-size:clamp(2rem,5vw,5rem); font-weight:300; line-height:1; letter-spacing:-.045em; } .static-orb { justify-self:center; width:min(58vw,22rem); aspect-ratio:1; border-radius:50%; background:conic-gradient(#06110c,#639477,#0a1713,#0f2c23,#a8e8d0,#06110c); box-shadow:inset -2rem -1rem 4rem #000; } .static-orb.iris { background:repeating-conic-gradient(#06110c 0 2deg,#72a98c 2.4deg 3deg,#132d21 3.4deg 5deg); box-shadow:inset 0 0 0 6rem rgba(5,10,8,.15),inset 0 0 0 7.2rem #010302; } .static-orb.human { border:1px solid rgba(238,240,232,.25); border-radius:52% 48%; background:radial-gradient(circle,#010302 0 14%,#4f7e67 15% 28%,#07100c 29% 34%,transparent 35%); box-shadow:none; }
+    .professional-anchor { min-height:100svh; display:grid; grid-template-columns:minmax(0,1.2fr) minmax(18rem,.8fr); gap:clamp(2rem,9vw,10rem); align-items:end; padding:14vh var(--gutter) 11vh; border-bottom:1px solid var(--line); background:var(--paper); color:var(--paper-ink); } .professional-anchor h1 { margin:0; max-width:7ch; font-size:clamp(4.7rem,13vw,13rem); font-weight:400; line-height:.72; letter-spacing:-.078em; } .anchor-copy { align-self:center; max-width:38rem; }
+    .eyebrow { display:inline-flex; align-items:center; gap:.65rem; margin:0 0 1.5rem; font:500 .68rem/1.2 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--muted); } .eyebrow::before { content:""; width:1.8rem; height:1px; background:var(--lime); } .role-line { margin:0 0 2rem; font:400 clamp(.78rem,1.4vw,1rem)/1.75 var(--mono); letter-spacing:.055em; text-transform:uppercase; } .grounding { margin:0; font-size:clamp(1.25rem,2.4vw,2rem); font-weight:300; line-height:1.38; letter-spacing:-.02em; } .grounding strong { color:#5e967b; font-weight:500; }
+    .marquee { overflow:hidden; border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--surface); } .marquee-track { display:flex; width:max-content; animation:marquee 42s linear infinite; } .marquee-track.is-paused { animation-play-state:paused; } .marquee-line { flex:none; display:flex; align-items:center; gap:2rem; min-height:72px; padding-right:2rem; font:400 .7rem/1 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--muted); } .marquee-line b { color:var(--lime); font-size:.55rem; }
+    .chapter { position:relative; padding:clamp(7rem,14vw,13rem) var(--gutter); background:var(--surface); color:var(--text); } .chapter-inner { width:min(100%,var(--content)); margin-inline:auto; } .chapter-header { display:grid; grid-template-columns:minmax(10rem,.4fr) minmax(0,1fr); gap:clamp(2rem,9vw,10rem); align-items:start; margin-bottom:clamp(4rem,10vw,9rem); } .chapter-kicker { position:sticky; top:7rem; margin:0; font:400 .68rem/1.6 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--muted); } .chapter-kicker span { display:block; margin-top:.7rem; color:var(--faint); } .chapter-title { margin:0; max-width:14ch; font-size:clamp(3.2rem,7.5vw,8.5rem); font-weight:300; line-height:.92; letter-spacing:-.06em; text-wrap:balance; } .chapter-lede { max-width:42rem; margin:2rem 0 0 auto; font-size:clamp(1.15rem,2vw,1.55rem); font-weight:300; line-height:1.55; color:var(--muted); }
+    .statement { max-width:18ch; margin:0 0 clamp(4rem,9vw,8rem); font-size:clamp(2.4rem,6vw,7rem); font-weight:300; line-height:.98; letter-spacing:-.05em; } .statement em { color:var(--mint); font-style:normal; }
+    .node-system { display:grid; grid-template-columns:minmax(25rem,1.35fr) minmax(18rem,.65fr); gap:clamp(2rem,6vw,6rem); align-items:center; min-height:42rem; padding:clamp(1rem,4vw,4rem) 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); } .node-field { position:relative; min-height:38rem; } .node-map { position:absolute; inset:8%; width:84%; height:84%; overflow:visible; } .node-line { stroke:var(--line-strong); stroke-width:.32; transition:stroke-width .3s,opacity .3s; } .node-line.is-active { stroke:var(--lime); stroke-width:1.2; opacity:1; }
+    .node-button { position:absolute; z-index:2; min-width:44px; min-height:44px; padding:.7rem .9rem; transform:translate(-50%,-50%); border:1px solid var(--line-strong); border-radius:999px; background:var(--surface); color:var(--text); cursor:pointer; font:400 clamp(.62rem,1vw,.76rem)/1 var(--mono); letter-spacing:.06em; text-transform:uppercase; transition:transform .25s var(--ease),border-color .25s,background .25s; } .node-button:hover,.node-button[aria-pressed="true"] { transform:translate(-50%,-50%) scale(1.08); border-color:var(--lime); } .node-button[aria-pressed="true"]::after { content:""; position:absolute; inset:-5px; border:1px solid var(--lime); border-radius:999px; } .node-person { left:50%; top:50%; background:var(--lime); color:#07100c; border-color:var(--lime); font-weight:500; } .node-community { left:17%; top:18%; }.node-product { left:50%; top:8%; }.node-organisation { left:84%; top:21%; }.node-market { left:91%; top:63%; }.node-data { left:69%; top:89%; }.node-nature { left:30%; top:89%; }.node-consequence { left:8%; top:64%; }
+    .node-reading { position:relative; padding-left:clamp(1.5rem,4vw,4rem); border-left:1px solid var(--line); } .node-reading::before { content:"Selected relationship"; display:block; margin-bottom:1.5rem; font:400 .62rem/1 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--muted); } .node-reading h3 { margin:0 0 1rem; font-size:clamp(2.4rem,4vw,4.5rem); font-weight:300; line-height:1; letter-spacing:-.05em; } .node-reading p { margin:0; font-size:clamp(1.05rem,1.7vw,1.3rem); color:var(--muted); }
+    .product-translation { display:grid; grid-template-columns:.55fr 1fr; gap:clamp(2rem,8vw,9rem); margin-top:clamp(5rem,11vw,10rem); padding-top:2rem; border-top:1px solid var(--line); } .product-translation span { font:400 .66rem/1.5 var(--mono); letter-spacing:.1em; text-transform:uppercase; color:var(--muted); } .product-translation p { max-width:26ch; margin:0; font-size:clamp(1.8rem,3.6vw,3.8rem); font-weight:300; line-height:1.12; letter-spacing:-.04em; }
+    .terrain { min-height:290vh; overflow:clip; background:linear-gradient(155deg,#07100c 0%,#0f2c23 48%,#10261e 100%); color:#eef0e8; } .terrain::before { content:""; position:absolute; inset:0; opacity:.21; background:repeating-radial-gradient(ellipse at 10% 90%,transparent 0 2.7rem,rgba(168,232,208,.22) 2.76rem 2.82rem,transparent 2.88rem 4rem); pointer-events:none; } .terrain .chapter-kicker,.terrain .chapter-lede { color:rgba(238,240,232,.68); }
+    .terrain-layout { display:grid; grid-template-columns:minmax(22rem,1fr) minmax(19rem,.75fr); gap:clamp(2rem,8vw,8rem); align-items:start; } .elevation { position:sticky; top:14vh; min-height:70vh; display:grid; place-items:center; } .elevation svg { width:100%; height:auto; overflow:visible; } .terrain-path-base { fill:none; stroke:rgba(238,240,232,.13); stroke-width:2; } .terrain-path { fill:none; stroke:var(--lime); stroke-width:2.2; stroke-linecap:round; } .terrain-marker { fill:var(--lime); stroke:#07100c; stroke-width:5; } .altitude-grid { stroke:rgba(238,240,232,.12); stroke-width:1; stroke-dasharray:3 8; } .altitude-label { fill:rgba(238,240,232,.5); font:12px var(--mono); letter-spacing:.08em; }
+    .terrain-moments { display:grid; gap:35vh; padding-bottom:20vh; } .trail-moment { min-height:58vh; display:flex; flex-direction:column; justify-content:center; border-top:1px solid rgba(238,240,232,.18); } .trail-moment small { font:400 .66rem/1.4 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:rgba(238,240,232,.58); } .trail-moment h3 { margin:1.6rem 0 1.3rem; font-size:clamp(2.4rem,5vw,5.6rem); font-weight:300; line-height:1; letter-spacing:-.055em; text-wrap:balance; } .trail-moment p { max-width:34rem; margin:0; font-size:clamp(1.05rem,1.7vw,1.25rem); color:rgba(238,240,232,.68); } .terrain-principle { position:relative; z-index:2; max-width:20ch; margin:14rem 0 0 auto; font-size:clamp(2.2rem,5.5vw,6.2rem); font-weight:300; line-height:1; letter-spacing:-.05em; }
+    .nature-os { overflow:hidden; } .nature-scenes { border-top:1px solid var(--line); } .nature-scene { position:relative; display:grid; grid-template-columns:minmax(11rem,.42fr) minmax(0,1fr) minmax(13rem,.5fr); gap:clamp(1.5rem,6vw,7rem); align-items:center; min-height:min(82svh,52rem); padding:clamp(3rem,7vw,7rem) 0; border-bottom:1px solid var(--line); } .scene-index { align-self:start; font:400 .68rem/1 var(--mono); letter-spacing:.12em; color:var(--muted); } .nature-scene h3 { margin:0; font-size:clamp(3rem,7vw,8rem); font-weight:300; line-height:.86; letter-spacing:-.065em; } .nature-scene h3 span { display:block; margin-top:1rem; font:400 clamp(.75rem,1.3vw,1rem)/1.6 var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--muted); } .scene-explanation { align-self:end; max-width:29rem; } .scene-explanation strong { display:block; margin-bottom:1rem; font:500 .65rem/1.4 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:#5e967b; } [data-theme="dark"] .scene-explanation strong { color:var(--mint); } .scene-explanation p { margin:0; font-size:clamp(1.05rem,1.7vw,1.25rem); color:var(--muted); } .scene-orbit { position:absolute; left:1.2rem; top:50%; width:clamp(7rem,15vw,13rem); aspect-ratio:1; border:1px solid var(--line); border-radius:50%; transform:translateY(-50%); opacity:.5; pointer-events:none; } .scene-orbit::before,.scene-orbit::after { content:""; position:absolute; border:1px solid var(--line); border-radius:50%; } .scene-orbit::before { inset:18%; }.scene-orbit::after { inset:40%; background:var(--lime); border:0; }
+    .team { background:var(--paper); color:var(--paper-ink); } .presence-list { margin:0; border-top:1px solid var(--line); } .presence-row { display:grid; grid-template-columns:minmax(11rem,.42fr) minmax(0,1fr); gap:clamp(2rem,9vw,10rem); padding:clamp(1.7rem,3vw,2.8rem) 0; border-bottom:1px solid var(--line); } .presence-row dt { font:400 .7rem/1.5 var(--mono); letter-spacing:.09em; text-transform:uppercase; color:var(--muted); } .presence-row dd { margin:0; font-size:clamp(1.35rem,2.6vw,2.6rem); font-weight:300; line-height:1.22; letter-spacing:-.025em; } .presence-row dd::before { content:"→"; display:inline-block; margin-right:1.2rem; color:#5e967b; } .proof-line { max-width:58rem; margin:clamp(5rem,10vw,9rem) 0 0 auto; padding:2rem 0 0 clamp(1rem,4vw,4rem); border-top:1px solid var(--line); border-left:1px solid var(--line); font:400 clamp(.85rem,1.4vw,1.05rem)/1.8 var(--mono); color:var(--muted); }
+    .explorations { background:var(--surface); } .exploration-list { border-top:1px solid var(--line); } .exploration { border-bottom:1px solid var(--line); } .exploration summary { min-height:8rem; display:grid; grid-template-columns:5rem minmax(0,1fr) auto; gap:clamp(1rem,4vw,4rem); align-items:center; cursor:pointer; list-style:none; } .exploration summary::-webkit-details-marker { display:none; } .exploration summary::after { content:"+"; display:grid; place-items:center; width:44px; height:44px; border:1px solid var(--line-strong); border-radius:50%; font-size:1.3rem; transition:transform .35s var(--ease); } .exploration[open] summary::after { transform:rotate(45deg); } .exploration-number { font:400 .66rem/1 var(--mono); color:var(--muted); } .exploration h3 { margin:0; font-size:clamp(1.8rem,4vw,4.2rem); font-weight:300; line-height:1; letter-spacing:-.045em; }
+    .exploration-body { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1px; margin:0 0 3rem 5rem; background:var(--line); border:1px solid var(--line); } .exploration-answer { min-height:13rem; padding:clamp(1.3rem,3vw,2.6rem); background:var(--surface); } .exploration-answer strong { display:block; margin-bottom:1rem; font:500 .64rem/1.5 var(--mono); letter-spacing:.1em; text-transform:uppercase; color:var(--muted); } .exploration-answer p { margin:0; font-size:clamp(1rem,1.45vw,1.18rem); } .concept-note { display:inline-block; margin:0 0 2rem 5rem; padding:.65rem .8rem; border:1px solid var(--line); font:400 .64rem/1.5 var(--mono); color:var(--muted); }
+    .lens { background:var(--paper); color:var(--paper-ink); } .lens-intro { max-width:28ch; margin:0 0 clamp(5rem,10vw,10rem) auto; font-size:clamp(1.2rem,2.2vw,1.8rem); color:var(--muted); } .lens-list { margin:0; padding:0; list-style:none; border-top:1px solid var(--line); } .lens-question { position:relative; min-height:56vh; display:grid; grid-template-columns:7rem minmax(10rem,.35fr) minmax(0,1fr); gap:clamp(1rem,5vw,5rem); align-items:center; border-bottom:1px solid var(--line); } .lens-number { font:400 .65rem/1 var(--mono); color:var(--muted); } .lens-question h3 { margin:0; font:500 .68rem/1.5 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:#5e967b; } .lens-question p { max-width:17ch; margin:0; font-size:clamp(2rem,5vw,5.8rem); font-weight:300; line-height:1; letter-spacing:-.05em; }
+    .epilogue { min-height:155vh; display:grid; align-items:center; overflow:hidden; padding:clamp(8rem,15vw,14rem) var(--gutter) 3rem; background:var(--void); color:#eef0e8; } .epilogue-inner { position:relative; z-index:1; width:min(100%,var(--content)); margin:auto; } .return-eye { position:absolute; z-index:-1; left:50%; top:42%; width:min(95vw,70rem); height:min(56vw,40rem); transform:translate(-50%,-50%); border-top:1px solid rgba(238,240,232,.18); border-bottom:1px solid rgba(238,240,232,.15); border-radius:52% 48%; opacity:.7; } .return-eye::before { content:""; position:absolute; left:50%; top:50%; width:min(52vw,31rem); aspect-ratio:1; transform:translate(-50%,-50%); border-radius:50%; background:repeating-conic-gradient(#06110c 0 2deg,#4c8066 2.4deg 3.1deg,#132a20 3.4deg 5deg); box-shadow:inset 0 0 0 clamp(4rem,10vw,8rem) rgba(5,10,8,.08); animation:breathe 10s ease-in-out infinite; } .return-eye::after { content:""; position:absolute; left:50%; top:50%; width:min(16vw,10rem); aspect-ratio:1; transform:translate(-50%,-50%); border-radius:50%; background:#010302; box-shadow:0 0 4rem #000; }
+    .epilogue .eyebrow { color:rgba(238,240,232,.62); } .closing-question { max-width:12ch; margin:24vh 0 3rem; font-size:clamp(4rem,11vw,12rem); font-weight:300; line-height:.82; letter-spacing:-.075em; text-wrap:balance; } .closing-copy { max-width:47rem; margin:0 0 4rem auto; font-size:clamp(1.25rem,2.5vw,2.25rem); font-weight:300; line-height:1.4; color:rgba(238,240,232,.76); } .cta-row { display:flex; flex-wrap:wrap; gap:.8rem; justify-content:flex-end; margin:0 0 8rem; } .cta { min-height:50px; display:inline-flex; align-items:center; gap:.75rem; padding:.8rem 1.2rem; border:1px solid rgba(238,240,232,.26); border-radius:999px; color:#eef0e8; text-decoration:none; font:400 .72rem/1 var(--mono); letter-spacing:.06em; text-transform:uppercase; transition:background .25s,color .25s,border .25s; } .cta:hover { border-color:var(--lime); background:var(--lime); color:#07100c; } .cta-primary { background:var(--lime); border-color:var(--lime); color:#07100c; } .cta span { font-size:1rem; }
+    .contact-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border-top:1px solid rgba(238,240,232,.16); border-bottom:1px solid rgba(238,240,232,.16); } .contact-item { min-height:9rem; padding:1.8rem 1rem 1.8rem 0; border-right:1px solid rgba(238,240,232,.16); } .contact-item:last-child { border-right:0; padding-left:2rem; } .contact-item:nth-child(2) { padding-left:2rem; } .contact-item small { display:block; margin-bottom:1rem; font:400 .62rem/1 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:rgba(238,240,232,.52); } .contact-item a,.contact-item p { margin:0; color:#eef0e8; font-size:clamp(.9rem,1.5vw,1.15rem); overflow-wrap:anywhere; } .footer { display:flex; justify-content:space-between; gap:1rem; padding-top:2.2rem; font:400 .62rem/1.6 var(--mono); letter-spacing:.06em; color:rgba(238,240,232,.46); }
+    .reveal { opacity:1; transform:none; } .js .reveal { opacity:0; transform:translateY(2rem); transition:opacity .85s var(--ease),transform .85s var(--ease); } .js .reveal.is-revealed { opacity:1; transform:none; }
+    @keyframes breathe { 50% { transform:translate(-50%,-50%) scale(1.035) rotate(2deg); filter:saturate(1.08); } } @keyframes breathe-orb { 50% { transform:scale(1.035) rotate(2deg); filter:saturate(1.08); } } @keyframes counterspin { to { transform:rotate(-1turn); } } @keyframes grain { 0%{transform:translate(0)}25%{transform:translate(2%,-1%)}50%{transform:translate(-1%,2%)}75%{transform:translate(1%,1%)} } @keyframes marquee { to { transform:translateX(-50%); } }
+    @media(max-width:900px){ .chapter-rail{display:none}.site-header{grid-template-columns:1fr auto}.coordinates{display:none}.professional-anchor,.chapter-header,.node-system,.terrain-layout{grid-template-columns:1fr}.professional-anchor{align-items:center}.professional-anchor h1{align-self:end}.chapter-kicker{position:static}.chapter-lede{margin-left:0}.node-system{min-height:auto}.node-field{min-height:34rem}.node-reading{padding:2rem 0 0;border-left:0;border-top:1px solid var(--line)}.elevation{position:relative;top:auto;min-height:auto}.terrain{min-height:auto}.terrain-moments{gap:8rem}.trail-moment{min-height:auto}.nature-scene{grid-template-columns:5rem 1fr}.scene-explanation{grid-column:2}.scene-orbit{display:none}.lens-question{grid-template-columns:4rem 1fr;padding:3rem 0}.lens-question p{grid-column:2}.contact-grid{grid-template-columns:1fr}.contact-item,.contact-item:nth-child(2),.contact-item:last-child{min-height:auto;padding:1.5rem 0;border-right:0;border-bottom:1px solid rgba(238,240,232,.16)}.contact-item:last-child{border-bottom:0} }
+    @media(max-width:640px){ .site-header{min-height:58px}.name-reveal{display:block;bottom:5rem}.name-reveal strong{font-size:clamp(3.6rem,18vw,6rem)}.name-reveal span{display:block;margin-top:1rem;text-align:left}.intro-truth{font-size:clamp(2.6rem,12vw,4.7rem)}.celestial{width:min(92vw,64vh)}.orbit{width:min(115vw,83vh)}.skip-intro{top:4.5rem}.professional-anchor{min-height:auto;padding-top:8rem}.professional-anchor h1{font-size:clamp(4.2rem,22vw,7.4rem)}.chapter{padding-top:7rem;padding-bottom:7rem}.chapter-title{font-size:clamp(3rem,15vw,5.6rem)}.node-field{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem;min-height:auto}.node-map{display:none}.node-button{position:relative;inset:auto!important;width:100%;transform:none;border-radius:0;text-align:left}.node-button:hover,.node-button[aria-pressed="true"]{transform:none}.node-button[aria-pressed="true"]::after{inset:3px;border-radius:0}.node-person{grid-column:1/-1}.product-translation,.presence-row{grid-template-columns:1fr}.nature-scene{grid-template-columns:1fr}.scene-index,.scene-explanation{grid-column:1}.exploration summary{grid-template-columns:2.5rem minmax(0,1fr) auto;min-height:7rem}.exploration-body{grid-template-columns:1fr;margin-left:0}.concept-note{margin-left:0}.lens-question{grid-template-columns:2.5rem 1fr}.closing-question{margin-top:18vh}.cta-row{justify-content:flex-start}.cta{width:100%;justify-content:space-between}.footer{flex-direction:column} }
+    @media(prefers-reduced-motion:reduce){ html{scroll-behavior:auto}*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.prologue{min-height:auto}.cinematic-stage{display:none}.reduced-sequence{display:block}.static-frame{min-height:65svh}.marquee-track{transform:none}.marquee-line[aria-hidden="true"]{display:none}.js .reveal{opacity:1;transform:none}.terrain-path{stroke-dashoffset:0!important} }
+    .no-js .prologue{min-height:auto}.no-js .cinematic-stage{display:none}.no-js .reduced-sequence{display:block}.no-js .marquee-track{animation:none}.no-js .marquee-line[aria-hidden="true"]{display:none}
+    @media(prefers-color-scheme:light){ .no-js{--surface:#fffef8;--text:#0a1713;--muted:rgba(10,23,19,.7);--faint:rgba(10,23,19,.5);--line:rgba(10,23,19,.16);--line-strong:rgba(10,23,19,.32);--paper:#f4f3ed;--paper-ink:#0a1713;color-scheme:light} }
+    @media(forced-colors:active){ .page-progress,.node-button[aria-pressed="true"]::after{background:Highlight}.planet-layer,.iris-layer,.return-eye{forced-color-adjust:none} }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#human-system">Skip to the main story</a>
+  <div class="page-progress" data-page-progress aria-hidden="true"></div>
+  <header class="site-header" aria-label="Site controls">
+    <a class="brand" href="#top" aria-label="Cristian Malpica, back to the beginning">CM</a>
+    <p class="coordinates">41.3874° N · 2.1686° E · Barcelona</p>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Theme: system. Activate to change theme.">Theme&nbsp;·&nbsp;<span data-theme-label>System</span></button>
+  </header>
+  <nav class="chapter-rail" aria-label="Chapter navigation"><ul><li><a href="#human-system"><span>Human system</span></a></li><li><a href="#terrain"><span>Terrain</span></a></li><li><a href="#nature-os"><span>Nature OS</span></a></li><li><a href="#team"><span>In a team</span></a></li><li><a href="#explorations"><span>Explorations</span></a></li><li><a href="#lens"><span>The lens</span></a></li><li><a href="#contact"><span>Conversation</span></a></li></ul></nav>
+
+  <main id="main">
+    <section class="prologue" id="top" aria-label="Cinematic prologue, from planet to pupil">
+      <div class="cinematic-stage" data-stage>
+        <button class="skip-intro" type="button" data-skip-intro>Skip intro</button><div class="orbit" aria-hidden="true"></div><div class="eye-field" aria-hidden="true"></div>
+        <div class="celestial" aria-hidden="true"><div class="planet-layer"></div><div class="iris-layer"></div><div class="pupil"></div></div>
+        <div class="intro-copy"><p class="intro-line intro-opening is-visible" data-opening>Some problems appear larger than us.</p><p class="intro-line intro-truth" data-truth>The answers to the most complex problems lie within ourselves.</p><p class="intro-line intro-recognition" data-recognition>Outer scale. Inner understanding. Human consequence.</p></div>
+        <div class="name-reveal" data-name-reveal aria-hidden="true"><strong>Cristian<br>Malpica</strong><span>Product · Systems · Design · Sustainable Innovation<br>Barcelona</span></div><span class="scroll-cue" aria-hidden="true">Travel inward</span>
+      </div>
+      <div class="reduced-sequence" aria-label="Planet, iris, and human insight"><article class="static-frame"><div class="static-orb" aria-hidden="true"></div><p>Some problems appear larger than us.</p></article><article class="static-frame"><div class="static-orb iris" aria-hidden="true"></div><p>Looking outward for scale and inward for understanding are part of the same movement.</p></article><article class="static-frame"><div class="static-orb human" aria-hidden="true"></div><p>The answers to the most complex problems lie within ourselves.</p></article></div>
+    </section>
+
+    <section class="professional-anchor" id="meaning" tabindex="-1" aria-labelledby="site-title"><h1 id="site-title">Cristian Malpica</h1><div class="anchor-copy reveal"><p class="eyebrow">Barcelona · Product professional</p><p class="role-line">Product · Systems · Design · Sustainable Innovation</p><p class="grounding">I connect <strong>human insight</strong>, commercial reality, data, design, and operational constraints to turn complex environments into clear products people can use and organisations can sustain.</p></div></section>
+
+    <div class="marquee" aria-label="Cristian's working principles"><div class="marquee-track"><div class="marquee-line"><span>Systems Thinking</span><b>●</b><span>Athletic Pacing</span><b>●</b><span>Mycelial Empathy</span><b>●</b><span>Organic Resilience</span><b>●</b><span>Human Consequence</span><b>●</b><span>Sustainable Innovation</span><b>●</b><span>Measure and Adapt</span><b>●</b></div><div class="marquee-line" aria-hidden="true"><span>Systems Thinking</span><b>●</b><span>Athletic Pacing</span><b>●</b><span>Mycelial Empathy</span><b>●</b><span>Organic Resilience</span><b>●</b><span>Human Consequence</span><b>●</b><span>Sustainable Innovation</span><b>●</b><span>Measure and Adapt</span><b>●</b></div></div></div>
+
+    <section class="chapter human-system" id="human-system" aria-labelledby="human-system-title"><div class="chapter-inner">
+      <header class="chapter-header reveal"><p class="chapter-kicker">Chapter I<span>The human system</span></p><div><h2 class="chapter-title" id="human-system-title">Every system eventually becomes a human experience.</h2><p class="chapter-lede">A product can begin as a market, a model, a requirement or a line of code. It ends as something a person must understand, trust, use, resist or live with.</p></div></header>
+      <p class="statement reveal">What changes when we stop treating the nodes as separate and begin designing for the <em>relationships</em> between them?</p>
+      <div class="node-system reveal"><div class="node-field" aria-label="Interactive map of relationships that return to the person">
+        <svg class="node-map" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><line class="node-line" data-node="Community" x1="17" y1="18" x2="50" y2="50"></line><line class="node-line" data-node="Product" x1="50" y1="8" x2="50" y2="50"></line><line class="node-line" data-node="Organisation" x1="84" y1="21" x2="50" y2="50"></line><line class="node-line" data-node="Market" x1="91" y1="63" x2="50" y2="50"></line><line class="node-line" data-node="Data" x1="69" y1="89" x2="50" y2="50"></line><line class="node-line" data-node="Nature" x1="30" y1="89" x2="50" y2="50"></line><line class="node-line" data-node="Consequence" x1="8" y1="64" x2="50" y2="50"></line></svg>
+        <button class="node-button node-person" type="button" data-node="Person" data-description="The point of return. Every market signal, operational choice and product decision is eventually felt by a person." aria-pressed="true">Person</button><button class="node-button node-community" type="button" data-node="Community" data-description="Products shape participation, belonging and shared value. The connection is social before it is technical." aria-pressed="false">Community</button><button class="node-button node-product" type="button" data-node="Product" data-description="A product is a set of choices made tangible. Its quality lives in what those choices let people do." aria-pressed="false">Product</button><button class="node-button node-organisation" type="button" data-node="Organisation" data-description="Capabilities, incentives and unspoken constraints determine what an organisation can promise and sustain." aria-pressed="false">Organisation</button><button class="node-button node-market" type="button" data-node="Market" data-description="A market is not an abstraction. It is a moving pattern of needs, trade-offs, alternatives and decisions." aria-pressed="false">Market</button><button class="node-button node-data" type="button" data-node="Data" data-description="Data becomes useful when it sharpens a decision, challenges an assumption or reveals behaviour that words conceal." aria-pressed="false">Data</button><button class="node-button node-nature" type="button" data-node="Nature" data-description="Nature offers a creative lens for balance, adaptation and energy. It is inspiration for inquiry, not a claim of scientific equivalence." aria-pressed="false">Nature</button><button class="node-button node-consequence" type="button" data-node="Consequence" data-description="Outputs are never the whole story. Responsible product work asks who carries the cost, the friction and the lasting effect." aria-pressed="false">Consequence</button>
+      </div><div class="node-reading" data-node-panel aria-live="polite"><h3 data-node-title>Person</h3><p data-node-copy>The point of return. Every market signal, operational choice and product decision is eventually felt by a person.</p></div><noscript><p>Community, product, organisation, market, data, nature and consequence all return to the person who experiences the decision.</p></noscript></div>
+      <div class="product-translation reveal"><span>Professional translation</span><p>Product Management is not the administration of features. It is the practice of understanding relationships, making responsible choices, and helping people move through complexity.</p></div>
+    </div></section>
+
+    <section class="chapter terrain" id="terrain" aria-labelledby="terrain-title"><div class="chapter-inner">
+      <header class="chapter-header reveal"><p class="chapter-kicker">Chapter II<span>The terrain</span></p><div><h2 class="chapter-title" id="terrain-title">Progress has a pace.</h2><p class="chapter-lede">Mountain trails shaped a working principle: endurance is not force applied for longer. It is attention, energy used deliberately, and the ability to keep choosing well as conditions change.</p></div></header>
+      <progress class="sr-only" max="100" value="0" data-terrain-progress aria-label="Terrain chapter progress"></progress>
+      <div class="terrain-layout"><figure class="elevation" aria-label="An elevation line that rises as the chapter progresses"><svg viewBox="0 0 700 360" role="img" aria-labelledby="elevation-title"><title id="elevation-title">A measured mountain elevation path</title><g class="altitude-grid"><line x1="20" y1="300" x2="680" y2="300"></line><line x1="20" y1="220" x2="680" y2="220"></line><line x1="20" y1="140" x2="680" y2="140"></line><line x1="20" y1="60" x2="680" y2="60"></line></g><g class="altitude-label"><text x="24" y="292">OBSERVE</text><text x="24" y="212">ADAPT</text><text x="24" y="132">DECIDE</text><text x="24" y="52">SUSTAIN</text></g><path class="terrain-path-base" d="M24 326 C75 315 93 286 139 294 C192 305 205 245 255 253 C302 260 318 198 365 206 C419 216 438 134 492 154 C547 174 555 84 605 105 C642 121 654 68 682 42"></path><path class="terrain-path" data-terrain-path d="M24 326 C75 315 93 286 139 294 C192 305 205 245 255 253 C302 260 318 198 365 206 C419 216 438 134 492 154 C547 174 555 84 605 105 C642 121 654 68 682 42"></path><circle class="terrain-marker" data-terrain-marker cx="24" cy="326" r="7"></circle></svg></figure>
+        <div class="terrain-moments"><article class="trail-moment reveal"><small>01 · Before the climb</small><h3>The terrain does not care about confidence. It rewards attention.</h3><p>Observe before forcing. Prepare with humility. Understand the conditions before committing energy to a route.</p></article><article class="trail-moment reveal"><small>02 · Inside the difficult kilometres</small><h3>The next coherent decision matters more than the perfect plan imagined at the start.</h3><p>Ambiguity changes the ground beneath a team. Priorities must respond to evidence without abandoning the purpose of the journey.</p></article><article class="trail-moment reveal"><small>03 · After the summit</small><h3>Progress is not proven by arrival alone. It is proven by what remains sustainable after the effort.</h3><p>Recovery, learning and iteration belong to delivery. Durable value leaves enough capacity to continue.</p></article></div>
+      </div><p class="terrain-principle reveal">Sustainable progress is not constant acceleration. It is the ability to keep making coherent decisions when the path becomes difficult.</p>
+    </div></section>
+
+    <section class="chapter nature-os" id="nature-os" aria-labelledby="nature-title"><div class="chapter-inner">
+      <header class="chapter-header reveal"><p class="chapter-kicker">Chapter III<span>Nature's operating system</span></p><div><h2 class="chapter-title" id="nature-title">Resilience lives in relationships.</h2><p class="chapter-lede">Nature is not a decorative theme. It is a prompt to examine balance, adaptation, circularity and the intelligent use of energy. These are creative product lenses, not literal scientific claims.</p></div></header>
+      <div class="nature-scenes"><article class="nature-scene reveal"><span class="scene-index">01 / 04</span><span class="scene-orbit" aria-hidden="true"></span><h3>Mycelium<span>Listen beneath the surface</span></h3><div class="scene-explanation"><strong>Mycelial empathy</strong><p>Discovery that listens across visible and invisible parts of a system: users, behaviour, data, commercial pressure, operational constraints, conflicting incentives and the people who carry the consequences.</p></div></article><article class="nature-scene reveal"><span class="scene-index">02 / 04</span><span class="scene-orbit" aria-hidden="true"></span><h3>Metabolism<span>Transform without wasting</span></h3><div class="scene-explanation"><strong>Metabolic synthesis</strong><p>Turning diverse signals into a focused problem, a credible value proposition, clear priorities and a path people can act on. Possibility becomes direction.</p></div></article><article class="nature-scene reveal"><span class="scene-index">03 / 04</span><span class="scene-orbit" aria-hidden="true"></span><h3>Symbiosis<span>Create value through relationship</span></h3><div class="scene-explanation"><strong>Shared movement</strong><p>Cross-functional collaboration that respects different constraints, builds alignment through clarity, and makes adoption part of the product rather than an afterthought.</p></div></article><article class="nature-scene reveal"><span class="scene-index">04 / 04</span><span class="scene-orbit" aria-hidden="true"></span><h3>Adaptation<span>Change without losing the core</span></h3><div class="scene-explanation"><strong>Measured resilience</strong><p>Feedback, evidence and iteration that allow a product to respond to reality while preserving the human need and strategic intent at its centre.</p></div></article></div>
+    </div></section>
+
+    <section class="chapter team" id="team" aria-labelledby="team-title"><div class="chapter-inner"><header class="chapter-header reveal"><p class="chapter-kicker">Chapter IV<span>How this presence enters a team</span></p><div><h2 class="chapter-title" id="team-title">Quiet fortitude, made practical.</h2><p class="chapter-lede">Not a list of skills. A set of behaviours colleagues can feel when the work becomes complicated.</p></div></header><dl class="presence-list"><div class="presence-row reveal"><dt>In ambiguity</dt><dd>A calm structure for finding the real problem.</dd></div><div class="presence-row reveal"><dt>In disagreement</dt><dd>Curiosity before defence, evidence before certainty.</dd></div><div class="presence-row reveal"><dt>In delivery</dt><dd>Disciplined priorities and respect for operational reality.</dd></div><div class="presence-row reveal"><dt>With customers</dt><dd>Attention to what is said, what is avoided, and what behaviour reveals.</dd></div><div class="presence-row reveal"><dt>With data</dt><dd>A search for decisions, not decorative dashboards.</dd></div><div class="presence-row reveal"><dt>With creativity</dt><dd>Imagination converted into something others can understand and act on.</dd></div><div class="presence-row reveal"><dt>With sustainability</dt><dd>Consideration of consequences, trade-offs and durability.</dd></div><div class="presence-row reveal"><dt>Under pressure</dt><dd>Pacing, adaptation and the next coherent decision.</dd></div></dl><p class="proof-line reveal">Shaped through B2B product work, SaaS, commercial leadership, analytics, go-to-market activity, and cross-functional operations across European environments.</p></div></section>
+
+    <section class="chapter explorations" id="explorations" aria-labelledby="explorations-title"><div class="chapter-inner"><header class="chapter-header reveal"><p class="chapter-kicker">Chapter V<span>Things Cristian is exploring</span></p><div><h2 class="chapter-title" id="explorations-title">Curiosity, with responsibility.</h2><p class="chapter-lede">These are windows into questions that keep returning. They are independent explorations, not claims of finished validation or commissioned outcomes.</p></div></header><div class="exploration-list">
+      <details class="exploration reveal" name="exploration" open><summary><span class="exploration-number">01</span><h3>The Inner Universe</h3></summary><div class="exploration-body"><div class="exploration-answer"><strong>What drew me in?</strong><p>The visual continuity between planetary scale, perception and the human experience of complex systems.</p></div><div class="exploration-answer"><strong>The human tension</strong><p>We often add technology and process before looking closely at the knowledge, friction and unused potential already present.</p></div><div class="exploration-answer"><strong>The relationships</strong><p>Outer systems, inner models, attention, product choices and the consequences people ultimately experience.</p></div><div class="exploration-answer"><strong>Responsible progress</strong><p>A digital encounter that opens reflection, stays accessible, and translates philosophy into grounded product behaviour.</p></div></div></details>
+      <details class="exploration reveal" name="exploration"><summary><span class="exploration-number">02</span><h3>Circular Mobility Intelligence</h3></summary><p class="concept-note">Independent concept. Not affiliated with or commissioned by Volkswagen Group.</p><div class="exploration-body"><div class="exploration-answer"><strong>What drew me in?</strong><p>The possibility that vehicle-use signals could support longer asset life and more thoughtful resource decisions.</p></div><div class="exploration-answer"><strong>The human tension</strong><p>Useful insight must coexist with privacy, trust, operational feasibility and the reality of imperfect data.</p></div><div class="exploration-answer"><strong>The relationships</strong><p>Drivers, fleets, maintenance, utilisation, commercial value, data responsibility and circular outcomes.</p></div><div class="exploration-answer"><strong>Responsible progress</strong><p>Start with a narrow decision, make consent and governance explicit, test the operational value, then adapt.</p></div></div></details>
+      <details class="exploration reveal" name="exploration"><summary><span class="exploration-number">03</span><h3>Outside / In</h3></summary><p class="concept-note">Independent concept.</p><div class="exploration-body"><div class="exploration-answer"><strong>What drew me in?</strong><p>The way movement, nature and a city can change attention, energy and a person's sense of possibility.</p></div><div class="exploration-answer"><strong>The human tension</strong><p>Urban wellbeing experiences can become exclusive, performative or dependent on more consumption.</p></div><div class="exploration-answer"><strong>The relationships</strong><p>Accessible movement, local places, sport, nature, lower-impact discovery, belonging and wellbeing in Barcelona.</p></div><div class="exploration-answer"><strong>Responsible progress</strong><p>Design for different bodies and confidence levels, use what the city already offers, and let participation shape the route.</p></div></div></details>
+    </div></div></section>
+
+    <section class="chapter lens" id="lens" aria-labelledby="lens-title"><div class="chapter-inner"><header class="chapter-header reveal"><p class="chapter-kicker">The uncompromising lens<span>Five questions</span></p><div><h2 class="chapter-title" id="lens-title">Before an answer becomes a product.</h2></div></header><p class="lens-intro reveal">A useful idea should survive more than enthusiasm. These questions slow the moment before commitment, so value, cost and consequence can be seen together.</p><ol class="lens-list"><li class="lens-question reveal"><span class="lens-number">01</span><h3>Balance</h3><p>Does the idea respect the system around it?</p></li><li class="lens-question reveal"><span class="lens-number">02</span><h3>Human value</h3><p>Does it genuinely elevate the human experience?</p></li><li class="lens-question reveal"><span class="lens-number">03</span><h3>Resilience</h3><p>Can it adapt and endure under stress?</p></li><li class="lens-question reveal"><span class="lens-number">04</span><h3>Clarity</h3><p>Have we looked deeply enough to find the simplest credible answer?</p></li><li class="lens-question reveal"><span class="lens-number">05</span><h3>Responsibility</h3><p>Does the value created justify the resources, data and consequences involved?</p></li></ol></div></section>
+
+    <section class="epilogue" id="contact" aria-labelledby="contact-title"><div class="epilogue-inner"><div class="return-eye" aria-hidden="true"></div><p class="eyebrow reveal">Epilogue · Return to the eye</p><h2 class="closing-question reveal" id="contact-title">What changes when we look deeper?</h2><p class="closing-copy reveal">I am interested in people and product challenges where data, commercial value, design, operational reality, and responsible innovation must work as one living system.</p><div class="cta-row reveal"><a class="cta cta-primary" href="mailto:cmalpica25@icloud.com?subject=Beginning%20a%20conversation">Begin a conversation <span aria-hidden="true">↗</span></a><a class="cta" href="Cristian_Malpica_CV.pdf" download="Cristian_Malpica_CV.pdf">Read the CV <span aria-hidden="true">↓</span></a><a class="cta" href="https://linkedin.com/in/cristian-malpica-02551b20a" target="_blank" rel="noreferrer">Connect on LinkedIn <span aria-hidden="true">↗</span></a></div><div class="contact-grid reveal"><div class="contact-item"><small>Email</small><a href="mailto:cmalpica25@icloud.com">cmalpica25@icloud.com</a></div><div class="contact-item"><small>LinkedIn</small><a href="https://linkedin.com/in/cristian-malpica-02551b20a" target="_blank" rel="noreferrer">cristian-malpica-02551b20a</a></div><div class="contact-item"><small>Location</small><p>Barcelona, Spain</p></div></div><footer class="footer"><span>© Cristian Malpica</span><span>Designed as a living system · Built with attention</span></footer></div></section>
+  </main>
+</body>
+</html>
