@@ -1,451 +1,131 @@
 <!doctype html>
-<html lang="en" class="no-js" data-theme="dark" data-theme-choice="system">
+<html lang="en" class="no-js">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Cristian Malpica | Product, Systems &amp; Sustainable Innovation</title>
-  <meta name="description" content="A cinematic portfolio by Cristian Malpica, a Barcelona-based product professional exploring systems, endurance, design, human insight, and sustainable innovation.">
-  <meta name="theme-color" content="#050a08">
+  <meta name="description" content="A cinematic personal portfolio by Cristian Malpica, a Barcelona-based product professional connecting human insight, systems thinking, design, data, and responsible innovation.">
+  <meta name="theme-color" content="#030605">
   <link rel="canonical" href="https://cm-uoc.github.io/CMMT/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://cm-uoc.github.io/CMMT/">
   <meta property="og:title" content="Cristian Malpica | Product, Systems &amp; Sustainable Innovation">
-  <meta property="og:description" content="A cinematic portfolio exploring systems, endurance, design, human insight, and sustainable innovation.">
+  <meta property="og:description" content="A cinematic portfolio connecting human insight, systems thinking, design, data, and responsible innovation.">
   <meta property="og:image" content="https://cm-uoc.github.io/CMMT/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Cristian Malpica beside an organic sphere that appears as both a planet and a human iris.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Cristian Malpica | Product, Systems &amp; Sustainable Innovation">
-  <meta name="twitter:description" content="A cinematic portfolio exploring systems, endurance, design, human insight, and sustainable innovation.">
+  <meta name="twitter:description" content="A cinematic portfolio connecting human insight, systems thinking, design, data, and responsible innovation.">
   <meta name="twitter:image" content="https://cm-uoc.github.io/CMMT/og.png">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preload" as="image" href="hero-planet-v2.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="hero-iris-v2.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="hero-eye-closed-v2.jpg" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&amp;family=Instrument+Serif:ital@0;1&amp;family=Manrope:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&amp;family=Manrope:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
   <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"Person","name":"Cristian Malpica","url":"https://cm-uoc.github.io/CMMT/","jobTitle":"Product professional","email":"mailto:cmalpica25@icloud.com","homeLocation":{"@type":"Place","name":"Barcelona, Spain"},"sameAs":["https://linkedin.com/in/cristian-malpica-02551b20a"],"knowsAbout":["Product Management","Systems thinking","Design","Innovation","Sustainability","Data","Mobility","B2B products","SaaS"]}
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Cristian Malpica",
+      "url": "https://cm-uoc.github.io/CMMT/",
+      "jobTitle": "Product professional",
+      "email": "mailto:cmalpica25@icloud.com",
+      "homeLocation": { "@type": "Place", "name": "Barcelona, Spain" },
+      "sameAs": ["https://linkedin.com/in/cristian-malpica-02551b20a"],
+      "knowsAbout": ["Product Management", "Systems thinking", "Design", "Innovation", "Sustainability", "Data", "Mobility", "B2B products", "SaaS"]
+    }
   </script>
-  <script>
-    (() => {
-      const root = document.documentElement;
-      const scheme = matchMedia('(prefers-color-scheme: light)');
-      let stored = 'system';
-      try { stored = localStorage.getItem('cm-theme') || 'system'; } catch (_) {}
-      if (!['system', 'light', 'dark'].includes(stored)) stored = 'system';
-      const resolved = stored === 'system' ? (scheme.matches ? 'light' : 'dark') : stored;
-      root.dataset.theme = resolved;
-      root.dataset.themeChoice = stored;
-      root.classList.replace('no-js', 'js');
-
-      addEventListener('DOMContentLoaded', () => {
-        const $ = (selector, scope = document) => scope.querySelector(selector);
-        const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
-        const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
-        const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-        const themeMeta = $('meta[name="theme-color"]');
-        const themeButton = $('[data-theme-toggle]');
-        const choices = ['system', 'light', 'dark'];
-        let themeChoice = root.dataset.themeChoice || 'system';
-
-        const paintTheme = () => {
-          const active = themeChoice === 'system' ? (scheme.matches ? 'light' : 'dark') : themeChoice;
-          root.dataset.theme = active;
-          root.dataset.themeChoice = themeChoice;
-          if (themeMeta) themeMeta.content = active === 'light' ? '#f4f3ed' : '#050a08';
-          if (themeButton) {
-            themeButton.querySelector('[data-theme-label]').textContent = themeChoice[0].toUpperCase() + themeChoice.slice(1);
-            themeButton.setAttribute('aria-label', `Theme: ${themeChoice}. Activate to change theme.`);
-          }
-        };
-        themeButton?.addEventListener('click', () => {
-          themeChoice = choices[(choices.indexOf(themeChoice) + 1) % choices.length];
-          try { localStorage.setItem('cm-theme', themeChoice); } catch (_) {}
-          paintTheme();
-        });
-        scheme.addEventListener?.('change', () => { if (themeChoice === 'system') paintTheme(); });
-        paintTheme();
-
-        const menuToggle = $('[data-menu-toggle]');
-        const siteMenu = $('[data-site-menu]');
-        const closeMenu = (restoreFocus = false) => {
-          root.classList.remove('menu-open');
-          menuToggle?.setAttribute('aria-expanded', 'false');
-          siteMenu?.setAttribute('aria-hidden', 'true');
-          if (siteMenu) siteMenu.inert = true;
-          if (restoreFocus) menuToggle?.focus();
-        };
-        const openMenu = () => {
-          root.classList.add('menu-open');
-          menuToggle?.setAttribute('aria-expanded', 'true');
-          siteMenu?.setAttribute('aria-hidden', 'false');
-          if (siteMenu) siteMenu.inert = false;
-          requestAnimationFrame(() => $('[data-menu-first]', siteMenu)?.focus());
-        };
-        if (siteMenu) siteMenu.inert = true;
-        menuToggle?.addEventListener('click', () => root.classList.contains('menu-open') ? closeMenu() : openMenu());
-        $$('[data-menu-close]').forEach((control) => control.addEventListener('click', () => closeMenu(true)));
-        $$('.site-menu a[href^="#"]').forEach((link) => link.addEventListener('click', () => closeMenu()));
-        addEventListener('keydown', (event) => {
-          if (event.key === 'Escape' && root.classList.contains('menu-open')) closeMenu(true);
-          if (event.key === 'Tab' && root.classList.contains('menu-open') && siteMenu) {
-            const focusable = $$('a[href],button:not([disabled])', siteMenu).filter((item) => !item.closest('[inert]'));
-            if (!focusable.length) return;
-            const first = focusable[0];
-            const last = focusable.at(-1);
-            if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-            else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
-          }
-        });
-
-        const prologue = $('.prologue');
-        const stage = $('[data-stage]');
-        const opening = $('[data-opening]');
-        const truth = $('[data-truth]');
-        const recognition = $('[data-recognition]');
-        const nameReveal = $('[data-name-reveal]');
-        const terrain = $('#terrain');
-        const terrainPath = $('[data-terrain-path]');
-        const terrainMarker = $('[data-terrain-marker]');
-        const terrainProgress = $('[data-terrain-progress]');
-        const pageProgress = $('[data-page-progress]');
-        let terrainLength = 0;
-        let documentMax = 1;
-        let prologueActive = Boolean(prologue);
-        let terrainActive = false;
-        let ticking = false;
-
-        $$('.hero-frame').forEach((image) => image.addEventListener('error', () => root.classList.add('hero-media-fallback')));
-
-        const setVisible = (element, visible) => element?.classList.toggle('is-visible', visible);
-        const render = () => {
-          ticking = false;
-          const pageP = clamp(scrollY / documentMax);
-          if (pageProgress) pageProgress.style.transform = `scaleX(${pageP})`;
-
-          if (!reduced.matches && prologueActive && prologue && stage) {
-            const max = prologue.offsetHeight - innerHeight;
-            const p = max > 0 ? clamp(-prologue.getBoundingClientRect().top / max) : 0;
-            const approach = clamp(p / .5);
-            const irisReveal = clamp((p - .31) / .31);
-            const wink = clamp((p - .34) / .24);
-            const winkEase = wink * wink * (3 - 2 * wink);
-            const humanReveal = clamp((p - .6) / .3);
-            const blinkCloseT = clamp((p - .61) / .055);
-            const blinkOpenT = clamp((p - .665) / .115);
-            const blinkClose = blinkCloseT * blinkCloseT * (3 - 2 * blinkCloseT);
-            const blinkOpen = blinkOpenT * blinkOpenT * (3 - 2 * blinkOpenT);
-            const lidOpen = p < .665 ? 1 - blinkClose * .94 : .06 + blinkOpen * .94;
-            stage.style.setProperty('--planet-image-scale', String(.7 + approach * 1.48));
-            stage.style.setProperty('--planet-image-opacity', String(1 - clamp((p - .42) / .24)));
-            stage.style.setProperty('--planet-rotate-x', `${.22 - approach * .38}deg`);
-            stage.style.setProperty('--planet-rotate-y', `${-.32 + approach * .56}deg`);
-            stage.style.setProperty('--planet-depth-y', `${approach * -.65}vh`);
-            stage.style.setProperty('--iris-image-opacity', String(irisReveal));
-            stage.style.setProperty('--iris-image-scale', String(2.32 - humanReveal * 1.24));
-            stage.style.setProperty('--wink-width', `${46 + winkEase * 54 + humanReveal * 18}%`);
-            stage.style.setProperty('--wink-height', `${.7 + winkEase * 57 + humanReveal * 47}%`);
-            stage.style.setProperty('--eye-rotate-x', `${(1 - humanReveal) * -.28}deg`);
-            stage.style.setProperty('--eye-rotate-y', `${(1 - humanReveal) * .22}deg`);
-            stage.style.setProperty('--eye-depth-y', `${(1 - humanReveal) * .55}vh`);
-            stage.style.setProperty('--truth-scale', String((.62 + winkEase * .38) * (1 - humanReveal * .52)));
-            stage.style.setProperty('--lid-presence', String(clamp((p - .56) / .045) * (1 - clamp((p - .82) / .05))));
-            stage.style.setProperty('--lid-top-shift', `${-44 * lidOpen}%`);
-            stage.style.setProperty('--lid-bottom-shift', `${44 * lidOpen}%`);
-            stage.style.setProperty('--eye-opacity', String(humanReveal));
-            stage.style.setProperty('--cue-opacity', String(1 - clamp((p - .7) / .12)));
-            stage.style.setProperty('--atmosphere-shift', `${p * 10}%`);
-            setVisible(opening, p < .34);
-            setVisible(truth, p > .44 && p < .995);
-            setVisible(recognition, p > .62 && p < .84);
-            setVisible(nameReveal, p > .82);
-            root.classList.toggle('intro-complete', p > .98);
-          } else root.classList.add('intro-complete');
-
-          if (terrainActive && terrain && terrainPath && !reduced.matches) {
-            const rect = terrain.getBoundingClientRect();
-            const range = terrain.offsetHeight - innerHeight * .45;
-            const p = range > 0 ? clamp((innerHeight * .6 - rect.top) / range) : 0;
-            terrainPath.style.strokeDashoffset = String(terrainLength * (1 - p));
-            if (terrainMarker && terrainLength) {
-              const point = terrainPath.getPointAtLength(terrainLength * p);
-              terrainMarker.setAttribute('cx', String(point.x));
-              terrainMarker.setAttribute('cy', String(point.y));
-            }
-            if (terrainProgress) terrainProgress.value = Math.round(p * 100);
-          }
-        };
-        const requestTick = () => {
-          if (!ticking) { ticking = true; requestAnimationFrame(render); }
-        };
-        if (terrainPath) {
-          terrainLength = terrainPath.getTotalLength();
-          terrainPath.style.strokeDasharray = String(terrainLength);
-          terrainPath.style.strokeDashoffset = reduced.matches ? '0' : String(terrainLength);
-        }
-        addEventListener('scroll', requestTick, { passive: true });
-        reduced.addEventListener?.('change', () => {
-          if (terrainPath) terrainPath.style.strokeDashoffset = reduced.matches ? '0' : String(terrainLength);
-          requestTick();
-        });
-
-        const motionObserver = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            entry.target.classList.toggle('is-active', entry.isIntersecting);
-            if (entry.target === prologue) prologueActive = entry.isIntersecting;
-            if (entry.target === terrain) terrainActive = entry.isIntersecting;
-          });
-          requestTick();
-        }, { rootMargin: '15% 0px', threshold: 0 });
-        [prologue, terrain].filter(Boolean).forEach((element) => motionObserver.observe(element));
-
-        const measureDocument = () => {
-          documentMax = Math.max(1, document.documentElement.scrollHeight - innerHeight);
-          requestTick();
-        };
-        if ('ResizeObserver' in window) new ResizeObserver(measureDocument).observe(document.body);
-        addEventListener('resize', measureDocument, { passive: true });
-        document.fonts?.ready.then(measureDocument);
-
-        const introTarget = $('#meaning');
-        $('[data-skip-intro]')?.addEventListener('click', () => {
-          if (!introTarget) return;
-          introTarget.focus({ preventScroll: true });
-          introTarget.scrollIntoView({ behavior: reduced.matches ? 'auto' : 'smooth', block: 'start' });
-        });
-
-        const revealItems = $$('.reveal');
-        if ('IntersectionObserver' in window && !reduced.matches) {
-          const revealObserver = new IntersectionObserver((entries, observer) => {
-            entries.filter((entry) => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top).forEach((entry, index) => {
-              entry.target.style.setProperty('--reveal-delay', `${Math.min(index, 4) * 55}ms`);
-              entry.target.classList.add('is-revealed');
-              observer.unobserve(entry.target);
-            });
-          }, { threshold: .05, rootMargin: '0px 0px -12% 0px' });
-          revealItems.forEach((item) => revealObserver.observe(item));
-        } else revealItems.forEach((item) => item.classList.add('is-revealed'));
-
-        const railLinks = $$('[data-chapter-link]');
-        const chapters = $$('main section[id]').filter((section) => railLinks.some((link) => link.hash === `#${section.id}`));
-        if ('IntersectionObserver' in window) {
-          const chapterState = new Map();
-          const chapterObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => chapterState.set(entry.target, entry));
-            const currentEntry = [...chapterState.values()].filter((entry) => entry.isIntersecting).sort((a, b) => Math.abs(a.boundingClientRect.top - innerHeight * .45) - Math.abs(b.boundingClientRect.top - innerHeight * .45))[0];
-            if (!currentEntry) return;
-            railLinks.forEach((link) => {
-              const current = link.hash === `#${currentEntry.target.id}`;
-              link.classList.toggle('is-current', current);
-              if (current) link.setAttribute('aria-current', 'location'); else link.removeAttribute('aria-current');
-            });
-          }, { rootMargin: '-38% 0px -50% 0px', threshold: 0 });
-          chapters.forEach((chapter) => chapterObserver.observe(chapter));
-        }
-        measureDocument();
-        requestTick();
-      });
-    })();
-  </script>
-  <style>
-    :root {
-      --void: #050a08; --surface: #0b1511; --text: #eef0e8; --muted: rgba(238,240,232,.68); --faint: rgba(238,240,232,.48); --line: rgba(238,240,232,.15); --line-strong: rgba(238,240,232,.3); --paper: #0b1511; --paper-ink: #eef0e8; --forest: #0f2c23; --lime: #c8ff45; --mint: #a8e8d0; --water: #77d4dc; --clay: #e2a77d; --warm-white: #fffef8; --display: Manrope, Arial, sans-serif; --cinema: "Instrument Serif", Georgia, serif; --mono: "DM Mono", ui-monospace, monospace; --ease: cubic-bezier(.22,.8,.24,1); --gutter: clamp(1.25rem,5vw,5.5rem); --content: 82rem; color-scheme: dark;
-    }
-    [data-theme="light"] { --surface:#fffef8; --text:#0a1713; --muted:rgba(10,23,19,.7); --faint:rgba(10,23,19,.5); --line:rgba(10,23,19,.16); --line-strong:rgba(10,23,19,.32); --paper:#f4f3ed; --paper-ink:#0a1713; color-scheme:light; }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; background: var(--void); }
-    body { margin:0; min-width:320px; overflow-x:hidden; background:var(--surface); color:var(--text); font-family:var(--display); font-size:16px; line-height:1.55; text-rendering:optimizeLegibility; }
-    a,button,summary { color:inherit; font:inherit; } a { text-decoration-thickness:1px; text-underline-offset:.28em; } button { border:0; } ::selection { background:var(--lime); color:#07100c; } :focus-visible { outline:2px solid var(--lime); outline-offset:4px; }
-    .sr-only { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
-    .skip-link { position:fixed; z-index:200; top:1rem; left:1rem; min-height:44px; display:grid; place-items:center; transform:translateY(-180%); padding:.7rem 1rem; border-radius:999px; background:var(--lime); color:#07100c; font:500 .74rem/1 var(--mono); text-decoration:none; transition:transform .2s; } .skip-link:focus { transform:none; }
-    .page-progress { position:fixed; z-index:110; top:0; left:0; width:100%; height:2px; transform:scaleX(0); transform-origin:left; background:var(--lime); }
-    .site-header { position:fixed; z-index:150; inset:0 0 auto; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; min-height:68px; padding:.65rem var(--gutter); color:#eef0e8; background:linear-gradient(to bottom,rgba(5,10,8,.94),rgba(5,10,8,.62) 72%,transparent); pointer-events:none; } .site-header>* { pointer-events:auto; }
-    .brand { justify-self:start; display:grid; place-items:center; width:44px; height:44px; border:1px solid rgba(238,240,232,.32); border-radius:50%; font:500 .72rem/1 var(--mono); letter-spacing:.06em; text-decoration:none; }
-    .coordinates { margin:0; font:400 .64rem/1.4 var(--mono); letter-spacing:.1em; text-transform:uppercase; color:rgba(238,240,232,.68); }
-    .header-actions { justify-self:end; display:flex; align-items:center; gap:.55rem; }
-    .theme-toggle,.menu-toggle { min-height:44px; padding:.55rem .9rem; border:1px solid rgba(238,240,232,.25); border-radius:999px; background:rgba(5,10,8,.66); color:#eef0e8; cursor:pointer; font:400 .66rem/1 var(--mono); letter-spacing:.06em; text-transform:uppercase; } .theme-toggle:hover,.theme-toggle:focus-visible,.menu-toggle:hover,.menu-toggle:focus-visible { border-color:var(--lime); } .no-js .theme-toggle,.no-js .menu-toggle,.no-js .site-menu { display:none; }
-    .menu-toggle { display:inline-flex; align-items:center; gap:.65rem; padding-inline:1rem; } .menu-toggle i,.menu-toggle i::before { content:""; display:block; width:.9rem; height:1px; background:currentColor; transition:transform .3s var(--ease); } .menu-toggle i::before { transform:translateY(.28rem); } .menu-open .menu-toggle i { transform:rotate(45deg); } .menu-open .menu-toggle i::before { transform:rotate(90deg); }
-    .site-menu { position:fixed; z-index:140; inset:0; visibility:hidden; pointer-events:none; color:#eef0e8; } .menu-open { overflow:hidden; } .menu-open .site-menu { visibility:visible; pointer-events:auto; }
-    .menu-backdrop { position:absolute; inset:0; width:100%; background:rgba(0,0,0,.72); opacity:0; cursor:pointer; transition:opacity .45s var(--ease); backdrop-filter:blur(12px); } .menu-open .menu-backdrop { opacity:1; }
-    .menu-panel { position:absolute; inset:0 0 0 auto; width:min(44rem,100%); display:grid; grid-template-rows:auto 1fr auto; padding:clamp(1.2rem,4vw,3rem); background:radial-gradient(circle at 90% 5%,rgba(119,212,220,.13),transparent 30%),#07100c; border-left:1px solid rgba(238,240,232,.14); transform:translateX(102%); transition:transform .55s var(--ease); overflow:auto; overscroll-behavior:contain; } .menu-open .menu-panel { transform:none; }
-    .menu-head,.menu-foot { display:flex; align-items:center; justify-content:space-between; gap:1rem; border-bottom:1px solid rgba(238,240,232,.14); } .menu-head { padding-bottom:1.2rem; } .menu-head p { margin:0; font:400 .68rem/1 var(--mono); letter-spacing:.1em; text-transform:uppercase; color:rgba(238,240,232,.6); } .menu-close { min-height:44px; padding:.4rem .2rem; background:transparent; color:#eef0e8; cursor:pointer; font:400 .68rem/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; } .menu-close span { display:inline-block; margin-left:.45rem; font-size:1.2rem; }
-    .menu-nav { align-self:center; padding-block:clamp(2rem,7vh,5rem); } .menu-nav ol { display:grid; gap:.25rem; margin:0; padding:0; list-style:none; } .menu-nav a { display:grid; grid-template-columns:2.5rem minmax(0,1fr); gap:1rem; align-items:baseline; min-height:58px; padding:.65rem 0; border-bottom:1px solid rgba(238,240,232,.1); text-decoration:none; transition:color .25s,padding .3s var(--ease); } .menu-nav a:hover,.menu-nav a:focus-visible,.menu-nav a.is-current { color:var(--lime); padding-left:.5rem; } .menu-nav a span { font:400 .62rem/1 var(--mono); color:rgba(238,240,232,.42); } .menu-nav a strong { font:400 clamp(1.8rem,4.4vw,3.8rem)/.95 var(--cinema); letter-spacing:-.025em; }
-    .menu-foot { padding-top:1.2rem; border-top:1px solid rgba(238,240,232,.14); border-bottom:0; } .menu-foot a { min-height:44px; display:inline-flex; align-items:center; gap:.6rem; font:400 .68rem/1 var(--mono); letter-spacing:.05em; text-transform:uppercase; text-decoration:none; }
-    .chapter-rail { position:fixed; z-index:90; top:50%; right:clamp(.7rem,1.6vw,1.8rem); transform:translateY(-50%); padding:.3rem; border:1px solid rgba(238,240,232,.12); border-radius:1rem; background:rgba(5,10,8,.88); } .chapter-rail ul { display:grid; gap:.2rem; margin:0; padding:0; list-style:none; } .chapter-rail a { display:flex; flex-direction:row-reverse; align-items:center; gap:.6rem; min-width:44px; min-height:44px; text-decoration:none; color:rgba(238,240,232,.68); } .chapter-rail a::before { content:""; flex:0 0 auto; width:5px; height:5px; border:1px solid currentColor; border-radius:50%; transition:transform .3s var(--ease),background .3s; } .chapter-rail span { opacity:0; transform:translateX(.4rem); text-align:right; font:400 .62rem/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; transition:.3s var(--ease); } .chapter-rail a:hover span,.chapter-rail a:focus-visible span,.chapter-rail a.is-current span { opacity:1; transform:none; } .chapter-rail a.is-current { color:var(--lime); } .chapter-rail a.is-current::before { background:currentColor; transform:scale(1.6); }
-    main { position:relative; }
-    .prologue { --planet-image-scale:.7; --planet-image-opacity:1; --planet-rotate-x:.22deg; --planet-rotate-y:-.32deg; --planet-depth-y:0vh; --iris-image-opacity:0; --iris-image-scale:2.32; --wink-width:46%; --wink-height:.7%; --eye-rotate-x:-.28deg; --eye-rotate-y:.22deg; --eye-depth-y:.55vh; --truth-scale:1; --lid-presence:0; --lid-top-shift:-44%; --lid-bottom-shift:44%; --eye-opacity:0; min-height:350vh; background:var(--void); color:#eef0e8; }
-    .cinematic-stage { position:sticky; top:0; height:100svh; overflow:hidden; display:grid; place-items:center; isolation:isolate; background:radial-gradient(circle at 50% var(--atmosphere-shift,20%),rgba(45,93,71,.24),transparent 35%),var(--void); contain:paint; }
-    .cinematic-stage::after { content:""; position:absolute; inset:0; z-index:-1; background:radial-gradient(ellipse at center,transparent 34%,rgba(0,0,0,.08) 55%,rgba(0,0,0,.82) 100%),linear-gradient(to bottom,rgba(0,0,0,.25),transparent 22%,transparent 74%,rgba(0,0,0,.42)); pointer-events:none; }
-    .hero-media { position:absolute; z-index:-2; inset:0; overflow:hidden; perspective:1400px; transform-style:preserve-3d; background:#010201; }
-    .hero-frame { position:absolute; inset:-2%; width:104%; height:104%; object-fit:cover; object-position:center; backface-visibility:hidden; will-change:transform,opacity; }
-    .hero-frame--planet { opacity:var(--planet-image-opacity); transform:translate3d(0,var(--planet-depth-y),-12px) rotateX(var(--planet-rotate-x)) rotateY(var(--planet-rotate-y)) scale(var(--planet-image-scale)); transform-origin:50% 50%; }
-    .hero-frame--iris { opacity:var(--iris-image-opacity); transform:translate3d(0,var(--eye-depth-y),16px) rotateX(var(--eye-rotate-x)) rotateY(var(--eye-rotate-y)) scale(var(--iris-image-scale)); transform-origin:50% 50%; clip-path:ellipse(var(--wink-width) var(--wink-height) at 50% 50%); }
-    .hero-media::after { content:""; position:absolute; inset:0; background:radial-gradient(circle at 50% 48%,transparent 28%,rgba(1,3,2,.16) 58%,rgba(1,3,2,.55) 100%); pointer-events:none; }
-    .eyelids { position:absolute; z-index:2; inset:0; opacity:var(--lid-presence); overflow:hidden; pointer-events:none; }
-    .eyelids::before,.eyelids::after { content:""; position:absolute; left:-8%; width:116%; height:100%; background:linear-gradient(to bottom,#020302 48%,#0a0705 84%,#24160f 100%); will-change:transform; }
-    .eyelids::before { top:-50%; border-radius:0 0 50% 50% / 0 0 15% 15%; box-shadow:inset 0 -1px rgba(238,240,232,.14),0 1.5rem 3rem rgba(0,0,0,.7); transform:translate3d(0,var(--lid-top-shift),0); }
-    .eyelids::after { bottom:-50%; border-radius:50% 50% 0 0 / 15% 15% 0 0; box-shadow:inset 0 1px rgba(238,240,232,.1),0 -1.5rem 3rem rgba(0,0,0,.7); transform:translate3d(0,var(--lid-bottom-shift),0); }
-    .intro-copy { position:absolute; z-index:1; inset:0; display:grid; place-items:center; padding:var(--gutter); text-align:center; pointer-events:none; } .intro-line { position:absolute; max-width:16ch; margin:0; opacity:0; transform:translateY(1rem); transition:opacity .7s var(--ease),transform .7s var(--ease); } .intro-line.is-visible { opacity:1; transform:none; } .intro-opening { top:17vh; max-width:30rem; font-size:clamp(1rem,2vw,1.35rem); font-weight:300; letter-spacing:.015em; } .intro-truth { max-width:min(16ch,78vw); transform:translateY(1rem) scale(var(--truth-scale)); transform-origin:50% 50%; transition:opacity .45s var(--ease); font-size:clamp(2.5rem,6.5vw,7rem); font-weight:300; line-height:.94; letter-spacing:-.06em; text-wrap:balance; text-shadow:0 .1em 1em #000; } .intro-truth.is-visible { opacity:1; transform:scale(var(--truth-scale)); } .intro-recognition { bottom:18vh; max-width:32rem; font:400 clamp(.72rem,1.1vw,.9rem)/1.7 var(--mono); letter-spacing:.09em; text-transform:uppercase; color:rgba(238,240,232,.72); }
-    .name-reveal { position:absolute; inset:auto var(--gutter) clamp(2rem,8vh,5.5rem); display:flex; justify-content:space-between; gap:2rem; align-items:end; opacity:0; transform:translateY(1rem); transition:1s var(--ease); pointer-events:none; } .name-reveal.is-visible { opacity:1; transform:none; } .name-reveal strong { font-size:clamp(3.6rem,11vw,10.5rem); font-weight:400; line-height:.78; letter-spacing:-.07em; } .name-reveal span { max-width:29rem; text-align:right; font:400 clamp(.68rem,1.1vw,.9rem)/1.65 var(--mono); letter-spacing:.07em; text-transform:uppercase; color:rgba(238,240,232,.75); }
-    .scroll-cue { position:absolute; left:var(--gutter); bottom:1.4rem; font:400 .62rem/1 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:rgba(238,240,232,.55); writing-mode:vertical-rl; } .scroll-cue::after { content:""; display:inline-block; width:1px; height:3rem; margin-top:.8rem; background:linear-gradient(var(--lime),transparent); }
-    .skip-intro { position:absolute; z-index:3; right:var(--gutter); top:5.2rem; min-height:44px; padding:.6rem 1rem; border:1px solid rgba(238,240,232,.2); border-radius:999px; background:rgba(5,10,8,.35); color:#eef0e8; cursor:pointer; font:400 .67rem/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; backdrop-filter:blur(8px); } .skip-intro:hover { border-color:var(--lime); }
-    .reduced-sequence { display:none; padding:6rem var(--gutter) 2rem; background:var(--void); } .static-frame { min-height:70svh; display:grid; grid-template-columns:minmax(12rem,1fr) minmax(14rem,1fr); gap:clamp(2rem,7vw,8rem); align-items:center; border-top:1px solid rgba(238,240,232,.15); } .static-frame p { max-width:18ch; margin:0; font-size:clamp(2rem,5vw,5rem); font-weight:300; line-height:1; letter-spacing:-.045em; } .static-orb { justify-self:center; width:min(58vw,28rem); aspect-ratio:1; border-radius:50%; background:#010201 url('hero-planet-v2.jpg') center/cover no-repeat; box-shadow:0 2rem 5rem #000; } .static-orb.iris { background-image:url('hero-iris-v2.jpg'); background-size:245%; background-position:center; box-shadow:0 2rem 5rem #000; } .static-orb.human { width:min(72vw,42rem); aspect-ratio:16/9; border:1px solid rgba(238,240,232,.25); border-radius:46% 54%; background:#010201 url('hero-iris-v2.jpg') center/cover no-repeat; box-shadow:0 2rem 5rem #000; }
-    .professional-anchor { min-height:92svh; display:grid; grid-template-columns:minmax(0,1.08fr) minmax(20rem,.92fr); gap:clamp(3rem,8vw,9rem); align-items:center; padding:clamp(8rem,15vh,12rem) var(--gutter) clamp(6rem,11vh,9rem); border-bottom:1px solid var(--line); background:var(--paper); color:var(--paper-ink); } .professional-anchor h1 { margin:0; max-width:7ch; font:400 var(--type-name)/.78 var(--cinema); letter-spacing:-.045em; text-wrap:balance; } .anchor-copy { max-width:41rem; }
-    .eyebrow { display:inline-flex; align-items:center; gap:.65rem; margin:0 0 1.5rem; font:500 .68rem/1.2 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--muted); } .eyebrow::before { content:""; width:1.8rem; height:1px; background:var(--lime); } .role-line { margin:0 0 2rem; font:400 clamp(.76rem,1.2vw,.92rem)/1.75 var(--mono); letter-spacing:.07em; text-transform:uppercase; } .grounding { margin:0; font-size:clamp(1.45rem,2.6vw,2.45rem); font-weight:300; line-height:1.32; letter-spacing:-.03em; text-wrap:pretty; } .anchor-context { max-width:38rem; margin:1.5rem 0 0; color:var(--muted); font-size:clamp(.98rem,1.4vw,1.15rem); }
-    .anchor-proof { display:flex; flex-wrap:wrap; gap:.55rem; margin:2rem 0; padding:0; list-style:none; } .anchor-proof li { padding:.58rem .75rem; border:1px solid var(--line); border-radius:999px; font:500 .66rem/1.35 var(--mono); } .anchor-actions { display:flex; flex-wrap:wrap; gap:.65rem; } .anchor-actions a { min-height:46px; display:inline-flex; align-items:center; gap:.65rem; padding:.72rem 1rem; border:1px solid var(--line-strong); border-radius:999px; font:500 .66rem/1 var(--mono); text-transform:uppercase; text-decoration:none; transition:background .25s,color .25s,border-color .25s; } .anchor-actions a:hover,.anchor-actions a:focus-visible { border-color:var(--lime); background:var(--lime); color:#07100c; }
-    .chapter { position:relative; padding:clamp(7rem,12vw,11rem) var(--gutter); background:var(--surface); color:var(--text); border-top:1px solid var(--line); } .chapter-inner { width:min(100%,var(--content)); margin-inline:auto; } .chapter-header { display:grid; grid-template-columns:var(--label-col) minmax(0,1fr); gap:var(--editorial-gap); align-items:start; margin-bottom:clamp(4rem,8vw,7rem); } .chapter-kicker { margin:0; padding-top:.55rem; font:400 .68rem/1.6 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--muted); } .chapter-kicker span { display:block; margin-top:.7rem; color:var(--faint); } .chapter-title { margin:0; max-width:15ch; font-size:var(--type-chapter); font-weight:300; line-height:.95; letter-spacing:-.05em; text-wrap:balance; } .chapter-lede { max-width:41rem; margin:1.5rem 0 0; font-size:clamp(1.08rem,1.6vw,1.4rem); font-weight:400; line-height:1.58; color:var(--muted); text-wrap:pretty; }
-    .terrain { overflow:clip; background:linear-gradient(145deg,#07100c 0%,#102e24 54%,#0a1b15 100%); color:#eef0e8; } .terrain::before { content:""; position:absolute; inset:0; opacity:.17; background:repeating-radial-gradient(ellipse at 10% 90%,transparent 0 2.7rem,rgba(168,232,208,.22) 2.76rem 2.82rem,transparent 2.88rem 4rem); pointer-events:none; } .terrain .chapter-kicker,.terrain .chapter-lede { color:rgba(238,240,232,.66); }
-    .terrain-layout { position:relative; display:grid; grid-template-columns:minmax(22rem,1fr) minmax(20rem,.85fr); gap:clamp(2.5rem,7vw,7rem); align-items:start; } .elevation { position:sticky; top:13vh; min-width:0; min-height:38rem; display:grid; place-items:center; margin:0; } .elevation svg { display:block; width:100%; max-width:100%; height:auto; overflow:visible; } .terrain-path-base { fill:none; stroke:rgba(238,240,232,.13); stroke-width:2; } .terrain-path { fill:none; stroke:var(--lime); stroke-width:2.2; stroke-linecap:round; } .terrain-marker { fill:var(--lime); stroke:#07100c; stroke-width:5; } .altitude-grid { stroke:rgba(238,240,232,.12); stroke-width:1; stroke-dasharray:3 8; } .altitude-label { fill:rgba(238,240,232,.5); font:12px var(--mono); letter-spacing:.08em; }
-    .terrain-moments { display:grid; gap:1rem; } .trail-moment { min-height:21rem; display:flex; flex-direction:column; justify-content:center; padding:clamp(1.7rem,3vw,2.6rem); border:1px solid rgba(238,240,232,.16); background:rgba(5,10,8,.22); backdrop-filter:blur(10px); } .trail-moment small { font:400 .66rem/1.4 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:rgba(238,240,232,.58); } .trail-moment h3 { margin:1.3rem 0 1rem; font-size:clamp(2rem,3.4vw,3.5rem); font-weight:300; line-height:1.02; letter-spacing:-.045em; text-wrap:balance; } .trail-moment p { max-width:34rem; margin:0; font-size:clamp(1rem,1.5vw,1.15rem); color:rgba(238,240,232,.7); } .terrain-principle { position:relative; z-index:2; max-width:24ch; margin:clamp(6rem,11vw,10rem) 0 0 auto; font:400 var(--type-moment)/1.02 var(--cinema); letter-spacing:-.025em; }
-    .tradeoff-lab { position:relative; z-index:2; margin-top:clamp(6rem,12vw,11rem); border-top:1px solid rgba(238,240,232,.22); } .tradeoff-lab>header { display:grid; grid-template-columns:var(--label-col) minmax(0,1fr) minmax(12rem,.42fr); gap:var(--editorial-gap); align-items:end; padding:2rem 0; } .tradeoff-lab>header p,.tradeoff-lab>header span { margin:0; font:400 .66rem/1.6 var(--mono); letter-spacing:.09em; text-transform:uppercase; color:rgba(238,240,232,.58); } .tradeoff-lab>header h3 { margin:0; font:400 clamp(2.2rem,4.2vw,4.5rem)/.95 var(--cinema); letter-spacing:-.025em; } .tradeoff-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; background:rgba(238,240,232,.16); border:1px solid rgba(238,240,232,.16); } .tradeoff { background:#0a1712; } .tradeoff summary { min-height:5.5rem; display:grid; grid-template-columns:2rem 1fr auto; gap:1rem; align-items:center; padding:1.2rem; cursor:pointer; list-style:none; } .tradeoff summary::-webkit-details-marker { display:none; } .tradeoff summary span { font:400 .62rem/1 var(--mono); color:rgba(238,240,232,.45); } .tradeoff summary strong { font-size:clamp(1.25rem,2vw,1.8rem); font-weight:400; } .tradeoff summary i { display:grid; place-items:center; width:34px; height:34px; border:1px solid rgba(238,240,232,.22); border-radius:50%; font-style:normal; transition:transform .3s var(--ease); } .tradeoff[open] summary i { transform:rotate(45deg); } .tradeoff>div { padding:0 1.2rem 1.4rem 4.2rem; } .tradeoff>div p { margin:.65rem 0; color:rgba(238,240,232,.68); font-size:.92rem; } .tradeoff>div b { display:inline-block; min-width:4.2rem; color:var(--lime); font:500 .62rem/1 var(--mono); letter-spacing:.06em; text-transform:uppercase; }
-    .team { background:var(--paper); color:var(--paper-ink); } .presence-list { margin:0; border-top:1px solid var(--line); } .presence-row { display:grid; grid-template-columns:var(--label-col) minmax(0,1fr); gap:var(--editorial-gap); padding:clamp(2rem,3.8vw,3.5rem) 0; border-bottom:1px solid var(--line); } .presence-row dt { padding-top:.45rem; font:400 .68rem/1.5 var(--mono); letter-spacing:.09em; text-transform:uppercase; color:var(--muted); } .presence-row dd { display:grid; grid-template-columns:minmax(0,1fr) minmax(14rem,.42fr); gap:clamp(1.5rem,5vw,5rem); margin:0; } .presence-row dd strong { font-size:clamp(1.55rem,2.7vw,2.7rem); font-weight:300; line-height:1.18; letter-spacing:-.035em; } .presence-row dd span { align-self:end; color:var(--muted); font-size:clamp(.92rem,1.2vw,1.05rem); } .proof-line { max-width:60rem; margin:clamp(4rem,8vw,7rem) 0 0 auto; padding:2rem 0 0 clamp(1rem,4vw,4rem); border-top:1px solid var(--line); border-left:1px solid var(--line); font:400 clamp(.82rem,1.2vw,1rem)/1.8 var(--mono); color:var(--muted); }
-    .explorations { background:var(--surface); } .exploration-grid { display:grid; gap:clamp(1.2rem,2.5vw,2rem); } .exploration-card { overflow:hidden; border:1px solid var(--line); background:linear-gradient(145deg,color-mix(in srgb,var(--mint) 5%,var(--surface)),var(--surface)); } .exploration-card.outside { background:linear-gradient(145deg,color-mix(in srgb,var(--clay) 6%,var(--surface)),var(--surface)); } .exploration-card>header { display:grid; grid-template-columns:4rem minmax(0,1fr); gap:1rem; align-items:start; padding:clamp(1.5rem,3.5vw,3rem); border-bottom:1px solid var(--line); } .exploration-number { padding-top:.5rem; font:400 .66rem/1 var(--mono); color:var(--muted); } .concept-note { display:block; margin:0 0 .8rem; font:400 .62rem/1.5 var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--muted); } .exploration-card h3 { max-width:16ch; margin:0; font:400 clamp(2.6rem,6vw,6.3rem)/.9 var(--cinema); letter-spacing:-.03em; }
-    .system-flow { display:grid; grid-template-columns:1fr auto 1fr auto 1fr auto 1.25fr auto 1.25fr; gap:.6rem; align-items:center; padding:clamp(2rem,5vw,4rem); border-bottom:1px solid var(--line); } .system-flow span { min-height:5.5rem; display:grid; place-items:center; padding:.8rem; border:1px solid var(--line); border-radius:50%; text-align:center; font:400 .65rem/1.45 var(--mono); text-transform:uppercase; } .system-flow b { color:var(--lime); font-weight:400; }
-    .route-rhythm { padding:clamp(2rem,5vw,4rem); border-bottom:1px solid var(--line); } .route-rhythm svg { display:block; width:100%; height:auto; } .route-rhythm path { fill:none; stroke:var(--clay); stroke-width:2; stroke-linecap:round; } .route-rhythm circle { fill:var(--surface); stroke:var(--lime); stroke-width:4; } .route-rhythm>div { display:flex; justify-content:space-between; gap:1rem; font:400 .64rem/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
-    .exploration-copy { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; background:var(--line); } .exploration-copy p { min-height:11rem; margin:0; padding:clamp(1.3rem,3vw,2.5rem); background:var(--surface); font-size:clamp(.95rem,1.35vw,1.08rem); } .exploration-copy strong { display:block; margin-bottom:1rem; font:500 .62rem/1.5 var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
-    .carrying-questions { display:grid; grid-template-columns:var(--label-col) minmax(0,1fr); gap:var(--editorial-gap); margin-top:clamp(4rem,8vw,7rem); padding-top:2rem; border-top:1px solid var(--line); } .carrying-questions p { margin:0; font:400 .66rem/1.5 var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--muted); } .carrying-questions ul { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; margin:0; padding:0; list-style:none; } .carrying-questions li { min-height:10rem; display:flex; align-items:flex-end; padding:1.5rem; border:1px solid var(--line); font:400 clamp(1.8rem,3.5vw,3.5rem)/1 var(--cinema); letter-spacing:-.02em; }
-    .epilogue { min-height:155vh; display:grid; align-items:center; overflow:hidden; padding:clamp(8rem,15vw,14rem) var(--gutter) 3rem; background:var(--void); color:#eef0e8; } .epilogue-inner { position:relative; z-index:1; width:min(100%,var(--content)); margin:auto; } .return-eye { position:absolute; z-index:-1; left:50%; top:42%; width:min(95vw,70rem); height:min(56vw,40rem); transform:translate(-50%,-50%); border:1px solid rgba(238,240,232,.12); border-radius:52% 48%; background:#010201 url('hero-iris-v2.jpg') center/cover no-repeat; opacity:.46; box-shadow:inset 0 0 9rem 3rem #050a08,0 4rem 9rem #000; } .return-eye::before,.return-eye::after { display:none; }
-    .epilogue .eyebrow { color:rgba(238,240,232,.62); } .closing-question { max-width:12ch; margin:24vh 0 3rem; font-size:clamp(4rem,11vw,12rem); font-weight:300; line-height:.82; letter-spacing:-.075em; text-wrap:balance; } .closing-copy { max-width:47rem; margin:0 0 4rem auto; font-size:clamp(1.25rem,2.5vw,2.25rem); font-weight:300; line-height:1.4; color:rgba(238,240,232,.76); } .cta-row { display:flex; flex-wrap:wrap; gap:.8rem; justify-content:flex-end; margin:0 0 8rem; } .cta { min-height:50px; display:inline-flex; align-items:center; gap:.75rem; padding:.8rem 1.2rem; border:1px solid rgba(238,240,232,.26); border-radius:999px; color:#eef0e8; text-decoration:none; font:400 .72rem/1 var(--mono); letter-spacing:.06em; text-transform:uppercase; transition:background .25s,color .25s,border .25s; } .cta:hover { border-color:var(--lime); background:var(--lime); color:#07100c; } .cta-primary { background:var(--lime); border-color:var(--lime); color:#07100c; } .cta span { font-size:1rem; }
-    .contact-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border-top:1px solid rgba(238,240,232,.16); border-bottom:1px solid rgba(238,240,232,.16); } .contact-item { min-height:9rem; padding:1.8rem 1rem 1.8rem 0; border-right:1px solid rgba(238,240,232,.16); } .contact-item:last-child { border-right:0; padding-left:2rem; } .contact-item:nth-child(2) { padding-left:2rem; } .contact-item small { display:block; margin-bottom:1rem; font:400 .62rem/1 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:rgba(238,240,232,.52); } .contact-item a,.contact-item p { margin:0; color:#eef0e8; font-size:clamp(.9rem,1.5vw,1.15rem); overflow-wrap:anywhere; } .footer { display:flex; justify-content:space-between; gap:1rem; padding-top:2.2rem; font:400 .62rem/1.6 var(--mono); letter-spacing:.06em; color:rgba(238,240,232,.46); }
-    .reveal { opacity:1; transform:none; } .js .reveal { opacity:0; transform:translateY(2rem); transition:opacity .85s var(--ease),transform .85s var(--ease); } .js .reveal.is-revealed { opacity:1; transform:none; }
-    @media(prefers-reduced-motion:reduce){ html{scroll-behavior:auto}*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.prologue{min-height:auto}.cinematic-stage{display:none}.reduced-sequence{display:block}.static-frame{min-height:65svh}.js .reveal{opacity:1;transform:none}.terrain-path{stroke-dashoffset:0!important} }
-    .no-js .prologue{min-height:auto}.no-js .cinematic-stage{display:none}.no-js .reduced-sequence{display:block}
-    @media(prefers-color-scheme:light){ .no-js{--surface:#fffef8;--text:#0a1713;--muted:rgba(10,23,19,.7);--faint:rgba(10,23,19,.5);--line:rgba(10,23,19,.16);--line-strong:rgba(10,23,19,.32);--paper:#f4f3ed;--paper-ink:#0a1713;color-scheme:light} }
-    @media(forced-colors:active){ .page-progress{background:Highlight}.hero-frame,.return-eye{forced-color-adjust:none} }
-
-    /* One cinematic rhythm: continuous type scales, one editorial edge, four acts. */
-    :root { --type-name:clamp(4rem,calc(2.15rem + 9.3vw),10.5rem); --type-hero:clamp(3rem,calc(1.8rem + 6vw),8rem); --type-chapter:clamp(2.75rem,calc(1.85rem + 4.6vw),7rem); --type-moment:clamp(2rem,calc(1.35rem + 3vw),4.6rem); --label-col:clamp(8rem,16vw,12rem); --editorial-gap:clamp(2rem,4.5vw,4.5rem); --edge:max(var(--gutter),calc((100vw - var(--content))/2)); }
-    body { overflow-x:clip; } h1,h2,h3 { text-wrap:balance; } p { text-wrap:pretty; } main section[id]:not(.prologue) { scroll-margin-top:5.25rem; }
-    :is(.professional-anchor,.chapter-header,.terrain-layout,.presence-row,.presence-row dd,.exploration-card>header,.exploration-copy,.carrying-questions,.contact-grid)>* { min-width:0; }
-    .site-header { padding-inline:var(--edge); opacity:0; transform:translateY(-.65rem); visibility:hidden; pointer-events:none; transition:opacity .65s var(--ease),transform .65s var(--ease),visibility 0s linear .65s; }
-    .chapter-rail { opacity:0; transform:translateY(calc(-50% - .65rem)); visibility:hidden; pointer-events:none; transition:opacity .65s var(--ease),transform .65s var(--ease),visibility 0s linear .65s; }
-    .page-progress { opacity:0; pointer-events:none; transition:opacity .65s var(--ease); }
-    .intro-complete .site-header,.intro-complete .chapter-rail,.no-js .site-header,.no-js .chapter-rail { opacity:1; visibility:visible; pointer-events:auto; transition-delay:0s; } .intro-complete .site-header,.no-js .site-header { transform:none; } .intro-complete .chapter-rail,.no-js .chapter-rail { transform:translateY(-50%); } .intro-complete .page-progress,.no-js .page-progress { opacity:1; }
-    .chapter-rail a.is-current:not(:hover):not(:focus-visible) span { opacity:1; transform:none; }
-    .professional-anchor,.chapter,.epilogue { padding-inline:var(--edge); } .name-reveal { inset-inline:var(--edge); } .skip-intro { right:var(--edge); } .scroll-cue { left:var(--edge); }
-    .prologue { min-height:310vh; } .scroll-cue { opacity:var(--cue-opacity,1); transition:opacity .5s var(--ease); } .name-reveal strong { font:400 clamp(3.6rem,8vw,7.6rem)/.84 var(--cinema); letter-spacing:-.035em; }
-    .intro-truth,.closing-question { font-family:var(--cinema); font-size:var(--type-hero); line-height:.9; letter-spacing:-.035em; }
-    .hero-frame,.eyelids::before,.eyelids::after { will-change:auto; } .prologue.is-active .hero-frame { will-change:transform,opacity; } .prologue.is-active .eyelids::before,.prologue.is-active .eyelids::after { will-change:transform; } .hero-media-fallback .hero-media { background:radial-gradient(circle at center,#38664f 0 16%,#13271e 26%,#030605 58%,#000 100%); }
-    .epilogue { min-height:118svh; padding-top:clamp(7rem,12vw,10rem); } .closing-question { margin-top:14vh; } .cta-row { margin-bottom:5rem; } .cta:focus-visible { border-color:var(--lime); background:var(--lime); color:#07100c; }
-    .js .reveal { transform:translateY(1.1rem); transition:opacity .72s var(--ease),transform .72s var(--ease); transition-delay:var(--reveal-delay,0ms); }
-    .js .chapter-header.reveal { opacity:1; transform:none; transition:none; } .js .chapter-header.reveal :is(.chapter-kicker,.chapter-title,.chapter-lede) { opacity:0; transform:translate3d(0,1.1rem,0); transition:opacity .72s linear,transform .9s var(--ease); } .js .chapter-header.is-revealed :is(.chapter-kicker,.chapter-title,.chapter-lede) { opacity:1; transform:none; } .js .chapter-header.is-revealed .chapter-title { transition-delay:70ms; } .js .chapter-header.is-revealed .chapter-lede { transition-delay:150ms; }
-    @supports selector(details::details-content) { .tradeoff { interpolate-size:allow-keywords; } .tradeoff::details-content { block-size:0; overflow:clip; opacity:0; transition:block-size .42s var(--ease),opacity .22s linear; } .tradeoff[open]::details-content { block-size:auto; opacity:1; } }
-    @media(max-width:1024px){
-      body{padding-bottom:calc(4.25rem + env(safe-area-inset-bottom))}
-      .site-header{grid-template-columns:1fr auto}.coordinates{display:none}
-      .professional-anchor,.chapter-header,.terrain-layout{grid-template-columns:minmax(0,1fr)}
-      .professional-anchor{min-height:auto;gap:3.5rem;padding-block:8rem 7rem}.professional-anchor h1{max-width:9ch}
-      .chapter-header{gap:1.25rem}.chapter-kicker{padding-top:0}.chapter-lede{max-width:38rem}
-      .elevation{position:relative;top:auto;min-height:auto}.terrain-moments{grid-template-columns:repeat(3,minmax(0,1fr))}.trail-moment{min-height:22rem}
-      .tradeoff-lab>header{grid-template-columns:1fr 1fr}.tradeoff-lab>header p{grid-column:1/-1}.tradeoff-lab>header span{text-align:right}
-      .chapter-rail{display:block;inset:auto 0 0;overflow-x:auto;padding:.35rem var(--gutter) calc(.35rem + env(safe-area-inset-bottom));border-width:1px 0 0;border-radius:0;transform:translateY(.65rem);overscroll-behavior-inline:contain;scrollbar-width:none;-webkit-overflow-scrolling:touch}.chapter-rail::-webkit-scrollbar{display:none}.intro-complete .chapter-rail,.no-js .chapter-rail{transform:none}.chapter-rail ul{display:flex;width:max-content;gap:.25rem}.chapter-rail a{min-height:48px;padding-inline:.65rem;flex-direction:row}.chapter-rail span,.chapter-rail a.is-current:not(:hover):not(:focus-visible) span{opacity:1;transform:none;white-space:nowrap}
-    }
-    @media(max-width:700px){
-      .site-header{min-height:calc(58px + env(safe-area-inset-top));padding-top:calc(.55rem + env(safe-area-inset-top))}.brand{width:40px;height:40px}.theme-toggle{padding-inline:.7rem}.menu-toggle{padding-inline:.8rem}.coordinates{display:none}
-      .menu-panel{padding:calc(1rem + env(safe-area-inset-top)) 1.2rem calc(1.2rem + env(safe-area-inset-bottom))}.menu-nav a strong{font-size:clamp(1.65rem,8vw,2.5rem)}
-      .prologue{min-height:270vh}.hero-media{perspective:none}.skip-intro{top:calc(4.5rem + env(safe-area-inset-top))}.name-reveal{display:block;bottom:5rem}.name-reveal strong{font-size:clamp(3.5rem,16vw,5.8rem)}.name-reveal span{display:block;margin-top:1rem;text-align:left}.intro-truth{font-size:var(--type-hero)}
-      .professional-anchor{padding-block:7rem 5.5rem;gap:2.5rem}.professional-anchor h1{line-height:.84}.grounding{font-size:clamp(1.35rem,6vw,2rem)}.anchor-actions a{width:100%;justify-content:space-between}
-      .chapter{padding-block:clamp(4.75rem,16vw,6rem)}.chapter-header{margin-bottom:3rem}.chapter-title{line-height:.98}
-      .terrain-moments{grid-template-columns:1fr}.trail-moment{min-height:auto}.terrain-principle{margin-top:5rem}
-      .tradeoff-lab{margin-top:5rem}.tradeoff-lab>header{grid-template-columns:1fr;gap:1rem}.tradeoff-lab>header span{text-align:left}.tradeoff-grid{grid-template-columns:1fr}.tradeoff>div{padding-left:1.2rem}
-      .presence-row{grid-template-columns:1fr;gap:1rem}.presence-row dd{grid-template-columns:1fr;gap:1rem}.presence-row dd span{max-width:34rem}.proof-line{padding-left:1rem}
-      .exploration-card>header{grid-template-columns:2.5rem minmax(0,1fr)}.exploration-card h3{font-size:clamp(2.6rem,13vw,4.8rem)}.system-flow{grid-template-columns:1fr;padding:1.5rem}.system-flow b{display:none}.system-flow span{min-height:4rem;border-radius:999px}.exploration-copy{grid-template-columns:1fr}.exploration-copy p{min-height:auto}.carrying-questions{grid-template-columns:1fr;gap:1.5rem}.carrying-questions ul{grid-template-columns:1fr}.carrying-questions li{min-height:8rem}
-      .epilogue{min-height:auto;padding-block:7rem calc(5rem + env(safe-area-inset-bottom))}.return-eye{width:115vw;height:76vw}.closing-question{margin-top:8vh}.closing-copy{margin-left:0}.cta-row{justify-content:flex-start}.cta{width:100%;justify-content:space-between}
-      .contact-grid{grid-template-columns:1fr}.contact-item,.contact-item:nth-child(2),.contact-item:last-child{min-height:auto;padding:1.5rem 0;border-right:0;border-bottom:1px solid rgba(238,240,232,.16)}.contact-item:last-child{border-bottom:0}.footer{flex-direction:column}
-      .static-frame{grid-template-columns:minmax(0,1fr);min-height:auto;gap:2rem;padding-block:4rem}.static-orb,.static-orb.human{width:min(100%,28rem)}
-      .js .reveal{transform:translateY(.75rem);transition-duration:.52s}
-    }
-    @media(prefers-reduced-motion:reduce){ .site-header,.page-progress{opacity:1;transform:none;visibility:visible;pointer-events:auto}.chapter-rail{opacity:1;transform:translateY(-50%);visibility:visible;pointer-events:auto}.js .chapter-header.reveal :is(.chapter-kicker,.chapter-title,.chapter-lede){opacity:1;transform:none;transition:none} }
-    @media(prefers-reduced-motion:reduce) and (max-width:1024px){ .chapter-rail{transform:none} }
-  </style>
 </head>
 <body>
-  <a class="skip-link" href="#meaning">Skip the cinematic opening</a>
+  <a class="skip-link" href="#identity-anchor">Skip the cinematic opening</a>
+  <canvas class="cinema-canvas" data-cinema-canvas aria-hidden="true"></canvas>
+  <div class="film-grain" aria-hidden="true"></div>
   <div class="page-progress" data-page-progress aria-hidden="true"></div>
-  <header class="site-header" aria-label="Site controls">
-    <a class="brand" href="#top" aria-label="Cristian Malpica, back to the beginning">CM</a>
-    <p class="coordinates">Cristian Malpica · Barcelona</p>
-    <div class="header-actions"><button class="theme-toggle" type="button" data-theme-toggle aria-label="Theme: system. Activate to change theme.">Theme&nbsp;·&nbsp;<span data-theme-label>System</span></button><button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="site-menu"><span>Explore</span><i aria-hidden="true"></i></button></div>
+
+  <header class="site-header" data-site-header>
+    <a class="monogram" href="#within" aria-label="Cristian Malpica, return to the opening">CM</a>
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      <a href="#within" data-nav-link>Within</a><a href="#terrain" data-nav-link>Terrain</a><a href="#practice" data-nav-link>Practice</a><a href="#questions" data-nav-link>Questions</a><a href="#connect" data-nav-link>Connect</a>
+    </nav>
+    <div class="header-actions"><a class="header-contact" href="mailto:cmalpica25@icloud.com">Begin a conversation</a><button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="site-menu"><span>Menu</span><i aria-hidden="true"></i></button></div>
   </header>
-  <nav class="chapter-rail" aria-label="Chapter navigation"><ul><li><a href="#meaning" data-chapter-link><span>Cristian</span></a></li><li><a href="#terrain" data-chapter-link><span>Terrain inside</span></a></li><li><a href="#team" data-chapter-link><span>How I work</span></a></li><li><a href="#explorations" data-chapter-link><span>Explorations</span></a></li><li><a href="#contact" data-chapter-link><span>Conversation</span></a></li></ul></nav>
-  <div class="site-menu" id="site-menu" data-site-menu aria-hidden="true"><button class="menu-backdrop" type="button" data-menu-close aria-label="Close navigation"></button><aside class="menu-panel" aria-labelledby="menu-title"><header class="menu-head"><p id="menu-title">Explore the story</p><button class="menu-close" type="button" data-menu-close>Close <span aria-hidden="true">×</span></button></header><nav class="menu-nav" aria-label="Full navigation"><ol><li><a href="#meaning" data-chapter-link data-menu-first><span>01</span><strong>From world to witness</strong></a></li><li><a href="#terrain" data-chapter-link><span>02</span><strong>The terrain inside</strong></a></li><li><a href="#team" data-chapter-link><span>03</span><strong>What working with me feels like</strong></a></li><li><a href="#explorations" data-chapter-link><span>04</span><strong>Questions worth carrying</strong></a></li><li><a href="#contact" data-chapter-link><span>→</span><strong>Begin a conversation</strong></a></li></ol></nav><footer class="menu-foot"><a href="Cristian_Malpica_CV.pdf" download="Cristian_Malpica_CV.pdf">View the CV <span aria-hidden="true">↓</span></a><a href="https://linkedin.com/in/cristian-malpica-02551b20a" target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a></footer></aside></div>
+
+  <div class="site-menu" id="site-menu" data-site-menu aria-hidden="true">
+    <button class="menu-backdrop" type="button" data-menu-close aria-label="Close navigation"></button>
+    <aside class="menu-panel" role="dialog" aria-modal="true" aria-labelledby="menu-title">
+      <div class="menu-head"><p id="menu-title">Navigate the film</p><button type="button" data-menu-close>Close <span aria-hidden="true">×</span></button></div>
+      <nav aria-label="Full navigation"><ol>
+        <li><a href="#within" data-menu-link data-menu-first><span>01</span><strong>Within</strong><small>From world to witness</small></a></li>
+        <li><a href="#terrain" data-menu-link><span>02</span><strong>Terrain</strong><small>The patterns that shape me</small></a></li>
+        <li><a href="#practice" data-menu-link><span>03</span><strong>Practice</strong><small>How I work with complexity</small></a></li>
+        <li><a href="#questions" data-menu-link><span>04</span><strong>Questions</strong><small>Ideas worth carrying</small></a></li>
+        <li><a href="#connect" data-menu-link><span>→</span><strong>Connect</strong><small>Begin a conversation</small></a></li>
+      </ol></nav>
+      <div class="menu-direct"><a href="Cristian_Malpica_CV.pdf" download="Cristian_Malpica_CV.pdf">Read CV <span aria-hidden="true">↓</span></a><a href="https://linkedin.com/in/cristian-malpica-02551b20a" target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a><a href="mailto:cmalpica25@icloud.com">Email <span aria-hidden="true">↗</span></a></div>
+    </aside>
+  </div>
+
+  <nav class="act-indicator" aria-label="Act navigation"><a href="#within" data-nav-link><i aria-hidden="true"></i><span>Within</span></a><a href="#terrain" data-nav-link><i aria-hidden="true"></i><span>Terrain</span></a><a href="#practice" data-nav-link><i aria-hidden="true"></i><span>Practice</span></a><a href="#questions" data-nav-link><i aria-hidden="true"></i><span>Questions</span></a></nav>
 
   <main id="main">
-    <section class="prologue" id="top" aria-label="Cinematic prologue, from planet to pupil">
-      <div class="cinematic-stage" data-stage>
-        <button class="skip-intro" type="button" data-skip-intro>Skip intro</button>
-        <div class="hero-media" aria-hidden="true"><img class="hero-frame hero-frame--planet" src="hero-planet-v2.jpg" alt="" width="1672" height="941" decoding="async" fetchpriority="high"><img class="hero-frame hero-frame--iris" src="hero-iris-v2.jpg" alt="" width="1672" height="941" decoding="async"></div>
-        <div class="eyelids" aria-hidden="true"></div>
-        <div class="intro-copy"><p class="intro-line intro-opening is-visible" data-opening>Some problems appear larger than us.</p><p class="intro-line intro-truth" data-truth>The answers to the most complex problems lie within ourselves.</p><p class="intro-line intro-recognition" data-recognition>Outer scale. Inner understanding. Human consequence.</p></div>
-        <div class="name-reveal" data-name-reveal aria-hidden="true"><strong>Cristian<br>Malpica</strong><span>Product · Systems · Design · Sustainable Innovation<br>Barcelona</span></div><span class="scroll-cue" aria-hidden="true">Travel inward</span>
+    <section class="act act-one" id="within" data-render-scene="0" aria-labelledby="site-title">
+      <div class="hero-track" data-hero-track>
+        <div class="hero-stage" data-hero-stage>
+          <div class="hero-fallback" aria-hidden="true"><img class="hero-fallback-planet" src="hero-planet-v2.jpg" alt="" width="1672" height="941" decoding="async" fetchpriority="high"><img class="hero-fallback-eye" src="hero-iris-v2.jpg" alt="" width="1672" height="941" decoding="async"></div>
+          <div class="hero-vignette" aria-hidden="true"></div>
+          <button class="skip-intro-control" type="button" data-skip-intro>Skip intro</button>
+          <p class="hero-coordinate" aria-hidden="true">41.3874° N<br>2.1686° E</p>
+          <div class="hero-narrative" aria-label="A journey from a distant planet into a human eye">
+            <p class="hero-line hero-line-opening" data-hero-line data-start="0" data-end="0.145">Some problems appear larger than us.</p>
+            <p class="hero-line hero-line-prompt" data-hero-line data-start="0.135" data-end="0.235">Move closer.</p>
+            <p class="hero-line hero-line-system" data-hero-line data-start="0.225" data-end="0.345">A system becomes relationships.</p>
+            <p class="hero-line hero-line-market" data-hero-line data-start="0.335" data-end="0.445">A market becomes decisions.</p>
+            <p class="hero-line hero-line-product" data-hero-line data-start="0.435" data-end="0.56">A product becomes an experience.</p>
+            <p class="hero-truth" data-hero-truth>The answers to the most complex problems lie <em>within ourselves.</em></p>
+          </div>
+          <div class="hero-identity" data-hero-identity><p class="act-label">Act I · From world to witness</p><h1 id="site-title">Cristian<br>Malpica</h1><div class="identity-detail"><p>Product · Systems ·<br>Design · Sustainable Innovation</p><span>Barcelona</span></div></div>
+          <div class="scroll-instruction" aria-hidden="true"><span>Travel inward</span><i></i></div>
+        </div>
+        <span id="identity-anchor" class="identity-anchor" tabindex="-1" role="region" aria-label="Cristian Malpica, product, systems, design and sustainable innovation"></span>
       </div>
-      <div class="reduced-sequence" aria-label="Planet, iris, and human insight"><article class="static-frame"><div class="static-orb" aria-hidden="true"></div><p>Some problems appear larger than us.</p></article><article class="static-frame"><div class="static-orb iris" aria-hidden="true"></div><p>Looking outward for scale and inward for understanding are part of the same movement.</p></article><article class="static-frame"><div class="static-orb human" aria-hidden="true"></div><p>The answers to the most complex problems lie within ourselves.</p></article></div>
+      <div class="act-one-introduction content-grid reveal"><p class="act-label">A human introduction</p><div><h2>I notice connections, ask difficult questions, and turn complexity into a direction people can move with.</h2><p>Product professional working across B2B products, SaaS, data, commercial strategy, and operations.</p><div class="inline-actions"><a href="#terrain">Continue inward <span aria-hidden="true">↓</span></a><a href="Cristian_Malpica_CV.pdf" download="Cristian_Malpica_CV.pdf">Read CV <span aria-hidden="true">↓</span></a></div></div></div>
     </section>
 
-    <section class="professional-anchor" id="meaning" tabindex="-1" aria-labelledby="site-title">
-      <h1 id="site-title">Cristian Malpica</h1>
-      <div class="anchor-copy reveal">
-        <p class="eyebrow">Act I · From world to witness</p>
-        <p class="role-line">Barcelona · Product professional</p>
-        <p class="grounding">I am Cristian. I notice connections, ask difficult questions, and turn complexity into a direction people can move with.</p>
-        <p class="anchor-context">Product professional working across B2B products, SaaS, data, commercial strategy, and operations.</p>
-        <ul class="anchor-proof" aria-label="Professional context"><li>B2B product lifecycle</li><li>SaaS, analytics &amp; go-to-market</li><li>Cross-functional European environments</li></ul>
-        <nav class="anchor-actions" aria-label="Portfolio shortcuts"><a href="#terrain">Experience the story <span aria-hidden="true">↓</span></a><a href="#team">How I work <span aria-hidden="true">↓</span></a><a href="Cristian_Malpica_CV.pdf" download="Cristian_Malpica_CV.pdf">View CV <span aria-hidden="true">↓</span></a></nav>
+    <section class="act terrain-act" id="terrain" data-render-scene="1" aria-labelledby="terrain-title">
+      <div class="act-header content-grid reveal"><p class="act-label">Act II · The terrain inside</p><div><h2 id="terrain-title">Attention before force.</h2><p>The terrain inside is not a biography. It is a way of moving through uncertainty.</p></div></div>
+      <figure class="terrain-visual" aria-labelledby="terrain-caption"><svg viewBox="0 0 1200 440" role="img"><title id="terrain-caption">One continuous trail rising through observation, pacing, and adaptation</title><g class="contour-field" aria-hidden="true"><path d="M-40 378 C147 270 259 442 445 303 S770 289 1240 94"></path><path d="M-60 410 C134 304 260 466 460 329 S804 322 1260 124"></path><path d="M-20 346 C170 236 276 409 428 278 S736 261 1220 66"></path><path d="M8 316 C193 203 286 378 412 251 S708 229 1204 38"></path></g><path class="terrain-route-base" d="M10 392 C186 303 247 382 354 318 C468 250 498 329 616 236 C710 161 782 235 881 153 C1008 48 1098 144 1190 45"></path><path class="terrain-route" data-terrain-path d="M10 392 C186 303 247 382 354 318 C468 250 498 329 616 236 C710 161 782 235 881 153 C1008 48 1098 144 1190 45"></path><circle cx="10" cy="392" r="6"></circle><circle cx="616" cy="236" r="6"></circle><circle cx="1190" cy="45" r="6"></circle></svg></figure>
+      <div class="terrain-movements">
+        <article class="terrain-movement reveal"><div class="movement-index"><span>01</span><small>Observe</small></div><div class="movement-copy"><h3>The terrain does not care about confidence. It rewards attention.</h3><p>Endurance taught me to observe before forcing. Conditions carry information. Energy is finite. The route imagined at the start may not be the route reality allows.</p><p class="professional-bridge">In ambiguous work, I begin by reading what is actually happening: customer behaviour, data, commercial pressure, operational constraints, and the things a team has not yet said aloud.</p></div></article>
+        <article class="terrain-movement reveal"><div class="movement-index"><span>02</span><small>Pace</small></div><div class="movement-copy"><h3>Speed can spend the future before it arrives.</h3><p>Pacing is not hesitation. It is choosing where effort creates progress and where effort only creates noise.</p><p class="professional-bridge">I do not equate activity with value. I look for the few decisions that reduce uncertainty, create alignment, or move the product meaningfully forward.</p></div></article>
+        <article class="terrain-movement reveal"><div class="movement-index"><span>03</span><small>Adapt</small></div><div class="movement-copy"><h3>When the path changes, coherence matters more than pride.</h3><p>Continuing does not always mean following the original plan. Sometimes resilience is the willingness to adapt without losing the reason for moving.</p><p class="professional-bridge">When evidence changes, I would rather revise the route than defend an outdated assumption.</p></div></article>
       </div>
+      <blockquote class="design-reflection reveal"><p>I began building websites because I wanted ideas to become experiences, not remain explanations.</p><footer>Design taught me that what people notice shapes what people understand, and what people understand shapes what people choose.</footer></blockquote>
     </section>
 
-    <section class="chapter terrain" id="terrain" aria-labelledby="terrain-title"><div class="chapter-inner">
-      <header class="chapter-header reveal"><p class="chapter-kicker">Act II<span>The terrain inside</span></p><div><h2 class="chapter-title" id="terrain-title">Read the terrain before forcing the route.</h2><p class="chapter-lede">Endurance, product work, and attention to living systems have shaped the same instinct: understand the conditions, spend energy deliberately, and keep the next decision coherent.</p></div></header>
-      <progress class="sr-only" max="100" value="0" data-terrain-progress aria-label="Terrain chapter progress"></progress>
-      <div class="terrain-layout">
-        <figure class="elevation" aria-label="An elevation line that rises as the chapter progresses"><svg viewBox="0 0 700 360" role="img" aria-labelledby="elevation-title"><title id="elevation-title">A measured mountain elevation path</title><g class="altitude-grid"><line x1="20" y1="300" x2="680" y2="300"></line><line x1="20" y1="220" x2="680" y2="220"></line><line x1="20" y1="140" x2="680" y2="140"></line><line x1="20" y1="60" x2="680" y2="60"></line></g><g class="altitude-label"><text x="24" y="292">OBSERVE</text><text x="24" y="212">ADAPT</text><text x="24" y="132">DECIDE</text><text x="24" y="52">SUSTAIN</text></g><path class="terrain-path-base" d="M24 326 C75 315 93 286 139 294 C192 305 205 245 255 253 C302 260 318 198 365 206 C419 216 438 134 492 154 C547 174 555 84 605 105 C642 121 654 68 682 42"></path><path class="terrain-path" data-terrain-path d="M24 326 C75 315 93 286 139 294 C192 305 205 245 255 253 C302 260 318 198 365 206 C419 216 438 134 492 154 C547 174 555 84 605 105 C642 121 654 68 682 42"></path><circle class="terrain-marker" data-terrain-marker cx="24" cy="326" r="7"></circle></svg></figure>
-        <div class="terrain-moments">
-          <article class="trail-moment reveal"><small>Endurance</small><h3>On difficult trails, fighting the terrain wastes energy.</h3><p>The better response is to read it: shorten the stride, change the pace, and protect what will be needed later. I carry the same instinct into uncertain product work.</p></article>
-          <article class="trail-moment reveal"><small>Product craft</small><h3>Make the complexity visible enough to decide together.</h3><p>I turn scattered signals into a shared picture of the problem, the constraints, and the choices. Clarity is useful when it helps people move.</p></article>
-          <article class="trail-moment reveal"><small>Living systems</small><h3>Resilience rarely belongs to one strong part.</h3><p>It emerges through feedback, relationships, and the ability to adapt without losing the purpose at the centre.</p></article>
-        </div>
+    <section class="act practice-act" id="practice" data-render-scene="2" aria-labelledby="practice-title">
+      <div class="act-header content-grid reveal"><p class="act-label">Act III · What working with me feels like</p><div><h2 id="practice-title">Judgement becomes visible in behaviour.</h2><p>Four patterns that matter when the work is complicated and the answer is not obvious.</p></div></div>
+      <div class="behaviour-sequence">
+        <article class="behaviour-scene reveal" data-behaviour="signals"><div class="behaviour-number">01 / 04</div><div class="behaviour-copy"><h3>I listen beneath the obvious.</h3><p class="human-line">What is unsaid can shape a system as strongly as what is documented.</p><p>I look across customer behaviour, stakeholder incentives, data, commercial pressure, and operational friction before deciding what problem deserves attention.</p></div><div class="signal-field" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><span>customer</span><span>incentive</span><span>friction</span></div></article>
+        <article class="behaviour-scene reveal" data-behaviour="direction"><div class="behaviour-number">02 / 04</div><div class="behaviour-copy"><h3>I turn many signals into one direction.</h3><p class="human-line">I enjoy possibility, but my real work begins when a team needs to choose.</p><p>I transform diverse inputs into a focused problem, a credible value proposition, clear priorities, and an executable next move.</p></div><svg class="convergence-visual" viewBox="0 0 560 360" role="img" aria-labelledby="convergence-title"><title id="convergence-title">Many signals converging into one clear direction</title><g><path d="M28 42 C212 42 202 178 420 180"></path><path d="M28 110 C204 110 227 181 420 180"></path><path d="M28 180 H420"></path><path d="M28 250 C204 250 227 179 420 180"></path><path d="M28 318 C212 318 202 182 420 180"></path></g><path class="direction-line" d="M420 180 H536"></path><circle cx="420" cy="180" r="8"></circle></svg></article>
+        <article class="behaviour-scene tradeoff-scene reveal" data-behaviour="tradeoffs"><div class="behaviour-number">03 / 04</div><div class="behaviour-copy"><h3>I make trade-offs visible.</h3><p class="human-line">A choice becomes more honest when the cost of not choosing is visible too.</p><p>I connect customer value, commercial priorities, operational feasibility, data, delivery constraints, and consequences before a decision becomes a commitment.</p></div><div class="consequence-map" data-consequence-map><div class="consequence-label"><span>Prompts for judgement</span><p>Select an objective. These are questions to examine, not universal rules.</p></div><div class="objective-controls" role="group" aria-label="Choose a product objective"><button type="button" data-objective="speed" aria-pressed="true">Speed</button><button type="button" data-objective="efficiency" aria-pressed="false">Efficiency</button><button type="button" data-objective="personalisation" aria-pressed="false">Personalisation</button><button type="button" data-objective="growth" aria-pressed="false">Growth</button><button type="button" data-objective="sustainability" aria-pressed="false">Sustainability</button></div><div class="consequence-output" aria-live="polite"><div><small>Possible benefit</small><strong data-benefit>Earlier learning</strong></div><i aria-hidden="true"></i><div><small>Possible tension</small><strong data-tension>Greater delivery pressure</strong></div></div><noscript><dl class="static-consequence-map"><div><dt>Speed</dt><dd>Earlier learning · Greater delivery pressure</dd></div><div><dt>Efficiency</dt><dd>Lower cost · Possible loss of flexibility</dd></div><div><dt>Personalisation</dt><dd>Greater relevance · Increased privacy responsibility</dd></div><div><dt>Growth</dt><dd>Wider reach · Increased operational and environmental load</dd></div><div><dt>Sustainability</dt><dd>Longer-term resilience · Possible short-term commercial tension</dd></div></dl></noscript></div></article>
+        <article class="behaviour-scene reveal" data-behaviour="feedback"><div class="behaviour-number">04 / 04</div><div class="behaviour-copy"><h3>I build for what must endure after launch.</h3><p class="human-line">Launch is a beginning disguised as a finish line.</p><p>I care about adoption, operational readiness, feedback, service levels, product performance, and the capacity to learn after release.</p></div><svg class="feedback-loop" viewBox="0 0 560 360" role="img" aria-labelledby="feedback-title"><title id="feedback-title">A launch pulse returning as feedback and continued learning</title><circle class="loop-orbit" cx="280" cy="180" r="122"></circle><path class="loop-path" d="M280 58 A122 122 0 1 1 176 244"></path><circle class="loop-pulse" cx="280" cy="58" r="8"></circle><text x="280" y="173">LAUNCH</text><text x="280" y="196">LEARN · ADAPT · CONTINUE</text></svg></article>
       </div>
-      <p class="terrain-principle reveal">Sustainability is not the greenest-looking option. It is the discipline of seeing who pays, what is consumed, what remains, and whether the value can endure.</p>
-      <div class="tradeoff-lab reveal">
-        <header><p>Decision exercise</p><h3>Every choice spends something.</h3><span>Select a direction to reveal its consequence.</span></header>
-        <div class="tradeoff-grid">
-          <details class="tradeoff" open><summary><span>01</span><strong>Speed</strong><i aria-hidden="true">+</i></summary><div><p><b>Creates</b> momentum and earlier learning.</p><p><b>Spends</b> certainty and recovery time.</p><p><b>Ask</b> What uncertainty are we carrying forward?</p></div></details>
-          <details class="tradeoff"><summary><span>02</span><strong>Efficiency</strong><i aria-hidden="true">+</i></summary><div><p><b>Creates</b> lower recurring cost.</p><p><b>Spends</b> flexibility and redundancy.</p><p><b>Ask</b> Who carries the fragility when conditions change?</p></div></details>
-          <details class="tradeoff"><summary><span>03</span><strong>Personalisation</strong><i aria-hidden="true">+</i></summary><div><p><b>Creates</b> relevance and easier choices.</p><p><b>Spends</b> privacy and simplicity.</p><p><b>Ask</b> What data relationship genuinely justifies the value?</p></div></details>
-        </div>
-      </div>
-    </div></section>
+      <div class="quiet-proof reveal"><p>Shaped through B2B product work, SaaS, commercial leadership, analytics, go-to-market activity, supplier relationships, and cross-functional operations across European environments.</p><div><a href="Cristian_Malpica_CV.pdf" download="Cristian_Malpica_CV.pdf">Read CV <span aria-hidden="true">↓</span></a><a href="https://linkedin.com/in/cristian-malpica-02551b20a" target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a></div></div>
+    </section>
 
-    <section class="chapter team" id="team" aria-labelledby="team-title"><div class="chapter-inner">
-      <header class="chapter-header reveal"><p class="chapter-kicker">Act III<span>What working with me feels like</span></p><div><h2 class="chapter-title" id="team-title">Calm enough to see. Practical enough to move.</h2><p class="chapter-lede">Four behaviours colleagues can feel when the work becomes complicated.</p></div></header>
-      <dl class="presence-list">
-        <div class="presence-row reveal"><dt>In ambiguity</dt><dd><strong>I give the problem a shape the team can challenge.</strong><span>Questions first; structure when it earns its place.</span></dd></div>
-        <div class="presence-row reveal"><dt>In tension</dt><dd><strong>I make the trade-offs visible without dramatizing disagreement.</strong><span>Curiosity before defence; evidence before certainty.</span></dd></div>
-        <div class="presence-row reveal"><dt>In delivery</dt><dd><strong>I connect strategy to customer, commercial, and operational reality.</strong><span>A direction is only useful when people can act on it.</span></dd></div>
-        <div class="presence-row reveal"><dt>Under pressure</dt><dd><strong>I protect the pace and decisions that keep value durable.</strong><span>The next coherent choice matters more than the performance of certainty.</span></dd></div>
-      </dl>
-      <p class="proof-line reveal">Shaped through B2B product work, SaaS, commercial leadership, analytics, go-to-market activity, and cross-functional operations across European environments.</p>
-    </div></section>
-
-    <section class="chapter explorations" id="explorations" aria-labelledby="explorations-title"><div class="chapter-inner">
-      <header class="chapter-header reveal"><p class="chapter-kicker">Act IV<span>Questions worth carrying</span></p><div><h2 class="chapter-title" id="explorations-title">Curiosity should survive contact with consequence.</h2><p class="chapter-lede">Two independent explorations—not claims of finished validation or commissioned outcomes.</p></div></header>
-      <div class="exploration-grid">
-        <article class="exploration-card mobility reveal">
-          <header><span class="exploration-number">01</span><div><p class="concept-note">Independent concept · Mobility</p><h3>Circular Mobility Intelligence</h3></div></header>
-          <div class="system-flow" aria-label="Concept flow from signal to longer asset life"><span>Use signal</span><b aria-hidden="true">→</b><span>Consent</span><b aria-hidden="true">→</b><span>Insight</span><b aria-hidden="true">→</b><span>Maintenance decision</span><b aria-hidden="true">→</b><span>Longer asset life</span></div>
-          <div class="exploration-copy"><p><strong>The question</strong>Could vehicle-use signals support longer asset life and better resource decisions?</p><p><strong>The tension</strong>Utility must coexist with privacy, trust, imperfect data, and operational feasibility.</p><p><strong>A credible first move</strong>Start with one maintenance decision, make consent and governance explicit, and test whether the insight changes action.</p></div>
-        </article>
-        <article class="exploration-card outside reveal">
-          <header><span class="exploration-number">02</span><div><p class="concept-note">Independent concept · Barcelona</p><h3>Outside / In</h3></div></header>
-          <div class="route-rhythm" aria-label="A route from attention through movement to belonging"><svg viewBox="0 0 800 170" role="img" aria-labelledby="route-title"><title id="route-title">A flowing route connecting attention, movement and belonging</title><path d="M24 116 C140 18 222 152 344 68 S571 35 776 108"></path><circle cx="24" cy="116" r="6"></circle><circle cx="344" cy="68" r="6"></circle><circle cx="776" cy="108" r="6"></circle></svg><div><span>Attention</span><span>Movement</span><span>Belonging</span></div></div>
-          <div class="exploration-copy"><p><strong>The question</strong>How might movement, nature, and a city change attention and a person's sense of possibility?</p><p><strong>The tension</strong>Urban wellbeing can become exclusive, performative, or dependent on more consumption.</p><p><strong>A credible first move</strong>Use places the city already offers, design for different bodies and confidence levels, and let participation reshape the route.</p></div>
-        </article>
-      </div>
-      <div class="carrying-questions reveal"><p>Before an answer becomes a product:</p><ul><li>Who carries the cost?</li><li>What should still be true after scale?</li></ul></div>
-    </div></section>
-
-    <section class="epilogue" id="contact" aria-labelledby="contact-title"><div class="epilogue-inner"><div class="return-eye" aria-hidden="true"></div><p class="eyebrow reveal">Return to the eye</p><h2 class="closing-question reveal" id="contact-title">What changes when we look deeper?</h2><p class="closing-copy reveal">If your product challenge sits between human need, business reality, data, operations, and responsibility, I would like to understand it.</p><div class="cta-row reveal"><a class="cta cta-primary" href="mailto:cmalpica25@icloud.com?subject=Beginning%20a%20conversation">Begin a conversation <span aria-hidden="true">↗</span></a><a class="cta" href="Cristian_Malpica_CV.pdf" download="Cristian_Malpica_CV.pdf">View CV <span aria-hidden="true">↓</span></a><a class="cta" href="https://linkedin.com/in/cristian-malpica-02551b20a" target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a></div><div class="contact-grid reveal"><div class="contact-item"><small>Email</small><a href="mailto:cmalpica25@icloud.com">cmalpica25@icloud.com</a></div><div class="contact-item"><small>LinkedIn</small><a href="https://linkedin.com/in/cristian-malpica-02551b20a" target="_blank" rel="noreferrer">cristian-malpica-02551b20a</a></div><div class="contact-item"><small>Location</small><p>Barcelona, Spain</p></div></div><footer class="footer"><span>© Cristian Malpica</span><span>Built with attention in Barcelona</span></footer></div></section>
+    <section class="act questions-act" id="questions" data-render-scene="3" aria-labelledby="questions-title">
+      <div class="act-header content-grid reveal"><p class="act-label">Act IV · Questions worth carrying</p><div><h2 id="questions-title">Curiosity should survive contact with consequence.</h2><p>Two independent explorations. Not claims of commissioned work, finished validation, or certain outcomes.</p></div></div>
+      <article class="exploration mobility-exploration reveal" aria-labelledby="mobility-title"><header class="exploration-header"><div><span>Exploration 01</span><p>Independent concept. Not affiliated with or commissioned by Volkswagen Group.</p></div><h3 id="mobility-title">Circular Mobility Intelligence</h3></header><p class="exploration-question">What if vehicle-use data helped extend asset life before it became another dashboard?</p><div class="system-explorer" data-system-explorer><div class="flow-controls" role="group" aria-label="Explore the concept flow"><button type="button" data-flow-step="0" aria-pressed="true"><span>01</span>Signal</button><button type="button" data-flow-step="1" aria-pressed="false"><span>02</span>Interpretation</button><button type="button" data-flow-step="2" aria-pressed="false"><span>03</span>Decision</button><button type="button" data-flow-step="3" aria-pressed="false"><span>04</span>Beneficiary</button><button type="button" data-flow-step="4" aria-pressed="false"><span>05</span>Risk</button><button type="button" data-flow-step="5" aria-pressed="false"><span>06</span>Feedback</button></div><div class="flow-line" aria-hidden="true"><i></i><span data-flow-node></span></div><div class="flow-output" aria-live="polite"><small data-flow-kicker>Use signal</small><p data-flow-copy>Begin with evidence already present in maintenance, utilisation, and downtime patterns, then ask whether it can support longer asset life and circular value.</p></div></div><div class="exploration-decisions"><p><small>Product decision</small><strong>Start narrow. Validate whether one decision improves before expanding the system.</strong></p><p><small>Tension</small>More data may improve decisions, but it also increases responsibility, infrastructure cost, and the need for trust.</p></div></article>
+      <article class="exploration outside-exploration reveal" aria-labelledby="outside-title"><header class="exploration-header"><div><span>Exploration 02</span><p>Independent concept · Human movement</p></div><h3 id="outside-title">Outside / In</h3></header><p class="exploration-question">Can a digital experience help people reconnect with movement and nature without turning the outdoors into more screen time?</p><div class="route-explorer" data-route-explorer><svg viewBox="0 0 1200 440" role="img" aria-labelledby="outside-route-title"><title id="outside-route-title">An accessible route connecting public transport, local nature, a pause point, and a protected area</title><path class="route-ghost" d="M34 348 C186 335 211 129 376 154 S600 390 770 264 S979 78 1166 111"></path><path class="route-live" data-outside-path d="M34 348 C186 335 211 129 376 154 S600 390 770 264 S979 78 1166 111"></path><g aria-hidden="true"><circle cx="34" cy="348" r="8"></circle><circle cx="376" cy="154" r="8"></circle><circle cx="770" cy="264" r="8"></circle><circle cx="1166" cy="111" r="8"></circle></g></svg><div class="route-controls" role="group" aria-label="Explore route considerations"><button type="button" data-route-step="0" aria-pressed="true">Public mobility</button><button type="button" data-route-step="1" aria-pressed="false">Accessible pace</button><button type="button" data-route-step="2" aria-pressed="false">Pause point</button><button type="button" data-route-step="3" aria-pressed="false">Local nature · lower impact</button></div><p class="route-output" data-route-output aria-live="polite">Begin from a connection the city already provides, reducing the need for another car journey.</p></div><div class="outside-copy"><p><small>Human scenario</small>A person wants to move more and spend time outdoors, but confidence, time, physical capacity, and familiarity with the city shape what feels possible.</p><p><small>Tension</small>Digital guidance can widen access, but it can also increase screen dependence or place pressure on sensitive natural spaces.</p></div></article>
+      <footer class="epilogue" id="connect" data-render-scene="4" aria-labelledby="connect-title"><p class="act-label reveal">Return to the eye</p><h3 id="connect-title" class="reveal">What changes when we look deeper?</h3><p class="epilogue-copy reveal">If your product challenge sits between human need, business reality, data, operations, design, and responsibility, I would like to understand it.</p><div class="epilogue-actions reveal"><a class="primary-action" href="mailto:cmalpica25@icloud.com?subject=Beginning%20a%20conversation">Begin a conversation <span aria-hidden="true">↗</span></a><a href="Cristian_Malpica_CV.pdf" download="Cristian_Malpica_CV.pdf">Read the CV <span aria-hidden="true">↓</span></a><a href="https://linkedin.com/in/cristian-malpica-02551b20a" target="_blank" rel="noreferrer">Connect on LinkedIn <span aria-hidden="true">↗</span></a></div><div class="contact-details reveal"><div><small>Name</small><p>Cristian Malpica</p></div><div><small>Location</small><p>Barcelona, Spain</p></div><div><small>Email</small><a href="mailto:cmalpica25@icloud.com">cmalpica25@icloud.com</a></div></div><div class="final-line"><span>© Cristian Malpica</span><span>Built with attention. Designed to leave room for thought.</span></div></footer>
+    </section>
   </main>
+  <script src="renderer.js?v=20260821d" defer></script>
+  <script src="script.js?v=20260821d" defer></script>
 </body>
 </html>
